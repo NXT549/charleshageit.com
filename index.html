@@ -3,16 +3,53 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Charles IT — Friendly, affordable in-home IT support for seniors in the Redlands, Brisbane. Device setup, Wi-Fi, printers, troubleshooting and more.">
+<meta name="description" content="Charles IT — Friendly, affordable in-home IT support for seniors in the Redlands, Brisbane. From $55. Device setup, Wi-Fi, printers, troubleshooting and more.">
+<meta name="keywords" content="IT support Redlands, computer help seniors Brisbane, in-home tech support Cleveland, Wi-Fi help Victoria Point, printer setup Capalaba">
+<meta property="og:title" content="Charles IT | In-Home IT Support for Seniors — Redlands, Brisbane">
+<meta property="og:description" content="Patient, jargon-free tech support for seniors in the Redlands. I come to your home, fix the problem, and make sure you're comfortable before I leave. From $55.">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="en_AU">
+<meta name="robots" content="index, follow">
+<link rel="canonical" href="https://charlesit.com.au/">
 <title>Charles IT | In-Home IT Support for Seniors — Redlands, Brisbane</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&family=Fraunces:opsz,wght@9..144,600;9..144,700&display=swap" rel="stylesheet">
+
+<!-- Structured Data -->
+<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "Charles IT",
+  "description": "In-home IT support for seniors in the Redlands, Brisbane.",
+  "url": "https://charlesit.com.au",
+  "telephone": "+61493106582",
+  "email": "charles@charlesit.com.au",
+  "areaServed": ["Redland Bay","Cleveland","Victoria Point","Capalaba","Wellington Point","Thornlands"],
+  "priceRange": "$$",
+  "address": {
+    "@type": "PostalAddress",
+    "addressLocality": "Redlands",
+    "addressRegion": "QLD",
+    "addressCountry": "AU"
+  },
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": -27.5306,
+    "longitude": 153.2456
+  },
+  "openingHours": "Mo-Sa 08:00-16:00"
+}
+</script>
+
 <style>
 *,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
 :root{
 --navy:#1a2744;--blue:#2b579a;--sky:#e8f0fa;--sky-deep:#d0e1f5;
 --warm:#e8a54b;--warm-light:#fdf4e6;--warm-dark:#c4882e;
 --text:#2c2c2c;--text-light:#5a6677;--white:#ffffff;--bg:#fafbfd;
+--green:#1a7a3a;--green-bg:#e6f9ed;
 --radius:12px;--radius-lg:20px;
 --shadow:0 2px 24px rgba(26,39,68,0.07);--shadow-lg:0 8px 40px rgba(26,39,68,0.10);
 }
@@ -21,6 +58,12 @@ body{font-family:'DM Sans',sans-serif;color:var(--text);background:var(--bg);lin
 h1,h2,h3{font-family:'Fraunces',serif;color:var(--navy);line-height:1.25}
 img{max-width:100%;display:block}
 a{color:var(--blue);text-decoration:none}
+
+/* Skip link */
+.skip-link{position:absolute;top:-100%;left:16px;background:var(--navy);color:var(--white);padding:12px 20px;border-radius:0 0 8px 8px;z-index:999;font-weight:600;font-size:15px;transition:top .2s}
+.skip-link:focus{top:0}
+
+/* Nav */
 .nav{position:fixed;top:0;left:0;right:0;z-index:100;background:rgba(255,255,255,0.92);backdrop-filter:blur(12px);border-bottom:1px solid rgba(43,87,154,0.08);transition:box-shadow .3s}
 .nav.scrolled{box-shadow:var(--shadow)}
 .nav-inner{max-width:1100px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;height:68px}
@@ -33,11 +76,13 @@ a{color:var(--blue);text-decoration:none}
 .nav-cta:hover{background:var(--navy);transform:translateY(-1px)}
 .nav-mobile{display:none;background:none;border:none;cursor:pointer;padding:8px}
 .nav-mobile svg{width:28px;height:28px;stroke:var(--navy);stroke-width:2;fill:none}
+
+/* Hero */
 .hero{padding:140px 24px 100px;text-align:center;background:linear-gradient(170deg,var(--sky) 0%,var(--bg) 60%);position:relative;overflow:hidden}
 .hero::before{content:'';position:absolute;top:-40%;right:-20%;width:600px;height:600px;background:radial-gradient(circle,rgba(232,165,75,0.08) 0%,transparent 70%);pointer-events:none}
 .hero h1{font-size:clamp(36px,5.5vw,58px);margin-bottom:20px;letter-spacing:-0.02em}
 .hero h1 em{color:var(--blue);font-style:normal}
-.hero p{font-size:clamp(17px,2.2vw,20px);color:var(--text-light);max-width:580px;margin:0 auto 36px;line-height:1.7}
+.hero p.hero-sub{font-size:clamp(17px,2.2vw,20px);color:var(--text-light);max-width:580px;margin:0 auto 36px;line-height:1.7}
 .hero-btns{display:flex;gap:16px;justify-content:center;flex-wrap:wrap}
 .btn{display:inline-flex;align-items:center;gap:8px;padding:14px 28px;border-radius:10px;font-weight:600;font-size:16px;transition:all .2s;cursor:pointer;border:none;font-family:'DM Sans',sans-serif}
 .btn-primary{background:var(--warm);color:var(--navy);box-shadow:0 4px 16px rgba(232,165,75,0.3)}
@@ -48,11 +93,15 @@ a{color:var(--blue);text-decoration:none}
 .trust-item{display:flex;align-items:center;gap:10px;font-size:15px;color:var(--text-light);font-weight:500}
 .trust-icon{width:40px;height:40px;background:var(--white);border-radius:10px;display:flex;align-items:center;justify-content:center;box-shadow:var(--shadow)}
 .trust-icon svg{width:20px;height:20px;stroke:var(--blue);stroke-width:2;fill:none}
+
+/* Sections */
 .section{padding:80px 24px}
 .section-inner{max-width:1100px;margin:0 auto}
 .section-label{font-size:13px;font-weight:600;color:var(--blue);text-transform:uppercase;letter-spacing:0.1em;margin-bottom:12px}
 .section-title{font-size:clamp(28px,4vw,40px);margin-bottom:16px;letter-spacing:-0.01em}
 .section-subtitle{font-size:17px;color:var(--text-light);max-width:560px;margin-bottom:48px;line-height:1.7}
+
+/* Services */
 .services-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:20px}
 .service-card{background:var(--white);border:1px solid rgba(43,87,154,0.06);border-radius:var(--radius-lg);padding:32px 28px;transition:all .3s}
 .service-card:hover{transform:translateY(-4px);box-shadow:var(--shadow-lg);border-color:rgba(43,87,154,0.12)}
@@ -60,6 +109,23 @@ a{color:var(--blue);text-decoration:none}
 .service-icon svg{width:24px;height:24px;stroke:var(--blue);stroke-width:1.8;fill:none}
 .service-card h3{font-size:19px;margin-bottom:10px;font-family:'DM Sans',sans-serif;font-weight:700;color:var(--navy)}
 .service-card p{font-size:15px;color:var(--text-light);line-height:1.65}
+
+/* Pricing */
+.pricing-bg{background:var(--sky)}
+.pricing-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-top:8px}
+.pricing-card{background:var(--white);border-radius:var(--radius-lg);padding:36px 32px;box-shadow:var(--shadow);border:2px solid transparent;transition:all .3s}
+.pricing-card.featured{border-color:var(--warm);position:relative}
+.pricing-card.featured::before{content:'Most popular';position:absolute;top:-14px;left:50%;transform:translateX(-50%);background:var(--warm);color:var(--navy);padding:4px 16px;border-radius:20px;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.05em;white-space:nowrap}
+.pricing-card h3{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:700;color:var(--navy);margin-bottom:8px}
+.pricing-card .price{font-family:'Fraunces',serif;font-size:40px;font-weight:700;color:var(--navy);margin-bottom:4px}
+.pricing-card .price span{font-size:16px;font-weight:400;color:var(--text-light);font-family:'DM Sans',sans-serif}
+.pricing-card .price-note{font-size:14px;color:var(--text-light);margin-bottom:20px}
+.pricing-card ul{list-style:none;display:flex;flex-direction:column;gap:12px;margin-bottom:28px}
+.pricing-card ul li{display:flex;align-items:flex-start;gap:10px;font-size:15px;color:var(--text)}
+.pricing-card ul li svg{width:20px;height:20px;min-width:20px;stroke:var(--green);stroke-width:2.5;fill:none;margin-top:2px}
+.pricing-card .btn{width:100%;justify-content:center}
+
+/* How it works */
 .how-bg{background:var(--navy)}
 .how-bg .section-label{color:var(--warm)}
 .how-bg .section-title{color:var(--white)}
@@ -69,6 +135,10 @@ a{color:var(--blue);text-decoration:none}
 .step-num{font-family:'Fraunces',serif;font-size:36px;font-weight:700;color:var(--warm);margin-bottom:12px}
 .step h3{font-family:'DM Sans',sans-serif;font-size:17px;font-weight:700;color:var(--white);margin-bottom:8px}
 .step p{font-size:14px;color:rgba(255,255,255,0.6);line-height:1.65}
+
+
+
+/* Booking */
 .booking-bg{background:var(--warm-light)}
 .booking-grid{display:grid;grid-template-columns:1fr 1.1fr;gap:48px;align-items:start}
 .booking-info h2{font-size:clamp(28px,3.5vw,36px);margin-bottom:16px}
@@ -79,6 +149,8 @@ a{color:var(--blue);text-decoration:none}
 .booking-form{background:var(--white);border-radius:var(--radius-lg);padding:36px;box-shadow:var(--shadow)}
 .booking-form h3{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:700;color:var(--navy);margin-bottom:24px}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+
+/* About */
 .about-grid{display:grid;grid-template-columns:1fr 1.2fr;gap:48px;align-items:center}
 .about-img{background:var(--sky);border-radius:var(--radius-lg);height:360px;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
 .about-img svg{width:120px;height:120px;stroke:var(--blue);stroke-width:1;fill:none;opacity:0.3}
@@ -87,6 +159,17 @@ a{color:var(--blue);text-decoration:none}
 .about-content p{font-size:16px;color:var(--text-light);margin-bottom:16px;line-height:1.75}
 .about-quals{display:flex;flex-wrap:wrap;gap:10px;margin-top:24px}
 .qual{background:var(--sky);padding:8px 16px;border-radius:8px;font-size:13px;font-weight:600;color:var(--blue)}
+
+/* FAQ */
+.faq-list{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:12px}
+.faq-item{background:var(--white);border-radius:var(--radius);overflow:hidden;box-shadow:var(--shadow);border:1px solid rgba(43,87,154,0.06)}
+.faq-item summary{padding:20px 24px;font-size:16px;font-weight:600;color:var(--navy);cursor:pointer;list-style:none;display:flex;justify-content:space-between;align-items:center;transition:background .2s}
+.faq-item summary:hover{background:var(--sky)}
+.faq-item summary::after{content:'+';font-size:22px;font-weight:400;color:var(--blue);transition:transform .2s}
+.faq-item[open] summary::after{transform:rotate(45deg)}
+.faq-item .faq-body{padding:0 24px 20px;font-size:15px;color:var(--text-light);line-height:1.7}
+
+/* Contact */
 .contact-bg{background:var(--sky)}
 .contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:start}
 .contact-info{display:flex;flex-direction:column;gap:24px}
@@ -98,22 +181,40 @@ a{color:var(--blue);text-decoration:none}
 .contact-item a{color:var(--blue);font-weight:500}
 .contact-form{background:var(--white);border-radius:var(--radius-lg);padding:36px;box-shadow:var(--shadow)}
 .contact-form h3{font-family:'DM Sans',sans-serif;font-size:18px;font-weight:700;color:var(--navy);margin-bottom:24px}
+
+/* Forms */
 .form-group{margin-bottom:18px}
 .form-group label{display:block;font-size:14px;font-weight:600;color:var(--navy);margin-bottom:6px}
-.form-group input,.form-group textarea,.form-group select{width:100%;padding:12px 16px;border:1.5px solid rgba(43,87,154,0.15);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:15px;color:var(--text);background:var(--bg);transition:border-color .2s,box-shadow .2s;outline:none}
+.form-group input,.form-group textarea,.form-group select{width:100%;padding:12px 16px;border:1.5px solid rgba(43,87,154,0.15);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:16px;color:var(--text);background:var(--bg);transition:border-color .2s,box-shadow .2s;outline:none;-webkit-appearance:none}
 .form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--blue);box-shadow:0 0 0 3px rgba(43,87,154,0.08)}
 .form-group textarea{resize:vertical;min-height:100px}
-.form-submit{width:100%;padding:14px;background:var(--blue);color:var(--white);border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:600;cursor:pointer;transition:background .2s,transform .15s}
+.form-submit{width:100%;padding:16px;background:var(--blue);color:var(--white);border:none;border-radius:10px;font-family:'DM Sans',sans-serif;font-size:16px;font-weight:600;cursor:pointer;transition:background .2s,transform .15s}
 .form-submit:hover{background:var(--navy);transform:translateY(-1px)}
 .form-submit:disabled{opacity:0.6;cursor:not-allowed;transform:none}
 .form-submit.booking-submit{background:var(--warm);color:var(--navy)}
 .form-submit.booking-submit:hover{background:var(--warm-dark);color:var(--white)}
 .form-msg{margin-top:12px;padding:12px 16px;border-radius:8px;font-size:14px;font-weight:500;display:none}
-.form-msg.success{display:block;background:#e6f9ed;color:#1a7a3a}
+.form-msg.success{display:block;background:var(--green-bg);color:var(--green)}
 .form-msg.error{display:block;background:#fde8e8;color:#a32d2d}
-.footer{background:var(--navy);padding:40px 24px;text-align:center}
-.footer p{color:rgba(255,255,255,0.5);font-size:14px}
-.footer a{color:var(--warm)}
+
+/* Phone CTA banner */
+.phone-banner{background:var(--navy);padding:20px 24px;text-align:center}
+.phone-banner p{color:rgba(255,255,255,0.7);font-size:15px}
+.phone-banner a{color:var(--warm);font-weight:700;font-size:17px;white-space:nowrap}
+
+/* Footer */
+.footer{background:var(--navy);padding:48px 24px 32px}
+.footer-inner{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:2fr 1fr 1fr;gap:40px;align-items:start}
+.footer-brand .nav-logo{font-size:20px;margin-bottom:12px;display:inline-block}
+.footer-brand p{color:rgba(255,255,255,0.5);font-size:14px;line-height:1.7;max-width:280px}
+.footer-col h4{font-family:'DM Sans',sans-serif;font-size:14px;font-weight:700;color:rgba(255,255,255,0.7);margin-bottom:14px;text-transform:uppercase;letter-spacing:0.05em}
+.footer-col a{display:block;color:rgba(255,255,255,0.5);font-size:14px;margin-bottom:10px;transition:color .2s}
+.footer-col a:hover{color:var(--warm)}
+.footer-bottom{max-width:1100px;margin:32px auto 0;padding-top:24px;border-top:1px solid rgba(255,255,255,0.08);display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
+.footer-bottom p{color:rgba(255,255,255,0.35);font-size:13px}
+.footer-bottom a{color:rgba(255,255,255,0.5)}
+
+/* Mobile */
 @media(max-width:768px){
 .nav-links{display:none;position:absolute;top:68px;left:0;right:0;background:var(--white);padding:24px;flex-direction:column;gap:20px;box-shadow:var(--shadow-lg);border-bottom:1px solid var(--sky-deep)}
 .nav-links.open{display:flex}
@@ -122,99 +223,166 @@ a{color:var(--blue);text-decoration:none}
 .about-grid,.contact-grid,.booking-grid{grid-template-columns:1fr}
 .about-img{height:240px}
 .steps,.form-row{grid-template-columns:1fr}
+.footer-inner{grid-template-columns:1fr}
+.footer-bottom{flex-direction:column;text-align:center}
+.pricing-grid{grid-template-columns:1fr}
 }
+@media(max-width:480px){
+.hero{padding:120px 20px 72px}
+.section{padding:64px 20px}
+.trust-bar{flex-direction:column;align-items:center;gap:16px}
+}
+
+/* Focus styles for accessibility */
+a:focus-visible,.btn:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,summary:focus-visible{outline:3px solid var(--blue);outline-offset:2px;border-radius:4px}
+
+/* Animations */
 .fade-up{opacity:0;transform:translateY(24px);transition:opacity .6s ease,transform .6s ease}
 .fade-up.visible{opacity:1;transform:translateY(0)}
+@media(prefers-reduced-motion:reduce){
+.fade-up{opacity:1;transform:none;transition:none}
+}
 </style>
 </head>
 <body>
 
-<nav class="nav" id="nav">
+<a href="#main" class="skip-link">Skip to main content</a>
+
+<nav class="nav" id="nav" role="navigation" aria-label="Main navigation">
 <div class="nav-inner">
-<a href="#" class="nav-logo">Charles<span>IT</span></a>
-<div class="nav-links" id="navLinks">
-<a href="#services">Services</a>
-<a href="#how">How it works</a>
-<a href="#book">Book a visit</a>
-<a href="#about">About</a>
-<a href="#contact" class="nav-cta">Get in touch</a>
+<a href="#" class="nav-logo" aria-label="Charles IT — Home">Charles<span>IT</span></a>
+<div class="nav-links" id="navLinks" role="menubar">
+<a href="#services" role="menuitem">Services</a>
+<a href="#pricing" role="menuitem">Pricing</a>
+<a href="#how" role="menuitem">How it works</a>
+<a href="#about" role="menuitem">About</a>
+<a href="#book" class="nav-cta" role="menuitem">Book a visit</a>
 </div>
-<button class="nav-mobile" id="navToggle" aria-label="Toggle menu">
+<button class="nav-mobile" id="navToggle" aria-label="Toggle menu" aria-expanded="false" aria-controls="navLinks">
 <svg viewBox="0 0 24 24"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
 </button>
 </div>
 </nav>
 
-<section class="hero">
+<main id="main">
+
+<section class="hero" aria-label="Introduction">
 <div class="fade-up">
 <h1>Friendly IT help,<br><em>right at your door</em></h1>
-<p>Patient, jargon-free tech support for seniors in the Redlands. I come to you, fix the problem, and make sure you're comfortable before I leave.</p>
+<p class="hero-sub">Patient, jargon-free tech support for seniors in the Redlands. I come to you, fix the problem, and make sure you're comfortable before I leave.</p>
 <div class="hero-btns">
 <a href="#book" class="btn btn-primary">
-<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
-Book a visit
+<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+Book a visit — it's free to call out
 </a>
 <a href="#services" class="btn btn-secondary">See what I can help with</a>
 </div>
 </div>
-<div class="trust-bar fade-up">
-<div class="trust-item"><div class="trust-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>Fully insured</div>
-<div class="trust-item"><div class="trust-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>Same-week visits</div>
-<div class="trust-item"><div class="trust-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>One-on-one support</div>
+<div class="trust-bar fade-up" role="list" aria-label="Trust signals">
+<div class="trust-item" role="listitem"><div class="trust-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>Fully insured</div>
+<div class="trust-item" role="listitem"><div class="trust-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg></div>Same-week visits</div>
+<div class="trust-item" role="listitem"><div class="trust-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>One-on-one support</div>
 </div>
 </section>
 
-<section class="section" id="services">
+<section class="section" id="services" aria-labelledby="services-title">
 <div class="section-inner">
 <p class="section-label fade-up">Services</p>
-<h2 class="section-title fade-up">Whatever the tech problem, I can help</h2>
+<h2 class="section-title fade-up" id="services-title">Whatever the tech problem, I can help</h2>
 <p class="section-subtitle fade-up">No job too small. If it plugs in or connects to the internet, I'll sort it out for you.</p>
-<div class="services-grid">
-<div class="service-card fade-up"><div class="service-icon"><svg viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><h3>Computer &amp; laptop help</h3><p>Slow performance, error messages, software installs, updates, and general troubleshooting on Windows and Mac.</p></div>
-<div class="service-card fade-up"><div class="service-icon"><svg viewBox="0 0 24 24"><path d="M5 12.55a11 11 0 0114.08 0"/><path d="M1.42 9a16 16 0 0121.16 0"/><path d="M8.53 16.11a6 6 0 016.95 0"/><circle cx="12" cy="20" r="1"/></svg></div><h3>Internet &amp; Wi-Fi</h3><p>Dropouts, dead spots, slow speeds, router setup, and getting all your devices connected properly.</p></div>
-<div class="service-card fade-up"><div class="service-icon"><svg viewBox="0 0 24 24"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></div><h3>Printer setup</h3><p>New printer installation, wireless printing, driver issues, scanning, and getting it all talking to your computer.</p></div>
-<div class="service-card fade-up"><div class="service-icon"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div><h3>Phone &amp; tablet help</h3><p>Setting up new devices, transferring data, app installs, email setup, and syncing contacts and photos.</p></div>
-<div class="service-card fade-up"><div class="service-icon"><svg viewBox="0 0 24 24"><path d="M12 22s-8-4.5-8-11.8A8 8 0 0112 2a8 8 0 018 8.2c0 7.3-8 11.8-8 11.8z"/><circle cx="12" cy="10" r="3"/></svg></div><h3>Smart home &amp; TV</h3><p>Smart TV setup, streaming apps, Chromecast, smart speakers, and getting everything on your home network.</p></div>
-<div class="service-card fade-up"><div class="service-icon"><svg viewBox="0 0 24 24"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></div><h3>Lessons &amp; coaching</h3><p>Patient, one-on-one guidance on using email, video calls, online banking, social media, or anything else you'd like to learn.</p></div>
+<div class="services-grid" role="list">
+<div class="service-card fade-up" role="listitem"><div class="service-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="3" width="20" height="14" rx="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></div><h3>Computer &amp; laptop help</h3><p>Slow performance, error messages, software installs, updates, and general troubleshooting on Windows and Mac.</p></div>
+<div class="service-card fade-up" role="listitem"><div class="service-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12.55a11 11 0 0114.08 0"/><path d="M1.42 9a16 16 0 0121.16 0"/><path d="M8.53 16.11a6 6 0 016.95 0"/><circle cx="12" cy="20" r="1"/></svg></div><h3>Internet &amp; Wi-Fi</h3><p>Dropouts, dead spots, slow speeds, router setup, and getting all your devices connected properly.</p></div>
+<div class="service-card fade-up" role="listitem"><div class="service-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 01-2-2v-5a2 2 0 012-2h16a2 2 0 012 2v5a2 2 0 01-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg></div><h3>Printer setup</h3><p>New printer installation, wireless printing, driver issues, scanning, and getting it all talking to your computer.</p></div>
+<div class="service-card fade-up" role="listitem"><div class="service-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div><h3>Phone &amp; tablet help</h3><p>Setting up new devices, transferring data, app installs, email setup, and syncing contacts and photos.</p></div>
+<div class="service-card fade-up" role="listitem"><div class="service-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="7" width="20" height="15" rx="2"/><polyline points="17 2 12 7 7 2"/></svg></div><h3>Smart home &amp; TV</h3><p>Smart TV setup, streaming apps, Chromecast, smart speakers, and getting everything on your home network.</p></div>
+<div class="service-card fade-up" role="listitem"><div class="service-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1a3 3 0 00-3 3v8a3 3 0 006 0V4a3 3 0 00-3-3z"/><path d="M19 10v2a7 7 0 01-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></svg></div><h3>Lessons &amp; coaching</h3><p>Patient, one-on-one guidance on using email, video calls, online banking, social media, or anything else you'd like to learn.</p></div>
 </div>
 </div>
 </section>
 
-<section class="section how-bg" id="how">
+<!-- NEW: Pricing section -->
+<section class="section pricing-bg" id="pricing" aria-labelledby="pricing-title">
+<div class="section-inner">
+<p class="section-label fade-up">Pricing</p>
+<h2 class="section-title fade-up" id="pricing-title">Simple, upfront pricing</h2>
+<p class="section-subtitle fade-up">No hidden fees, no call-out charges for Redlands locals. You only pay for the time I'm working.</p>
+<div class="pricing-grid">
+<div class="pricing-card fade-up">
+<h3>Quick fix</h3>
+<div class="price">$55 <span>/ visit</span></div>
+<p class="price-note">Up to 30 minutes</p>
+<ul>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Simple troubleshooting</li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Printer or device setup</li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Software installs</li>
+</ul>
+<a href="#book" class="btn btn-secondary">Book a quick fix</a>
+</div>
+<div class="pricing-card featured fade-up">
+<h3>Standard visit</h3>
+<div class="price">$85 <span>/ visit</span></div>
+<p class="price-note">Up to 1 hour</p>
+<ul>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Everything in Quick fix</li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Wi-Fi and network fixes</li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>New device setup &amp; data transfer</li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>One-on-one coaching</li>
+</ul>
+<a href="#book" class="btn btn-primary">Book a standard visit</a>
+</div>
+<div class="pricing-card fade-up">
+<h3>Extended session</h3>
+<div class="price">$120 <span>/ visit</span></div>
+<p class="price-note">Up to 2 hours</p>
+<ul>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Everything in Standard</li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Full computer health check</li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Multi-device setups</li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Smart home configuration</li>
+</ul>
+<a href="#book" class="btn btn-secondary">Book an extended session</a>
+</div>
+</div>
+</div>
+</section>
+
+<section class="section how-bg" id="how" aria-labelledby="how-title">
 <div class="section-inner">
 <p class="section-label fade-up">How it works</p>
-<h2 class="section-title fade-up">Simple as 1, 2, 3</h2>
+<h2 class="section-title fade-up" id="how-title">Simple as 1, 2, 3</h2>
 <p class="section-subtitle fade-up">No confusing processes. Just give me a call or send a message.</p>
-<div class="steps">
-<div class="step fade-up"><div class="step-num">1</div><h3>Get in touch</h3><p>Call, email, or fill out the booking form. Tell me what's going on — no tech jargon needed.</p></div>
-<div class="step fade-up"><div class="step-num">2</div><h3>I come to you</h3><p>We book a time that works for you. I arrive at your home, ready to help.</p></div>
-<div class="step fade-up"><div class="step-num">3</div><h3>Problem solved</h3><p>I fix the issue, explain what I did in plain English, and make sure you're confident before I leave.</p></div>
+<div class="steps" role="list">
+<div class="step fade-up" role="listitem"><div class="step-num" aria-hidden="true">1</div><h3>Get in touch</h3><p>Call, email, or fill out the booking form. Tell me what's going on — no tech jargon needed.</p></div>
+<div class="step fade-up" role="listitem"><div class="step-num" aria-hidden="true">2</div><h3>I come to you</h3><p>We book a time that works for you. I arrive at your home, ready to help.</p></div>
+<div class="step fade-up" role="listitem"><div class="step-num" aria-hidden="true">3</div><h3>Problem solved</h3><p>I fix the issue, explain what I did in plain English, and make sure you're confident before I leave.</p></div>
 </div>
 </div>
 </section>
 
-<section class="section booking-bg" id="book">
+
+<section class="section booking-bg" id="book" aria-labelledby="book-title">
 <div class="section-inner">
 <div class="booking-grid">
 <div class="booking-info fade-up">
 <p class="section-label">Book a visit</p>
-<h2>Pick a time that suits you</h2>
+<h2 id="book-title">Pick a time that suits you</h2>
 <p>Choose your preferred date and time below and I'll confirm within a few hours. Visits are available Monday to Saturday across the Redlands area.</p>
-<ul class="booking-perks">
-<li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>No call-out fee for Redlands locals</li>
-<li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Transparent pricing — no surprises</li>
-<li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Same-week availability most weeks</li>
-<li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Flexible rescheduling if plans change</li>
+<ul class="booking-perks" role="list">
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>No call-out fee for Redlands locals</li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Transparent pricing — no surprises</li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Same-week availability most weeks</li>
+<li><svg viewBox="0 0 24 24" aria-hidden="true"><polyline points="20 6 9 17 4 12"/></svg>Flexible rescheduling if plans change</li>
 </ul>
 </div>
 <div class="booking-form fade-up">
 <h3>Request a booking</h3>
 <form id="bookingForm" action="https://formspree.io/f/mykbrwwd" method="POST">
 <input type="hidden" name="_subject" value="New Booking Request — Charles IT">
-<div class="form-group"><label for="bk-name">Your name</label><input type="text" id="bk-name" name="name" required placeholder="e.g. Margaret Smith"></div>
+<div class="form-group"><label for="bk-name">Your name</label><input type="text" id="bk-name" name="name" required placeholder="e.g. Margaret Smith" autocomplete="name"></div>
 <div class="form-row">
-<div class="form-group"><label for="bk-phone">Phone number</label><input type="tel" id="bk-phone" name="phone" required placeholder="e.g. 0412 345 678"></div>
-<div class="form-group"><label for="bk-email">Email (optional)</label><input type="email" id="bk-email" name="email" placeholder="e.g. margaret@email.com"></div>
+<div class="form-group"><label for="bk-phone">Phone number</label><input type="tel" id="bk-phone" name="phone" required placeholder="e.g. 0412 345 678" autocomplete="tel"></div>
+<div class="form-group"><label for="bk-email">Email (optional)</label><input type="email" id="bk-email" name="email" placeholder="e.g. margaret@email.com" autocomplete="email"></div>
 </div>
 <div class="form-row">
 <div class="form-group"><label for="bk-date">Preferred date</label><input type="date" id="bk-date" name="preferred_date" required></div>
@@ -244,94 +412,142 @@ Book a visit
 </select></div>
 <div class="form-group"><label for="bk-details">Any extra details? (optional)</label><textarea id="bk-details" name="details" placeholder="Describe the issue in your own words — no tech language needed!"></textarea></div>
 <button type="submit" class="form-submit booking-submit" id="bookingBtn">Request booking</button>
-<div class="form-msg" id="bookingMsg"></div>
+<div class="form-msg" id="bookingMsg" role="alert" aria-live="polite"></div>
 </form>
 </div>
 </div>
 </div>
 </section>
 
-<section class="section" id="about">
+<section class="section" id="about" aria-labelledby="about-title">
 <div class="section-inner">
 <div class="about-grid">
 <div class="about-img fade-up">
-<svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-<div class="about-img-badge"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2b579a" stroke-width="2"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>TAFE Qualified</div>
+<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+<div class="about-img-badge"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#2b579a" stroke-width="2" aria-hidden="true"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>TAFE Qualified</div>
 </div>
 <div class="about-content fade-up">
 <p class="section-label">About Charles</p>
-<h2>Tech support from someone who actually listens</h2>
+<h2 id="about-title">Tech support from someone who actually listens</h2>
 <p>I'm Charles — a qualified IT technician based in the Redlands. I hold a Diploma of IT in Advanced Networking from TAFE Queensland and work as a Level 1 technician supporting schools across Brisbane.</p>
 <p>I started Charles IT because I saw how many people in our community just need someone patient, friendly, and local to help with their tech. No call centres, no confusing jargon — just honest help from someone who genuinely enjoys making technology easier for people.</p>
-<div class="about-quals">
-<span class="qual">Diploma — Advanced Networking</span>
-<span class="qual">CCNA (in progress)</span>
-<span class="qual">Redlands local</span>
+<div class="about-quals" role="list" aria-label="Qualifications">
+<span class="qual" role="listitem">Diploma — Advanced Networking</span>
+<span class="qual" role="listitem">CCNA (in progress)</span>
+<span class="qual" role="listitem">Fully insured</span>
+<span class="qual" role="listitem">Redlands local</span>
 </div>
 </div>
 </div>
 </div>
 </section>
 
-<section class="section contact-bg" id="contact">
+<!-- NEW: FAQ -->
+<section class="section" id="faq" aria-labelledby="faq-title">
 <div class="section-inner">
-<p class="section-label fade-up">Contact</p>
-<h2 class="section-title fade-up">Let's sort out your tech problem</h2>
-<p class="section-subtitle fade-up">Call me directly or send a message — I'll get back to you within a few hours.</p>
-<div class="contact-grid">
-<div class="contact-info fade-up">
-<div class="contact-item"><div class="contact-item-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div><div><h3>Phone</h3><p><a href="tel:0493106582">0493 106 582</a></p></div></div>
-<div class="contact-item"><div class="contact-item-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div><h3>Email</h3><p><a href="mailto:charles@charleshageit.com">charles@charleshageit.com</a></p></div></div>
-<div class="contact-item"><div class="contact-item-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><h3>Service area</h3><p>Redland Bay, Cleveland, Victoria Point, Capalaba, Wellington Point, Thornlands &amp; surrounds</p></div></div>
-</div>
-<div class="contact-form fade-up">
-<h3>Send me a message</h3>
-<form id="contactForm" action="https://formspree.io/f/mzdknrrj" method="POST">
-<input type="hidden" name="_subject" value="New Message — Charles IT Website">
-<div class="form-group"><label for="ct-name">Your name</label><input type="text" id="ct-name" name="name" required placeholder="e.g. Margaret Smith"></div>
-<div class="form-group"><label for="ct-phone">Phone number</label><input type="tel" id="ct-phone" name="phone" required placeholder="e.g. 0412 345 678"></div>
-<div class="form-group"><label for="ct-email">Email (optional)</label><input type="email" id="ct-email" name="email" placeholder="e.g. margaret@email.com"></div>
-<div class="form-group"><label for="ct-issue">What do you need help with?</label>
-<select id="ct-issue" name="issue">
-<option value="">Select an option...</option>
-<option value="Computer or laptop problem">Computer or laptop problem</option>
-<option value="Internet or Wi-Fi issues">Internet or Wi-Fi issues</option>
-<option value="Printer setup or problems">Printer setup or problems</option>
-<option value="Phone or tablet help">Phone or tablet help</option>
-<option value="Smart TV or streaming">Smart TV or streaming</option>
-<option value="Lessons or coaching">Lessons or coaching</option>
-<option value="Something else">Something else</option>
-</select></div>
-<div class="form-group"><label for="ct-message">Tell me a bit more</label><textarea id="ct-message" name="message" placeholder="Describe the issue in your own words — no tech language needed!"></textarea></div>
-<button type="submit" class="form-submit" id="contactBtn">Send message</button>
-<div class="form-msg" id="contactMsg"></div>
-</form>
-</div>
+<p class="section-label fade-up" style="text-align:center">FAQ</p>
+<h2 class="section-title fade-up" id="faq-title" style="text-align:center">Common questions</h2>
+<p class="section-subtitle fade-up" style="text-align:center;margin-left:auto;margin-right:auto">Everything you might want to know before booking.</p>
+<div class="faq-list">
+<details class="faq-item fade-up"><summary>How much does a visit cost?</summary><div class="faq-body">A quick fix (up to 30 minutes) is $55, a standard visit (up to 1 hour) is $85, and an extended session (up to 2 hours) is $120. There's no call-out fee for anyone in the Redlands area. I'll always let you know upfront if I think a job will take longer.</div></details>
+<details class="faq-item fade-up"><summary>What areas do you cover?</summary><div class="faq-body">I service Redland Bay, Cleveland, Victoria Point, Capalaba, Wellington Point, Thornlands, and surrounding suburbs. If you're not sure whether you're in range, just give me a call and I'll let you know.</div></details>
+<details class="faq-item fade-up"><summary>Do I need to know anything technical before you arrive?</summary><div class="faq-body">Not at all! Just describe the problem in your own words — that's all I need. I'll figure out the rest when I get there.</div></details>
+<details class="faq-item fade-up"><summary>How quickly can you come out?</summary><div class="faq-body">Most weeks I can get to you within 2–3 days. I'm available Monday to Saturday, 8 AM to 4 PM. For urgent issues, call me directly and I'll do my best to fit you in sooner.</div></details>
+<details class="faq-item fade-up"><summary>What if the problem isn't fixed in one visit?</summary><div class="faq-body">If I need to come back to finish the job, I won't charge you a second call-out. If parts or software need to be ordered, I'll discuss costs with you upfront before proceeding.</div></details>
+<details class="faq-item fade-up"><summary>How do I pay?</summary><div class="faq-body">I accept cash, bank transfer, or card payment on the spot. You'll receive a simple invoice by text or email after the visit.</div></details>
 </div>
 </div>
 </section>
 
-<footer class="footer">
-<p>&copy; 2026 Charles IT — ABN pending | <a href="mailto:charles@charleshageit.com">charles@charleshageit.com</a></p>
+<!-- Simplified: Removed duplicate contact form, made contact section info-only with strong CTA -->
+<section class="section contact-bg" id="contact" aria-labelledby="contact-title">
+<div class="section-inner" style="text-align:center;max-width:680px">
+<p class="section-label fade-up">Contact</p>
+<h2 class="section-title fade-up" id="contact-title">Ready to sort out your tech?</h2>
+<p class="section-subtitle fade-up" style="margin-left:auto;margin-right:auto">Call me directly or book a visit — I'll get back to you within a few hours.</p>
+<div style="display:flex;gap:16px;justify-content:center;flex-wrap:wrap;margin-bottom:40px" class="fade-up">
+<a href="tel:0493106582" class="btn btn-primary" style="font-size:18px;padding:16px 32px">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6A19.79 19.79 0 012.12 4.18 2 2 0 014.11 2h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+Call 0493 106 582
+</a>
+<a href="#book" class="btn btn-secondary">Book online</a>
+</div>
+<div class="fade-up" style="display:flex;flex-wrap:wrap;gap:32px;justify-content:center;text-align:left">
+<div class="contact-item"><div class="contact-item-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div><div><h3>Email</h3><p><a href="mailto:charles@charlesit.com.au">charles@charlesit.com.au</a></p></div></div>
+<div class="contact-item"><div class="contact-item-icon"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div><div><h3>Service area</h3><p>Redland Bay, Cleveland, Victoria Point, Capalaba, Wellington Point, Thornlands</p></div></div>
+</div>
+</div>
+</section>
+
+</main>
+
+<footer class="footer" role="contentinfo">
+<div class="footer-inner">
+<div class="footer-brand">
+<a href="#" class="nav-logo" aria-label="Charles IT">Charles<span>IT</span></a>
+<p>Patient, in-home IT support for seniors in the Redlands. No jargon, no fuss — just help that makes sense.</p>
+</div>
+<div class="footer-col">
+<h4>Quick links</h4>
+<a href="#services">Services</a>
+<a href="#pricing">Pricing</a>
+<a href="#how">How it works</a>
+<a href="#faq">FAQ</a>
+<a href="#about">About</a>
+</div>
+<div class="footer-col">
+<h4>Get in touch</h4>
+<a href="tel:0493106582">0493 106 582</a>
+<a href="mailto:charles@charlesit.com.au">charles@charlesit.com.au</a>
+<a href="#book">Book a visit</a>
+</div>
+</div>
+<div class="footer-bottom">
+<p>&copy; 2026 Charles IT &mdash; ABN 00 000 000 000</p>
+<p><a href="#privacy">Privacy Policy</a></p>
+</div>
 </footer>
 
 <script>
+// Set min date for booking
 document.getElementById('bk-date').min = new Date().toISOString().split('T')[0];
+
+// Sticky nav shadow
 var nav = document.getElementById('nav');
 window.addEventListener('scroll', function() { nav.classList.toggle('scrolled', window.scrollY > 20); });
+
+// Mobile menu toggle
 var navToggle = document.getElementById('navToggle');
 var navLinks = document.getElementById('navLinks');
-navToggle.addEventListener('click', function() { navLinks.classList.toggle('open'); });
+navToggle.addEventListener('click', function() {
+  var isOpen = navLinks.classList.toggle('open');
+  navToggle.setAttribute('aria-expanded', isOpen);
+});
 var links = navLinks.querySelectorAll('a');
-for (var i = 0; i < links.length; i++) { links[i].addEventListener('click', function() { navLinks.classList.remove('open'); }); }
-var obs = new IntersectionObserver(function(entries) {
-  entries.forEach(function(e, i) {
-    if (e.isIntersecting) { setTimeout(function() { e.target.classList.add('visible'); }, i * 80); obs.unobserve(e.target); }
+for (var i = 0; i < links.length; i++) {
+  links[i].addEventListener('click', function() {
+    navLinks.classList.remove('open');
+    navToggle.setAttribute('aria-expanded', 'false');
   });
-}, { threshold: 0.15 });
-var fadeEls = document.querySelectorAll('.fade-up');
-for (var j = 0; j < fadeEls.length; j++) { obs.observe(fadeEls[j]); }
+}
 
+// Scroll animations (respects prefers-reduced-motion)
+var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+if (!prefersReduced) {
+  var obs = new IntersectionObserver(function(entries) {
+    entries.forEach(function(e) {
+      if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
+    });
+  }, { threshold: 0.1 });
+  var fadeEls = document.querySelectorAll('.fade-up');
+  for (var j = 0; j < fadeEls.length; j++) { obs.observe(fadeEls[j]); }
+} else {
+  // Make all visible immediately
+  var fadeEls = document.querySelectorAll('.fade-up');
+  for (var j = 0; j < fadeEls.length; j++) { fadeEls[j].classList.add('visible'); }
+}
+
+// Form handler
 function handleForm(formId, btnId, msgId) {
   var form = document.getElementById(formId);
   form.addEventListener('submit', function(e) {
@@ -351,7 +567,7 @@ function handleForm(formId, btnId, msgId) {
       if (res.ok) {
         msg.className = 'form-msg success';
         var nameVal = form.querySelector('[name="name"]').value.split(' ')[0];
-        msg.textContent = 'Thanks ' + nameVal + '! I will be in touch within a few hours to confirm.';
+        msg.textContent = 'Thanks ' + nameVal + '! I\'ll be in touch within a few hours to confirm.';
         form.reset();
       } else {
         msg.className = 'form-msg error';
@@ -361,14 +577,13 @@ function handleForm(formId, btnId, msgId) {
       btn.textContent = origText;
     }).catch(function() {
       msg.className = 'form-msg error';
-      msg.textContent = 'Could not send. Please call me on 0493 106 582 instead.';
+      msg.textContent = 'Something went wrong. Please call me on 0493 106 582 instead.';
       btn.disabled = false;
       btn.textContent = origText;
     });
   });
 }
 handleForm('bookingForm', 'bookingBtn', 'bookingMsg');
-handleForm('contactForm', 'contactBtn', 'contactMsg');
 </script>
 </body>
 </html>
