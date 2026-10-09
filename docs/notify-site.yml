@@ -1,0 +1,25 @@
+# Copy to .github/workflows/notify-site.yml in any of Charles's repos.
+# Tells charleshageit.com to rebuild so the project cards, spec sheets and log are current.
+# Needs a secret SITE_DISPATCH_TOKEN (see docs/keeping-it-fresh.md in NXT549/charleshageit.com).
+name: Notify site
+
+on:
+  push:
+    branches: [main]
+  release:
+    types: [published]
+  workflow_dispatch:
+
+jobs:
+  notify:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Ask charleshageit.com to rebuild
+        env:
+          TOKEN: ${{ secrets.SITE_DISPATCH_TOKEN }}
+        run: |
+          curl -fsS -X POST \
+            -H "Accept: application/vnd.github+json" \
+            -H "Authorization: Bearer $TOKEN" \
+            https://api.github.com/repos/NXT549/charleshageit.com/dispatches \
+            -d '{"event_type":"repo-updated","client_payload":{"repo":"${{ github.repository }}"}}'
