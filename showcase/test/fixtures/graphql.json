@@ -133,7 +133,7 @@
             "name": "weather-bot",
             "nameWithOwner": "NXT549/weather-bot",
             "url": "https://github.com/NXT549/weather-bot",
-            "description": "Posts the <b>Brisbane</b> forecast <script>alert(1)</script> to `#general`",
+            "description": "Posts the <b>weather</b> forecast <script>alert(1)</script> to `#general`",
             "homepageUrl": "javascript:alert(1)",
             "stargazerCount": 1234, "forkCount": 0, "isFork": false, "isArchived": false, "isPrivate": false,
             "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-03-01T00:00:00Z", "pushedAt": "2025-03-01T00:00:00Z",

@@ -51,7 +51,7 @@ export function icon(name) {
   return `<svg class="icon" aria-hidden="true" width="16" height="16"><use href="#i-${name}"/></svg>`;
 }
 
-const DATE_FMT = new Intl.DateTimeFormat("en-AU", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+const DATE_FMT = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
 
 /** A <time> showing an absolute date; js/showcase.js swaps in "3 days ago" on load. */
 export function time(iso) {

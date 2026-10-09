@@ -202,7 +202,7 @@ export function mountShell(body: HTMLElement, data: ShellData) {
         if (!file) return print("cat: meow?");
         if (/^(about|about\.md|readme|readme\.md)$/.test(file)) {
           return print([
-            "I'm Charles, from the Redlands in Brisbane. I build little things for fun, mostly by vibe coding: " +
+            "I'm Charles. I build little things for fun, mostly by vibe coding: " +
               "I describe it, an AI helps write it, and we go back and forth until it feels right. ",
             link("more about me", "#about"),
           ]);
@@ -246,7 +246,7 @@ export function mountShell(body: HTMLElement, data: ShellData) {
       case "pwd":
         return print("/home/you/workshop");
       case "date":
-        return print(new Date().toLocaleString("en-AU", { dateStyle: "full", timeStyle: "short" }));
+        return print(new Date().toLocaleString("en-GB", { dateStyle: "full", timeStyle: "short" }));
       case "echo":
         return print(arg);
       case "history":
