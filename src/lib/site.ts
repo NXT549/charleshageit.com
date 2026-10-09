@@ -7,6 +7,7 @@ export const SITE = {
   shortDescription: "Little things I've vibe-coded, finished and in progress.",
   author: "Charles",
   lang: "en",
+  domain: "charleshageit.com",
   github: "NXT549",
   githubUrl: "https://github.com/NXT549",
   repoUrl: "https://github.com/NXT549/charleshageit.com",

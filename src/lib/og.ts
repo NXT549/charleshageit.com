@@ -178,7 +178,9 @@ export async function renderOgPng(card: OgCard): Promise<Uint8Array> {
 
   const words = title.trim().split(/\s+/);
   const last = words.pop() ?? "";
-  const titleSize = 104;
+  // Shrink long names so the longest line still fits beside Pip.
+  const longest = Math.max(last.length, ...words.map((w) => w.length));
+  const titleSize = Math.max(56, Math.min(104, Math.floor(540 / (longest * 0.6))));
   // Wide enough for the circled word in Geist 800; the loop overshoots it a little, like the hand-drawn one.
   const loopW = Math.round(last.length * titleSize * 0.6 + 60);
   const loopH = Math.round(titleSize * 1.4);
