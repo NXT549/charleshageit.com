@@ -67,6 +67,19 @@ async function mapLimit(items, limit, fn) {
 
 // ---------------------------------------------------------------- GraphQL
 
+/** How many recent commits to keep per repo, for the project pages and the workshop log. */
+export const HISTORY = 15;
+
+function fromGraphQLCommit(c) {
+  return {
+    sha: c.oid,
+    shortSha: c.abbreviatedOid,
+    message: commitHeadline(c.messageHeadline, c.messageBody),
+    date: c.committedDate,
+    url: c.url,
+  };
+}
+
 const QUERY = `
 query Showcase($login: String!, $cursor: String) {
   user(login: $login) {
@@ -87,8 +100,16 @@ query Showcase($login: String!, $cursor: String) {
           tagName name publishedAt url
           releaseAssets(first: 20) { nodes { name downloadUrl } }
         }
+        releases(first: 10, orderBy: { field: CREATED_AT, direction: DESC }) {
+          nodes { tagName name publishedAt url isDraft isPrerelease }
+        }
         defaultBranchRef {
-          target { ... on Commit { oid abbreviatedOid messageHeadline messageBody committedDate url } }
+          target {
+            ... on Commit {
+              oid abbreviatedOid messageHeadline messageBody committedDate url
+              history(first: ${HISTORY}) { nodes { oid abbreviatedOid messageHeadline messageBody committedDate url } }
+            }
+          }
         }
         packageJson: object(expression: "HEAD:package.json") { ... on Blob { text } }
         requirements: object(expression: "HEAD:requirements.txt") { ... on Blob { text } }
@@ -133,16 +154,11 @@ export function fromGraphQLRepo(node) {
           assets: ((rel.releaseAssets && rel.releaseAssets.nodes) || []).map((a) => ({ name: a.name, url: a.downloadUrl })),
         }
       : null,
-    latestCommit:
-      commit && commit.oid
-        ? {
-            sha: commit.oid,
-            shortSha: commit.abbreviatedOid,
-            message: commitHeadline(commit.messageHeadline, commit.messageBody),
-            date: commit.committedDate,
-            url: commit.url,
-          }
-        : null,
+    latestCommit: commit && commit.oid ? fromGraphQLCommit(commit) : null,
+    commits: ((commit && commit.history && commit.history.nodes) || []).map(fromGraphQLCommit),
+    releases: ((node.releases && node.releases.nodes) || [])
+      .filter((r) => !r.isDraft)
+      .map((r) => ({ tag: r.tagName, name: r.name, date: r.publishedAt, url: r.url, prerelease: Boolean(r.isPrerelease) })),
     packageJson: node.packageJson && node.packageJson.text,
     requirements: node.requirements && node.requirements.text,
     pyproject: node.pyproject && node.pyproject.text,
@@ -201,6 +217,8 @@ export function fromRestRepo(r) {
     topics: r.topics || [],
     release: null,
     latestCommit: null,
+    commits: [],
+    releases: [],
     packageJson: null,
     requirements: null,
     pyproject: null,
@@ -233,23 +251,23 @@ export async function fetchViaRest({ login, token, config, fetchImpl = fetch }) 
   const shown = repos.filter((r) => isShown(r, config, login));
   await mapLimit(shown, 4, async (repo) => {
     const [commits, release] = await Promise.all([
-      getJson(fetchImpl, `${API}/repos/${repo.fullName}/commits?per_page=1`, token, { allow404: true }).catch((e) => {
+      getJson(fetchImpl, `${API}/repos/${repo.fullName}/commits?per_page=${HISTORY}`, token, { allow404: true }).catch((e) => {
         if (e instanceof RateLimitError) throw e;
         return null; // empty repos answer 409
       }),
       getJson(fetchImpl, `${API}/repos/${repo.fullName}/releases/latest`, token, { allow404: true }),
     ]);
-    const c = Array.isArray(commits) && commits[0];
-    if (c) {
+    repo.commits = (Array.isArray(commits) ? commits : []).map((c) => {
       const [headline, ...body] = String(c.commit.message).split("\n");
-      repo.latestCommit = {
+      return {
         sha: c.sha,
         shortSha: c.sha.slice(0, 7),
         message: commitHeadline(headline, body.join("\n")),
         date: c.commit.committer ? c.commit.committer.date : c.commit.author.date,
         url: c.html_url,
       };
-    }
+    });
+    repo.latestCommit = repo.commits[0] || null;
     if (release) {
       repo.release = {
         tag: release.tag_name,
@@ -369,6 +387,15 @@ export function normalize({ user, repos }, config, { generatedAt = new Date().to
         createdAt: r.createdAt,
         pushedAt: r.pushedAt,
         latestCommit: r.latestCommit || null,
+        // Older caches (and REST, for releases) only have the latest one.
+        commits: (r.commits && r.commits.length ? r.commits : r.latestCommit ? [r.latestCommit] : []).slice(0, HISTORY),
+        releases: (r.releases && r.releases.length
+          ? r.releases
+          : r.release
+            ? [{ tag: r.release.tag, name: r.release.name, date: r.release.date, url: r.release.url, prerelease: false }]
+            : []
+        ).map((rel) => ({ ...rel, name: rel.name || rel.tag })),
+        readme: o.hideReadme ? null : r.readme || null,
         release: r.release
           ? {
               tag: r.release.tag,
