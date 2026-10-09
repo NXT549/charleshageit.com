@@ -3,17 +3,40 @@
 Charles's workshop: the little things I've vibe-coded, finished and in progress.
 Live at **https://charleshageit.com/** (GitHub Pages, from the `main` branch).
 
-It's plain HTML with no build step. To see it locally, open `index.html` in a browser.
+It's plain HTML. To see it locally, open `index.html` in a browser.
 
-## Adding a project
+## The projects (from GitHub)
 
-1. Put a screenshot in `img/` (a `.webp` or `.png` around 1200×630 works well).
-2. In `index.html`, copy one `<article class="card glass glow">` block under **The projects** and change the
-   words, links and image. Set `data-repo="your-repo-name"` and the "updated … ago" tag fills in by itself.
-3. The status badge can be `badge--live` (released) or `badge--wip` (playable & growing).
+The project cards are built from the GitHub API, not written by hand. A GitHub Action
+(`.github/workflows/showcase.yml`) runs every 6 hours and on every push to `main`: it pulls every public
+repo (stars, language, topics, latest commit, latest release, README), writes `data/github.json`, renders
+the cards into `index.html` and commits the result. Nothing calls GitHub when someone visits the page.
 
-The **On the workbench** list fetches every public repo from GitHub when the page loads, so new repos
-show up there automatically. Give a repo a description on GitHub and it appears on its card.
+- **New repos show up by themselves** under **On the workbench**. Give a repo a description and some
+  topics on GitHub and they appear on its card. Forks, archived repos and your profile repo are skipped.
+- **The projects** (the big spotlight cards) are the repos listed under `featured` in `showcase/config.json`,
+  plus any repo with the `featured` topic on GitHub.
+- **Hide a repo** by adding it to `hide` in `showcase/config.json`.
+- **Customise a card** under `repos` in `showcase/config.json`: `blurb`, `highlights`, `status` (`done` or
+  `wip`), `image` and `imageAlt` (put screenshots in `img/`, around 1200×630), `live` (the "Play it live"
+  link, otherwise the repo's website from GitHub), `embed: true` (adds a "Try it right here" button that
+  plays the live site inside the card) and `frameworks` (extra framework tags if they aren't detected).
+- **Download buttons** come from the latest GitHub release: an `.exe`/`.msi` becomes Windows, a `.dmg`
+  becomes macOS, an `.AppImage`/`.deb` becomes Linux.
+- **Frameworks** (Vite, Electron, React, Flask, ...) are detected from each repo's `package.json`,
+  `requirements.txt` or `pyproject.toml`, and from its topics.
+
+To refresh straight away, run the **GitHub showcase** workflow from the Actions tab, or locally:
+
+```sh
+node showcase/build.mjs            # fetch from GitHub and re-render (set GITHUB_TOKEN to raise the rate limit)
+node showcase/build.mjs --offline  # re-render from data/github.json after editing the config or render code
+node --test "showcase/test/*.test.mjs"
+```
+
+Each card carries `data-language`, `data-frameworks`, `data-topics` and `data-tags` attributes, and
+`data/github.json` lists every language, framework and topic with counts under `facets`, for filters.
+Don't edit anything between the `<!-- showcase:… -->` markers in `index.html`; it's overwritten on every build.
 
 ## Theme
 
@@ -28,7 +51,10 @@ Geist for text and Geist Mono for code and labels.
 
 ## Files
 
-- `index.html`: the page, with its layout styles and scripts inline.
+- `index.html`: the page, with its layout styles and scripts inline. The project cards inside it are generated.
+- `showcase/`: the GitHub showcase build (`config.json` to tweak, `build.mjs` to run, tests in `test/`). No dependencies, just Node 20+.
+- `data/github.json`: the repo data the cards were built from (generated).
+- `css/showcase.css`, `js/showcase.js`: card layout, plus "3 days ago" dates, copy-to-clipboard and demo embeds.
 - `css/tokens.css`, `css/theme.css`, `js/fx.js`: the shared theme (see above).
 - `fonts/`: Geist and Geist Mono, trimmed to Latin characters, with their licence (SIL OFL).
 - `pip-sprites.js`: Pip's sprites and flavours, copied from [NXT549/pip](https://github.com/NXT549/pip), for the Pip who walks around the top of the page.

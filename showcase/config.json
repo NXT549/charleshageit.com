@@ -1,0 +1,33 @@
+{
+  "user": "NXT549",
+  "featuredTopic": "featured",
+  "featured": ["hamster-slots", "pip"],
+  "hide": ["charleshageit.com", "python-scripts"],
+  "includeForks": false,
+  "includeArchived": false,
+  "repos": {
+    "hamster-slots": {
+      "status": "wip",
+      "blurb": "A cute pixel-art idle slot machine, powered by a hamster on a wheel. Spin the reels, win (pretend) coins, buy upgrades and teach your hamster to run the wheel by itself. Then retire to the Big Cage, grow the Family Tree and eventually open a whole hamster casino.",
+      "highlights": ["Eight slot machines, a jackpot wheel and a card gamble", "Every sprite and sound is made in code, no game engine"],
+      "live": "https://nxt549.github.io/hamster-slots/",
+      "embed": true,
+      "image": "./img/hamster-slots.webp",
+      "imageAlt": "Hamster Slots: a BIG WIN on the Snack Stacker, with coins flying everywhere",
+      "imageWidth": 1200,
+      "imageHeight": 630,
+      "frameworks": ["vite"]
+    },
+    "pip": {
+      "status": "done",
+      "blurb": "A tiny pixel-art jellybean who lives on your desktop. Pip trots about on four stubby legs, climbs the edges of your screen, naps when you wander off and keeps a gentle eye on your breaks, your Pomodoros and whether you've had any water lately. He's a desktop pet, not a productivity nag. (That's him walking around up the top, too.)",
+      "highlights": ["Nine flavours, from cherry to candy cane", "Never steals focus or blocks your screen"],
+      "image": "./img/pip-icon.png",
+      "imageAlt": "Pip, a cherry-red pixel jellybean with four stubby legs",
+      "imageWidth": 256,
+      "imageHeight": 256,
+      "pixelArt": true,
+      "frameworks": ["electron"]
+    }
+  }
+}

@@ -25,7 +25,9 @@
     <link rel="preload" href="./fonts/GeistMono-Variable.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="./css/tokens.css" />
     <link rel="stylesheet" href="./css/theme.css" />
+    <link rel="stylesheet" href="./css/showcase.css" />
     <script src="./js/fx.js" defer></script>
+    <script src="./js/showcase.js" defer></script>
 
     <style>
       /* Page layout. Colours, type and components come from css/tokens.css and css/theme.css. */
@@ -88,67 +90,6 @@
 
       /* ---------- sections ---------- */
       .section { padding-top: var(--space-9); }
-
-      /* ---------- project cards ---------- */
-      .projects { display: grid; gap: var(--space-6); }
-      .card { display: grid; grid-template-columns: 1fr; overflow: hidden; }
-      @media (min-width: 840px) {
-        .card { grid-template-columns: 1.15fr 1fr; }
-        .card.flip { grid-template-columns: 1fr 1.15fr; }
-        .card.flip .shot { order: 2; border-right: 0; border-left: 1px solid var(--border); }
-      }
-      .shot {
-        position: relative; min-height: 240px; border-bottom: 1px solid var(--border);
-        display: grid; place-items: center; overflow: hidden; background: var(--zinc-900);
-      }
-      @media (min-width: 840px) { .shot { border-bottom: 0; border-right: 1px solid var(--border); } }
-      .shot img.cover { width: 100%; height: 100%; object-fit: cover; transition: transform var(--dur-slow) var(--ease-out); }
-      .card:hover .shot img.cover { transform: scale(1.02); }
-      .shot.pip-shot {
-        background:
-          radial-gradient(circle at 50% 55%, rgb(16 185 129 / 0.2), transparent 55%),
-          linear-gradient(rgb(255 255 255 / 0.03) 1px, transparent 1px) 0 0 / 24px 24px,
-          linear-gradient(90deg, rgb(255 255 255 / 0.03) 1px, transparent 1px) 0 0 / 24px 24px,
-          var(--zinc-900);
-      }
-      .shot.pip-shot .desk {
-        position: absolute; left: 0; right: 0; bottom: 0; height: 30%;
-        background: linear-gradient(rgb(16 185 129 / 0.08), transparent 70%);
-        border-top: 1px solid rgb(16 185 129 / 0.5); box-shadow: 0 -1px 18px rgb(16 185 129 / 0.25);
-      }
-      .shot.pip-shot img {
-        position: absolute; left: 50%; bottom: calc(30% - 52px); transform: translateX(-50%);
-        width: 168px; height: 168px; image-rendering: pixelated; z-index: 1;
-      }
-      .shot .badge { position: absolute; top: 14px; left: 14px; z-index: 2; }
-
-      .info { padding: var(--space-5); display: flex; flex-direction: column; gap: var(--space-3); }
-      @media (min-width: 840px) { .info { padding: var(--space-6); } }
-      .info h3 { font-size: clamp(1.5rem, 1.2rem + 1vw, 1.875rem); letter-spacing: -0.025em; }
-      .info .tagline { color: var(--text); font-weight: 500; }
-      .info p { color: var(--text-muted); }
-      .bits { margin: 0; padding: 0; list-style: none; color: var(--text-muted); display: grid; gap: 4px; }
-      .bits li { display: flex; gap: 10px; }
-      .bits li::before { content: "→"; font-family: var(--font-mono); color: var(--accent); }
-      .meta { display: flex; flex-wrap: wrap; gap: var(--space-2); }
-      .buttons { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: auto; padding-top: var(--space-3); }
-
-      /* ---------- workbench (live from GitHub) ---------- */
-      .bench { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
-      .mini { display: flex; flex-direction: column; gap: 6px; padding: var(--space-4) var(--space-5); text-decoration: none; color: var(--text); border-radius: var(--radius); }
-      .mini:hover { color: var(--text); }
-      .mini strong { font: 550 var(--text-base) / 1.3 var(--font-mono); letter-spacing: -0.01em; }
-      .mini strong::before { content: "~/"; color: var(--text-faint); }
-      .mini span { font-size: var(--text-sm); color: var(--text-muted); }
-      .mini small { margin-top: auto; padding-top: var(--space-2); font: 400 var(--text-xs) / 1.4 var(--font-mono); color: var(--text-faint); }
-      .mini.add {
-        align-items: center; justify-content: center; text-align: center; min-height: 112px;
-        border: 1px dashed var(--border-strong); color: var(--text-muted);
-        transition: border-color var(--dur), color var(--dur);
-      }
-      .mini.add:hover { border-color: var(--accent); color: var(--text); }
-      .mini.add strong { display: block; color: var(--accent); }
-      .mini.add strong::before { content: none; }
 
       /* ---------- about ---------- */
       .about { max-width: 760px; }
@@ -226,82 +167,20 @@
           <p class="sub">The good stuff. Click around, they all work (mostly).</p>
         </header>
 
-        <div class="projects">
-          <!-- To add a project, copy one <article class="card"> block and change the words and links. -->
-
-          <article class="card glass glow" id="project-hamster-slots" data-repo="hamster-slots">
-            <div class="shot">
-              <span class="badge badge--wip">playable &amp; growing</span>
-              <img class="cover" src="./img/hamster-slots.webp" alt="Hamster Slots: a BIG WIN on the Snack Stacker, with coins flying everywhere" width="1200" height="630" />
-            </div>
-            <div class="info">
-              <h3>Hamster Slots</h3>
-              <p class="tagline">A cute pixel-art idle slot machine, powered by a hamster on a wheel.</p>
-              <p>
-                Spin the reels, win (pretend) coins, buy upgrades and teach your hamster to run the wheel by itself.
-                Then retire to the Big Cage, grow the Family Tree and eventually open a whole hamster casino.
-              </p>
-              <ul class="bits">
-                <li>Eight slot machines, a jackpot wheel and a card gamble</li>
-                <li>Every sprite and sound is made in code, no game engine</li>
-              </ul>
-              <div class="meta">
-                <span class="tag tag--accent-2">v1.9.1 "Welcome Mat"</span>
-                <span class="tag">TypeScript + Vite</span>
-                <span class="tag" data-pushed>in active development</span>
-              </div>
-              <div class="buttons">
-                <a class="btn btn--primary" href="https://nxt549.github.io/hamster-slots/">▶ Play in your browser</a>
-                <a class="btn btn--ghost" href="https://github.com/NXT549/hamster-slots">See the code</a>
-              </div>
-            </div>
-          </article>
-
-          <article class="card flip glass glow" id="project-pip" data-repo="pip">
-            <div class="shot pip-shot">
-              <span class="badge badge--live">released</span>
-              <div class="desk"></div>
-              <img src="./img/pip-icon.png" alt="Pip, a cherry-red pixel jellybean with four stubby legs" width="256" height="256" />
-            </div>
-            <div class="info">
-              <h3>Pip</h3>
-              <p class="tagline">A tiny pixel-art jellybean who lives on your desktop.</p>
-              <p>
-                Pip trots about on four stubby legs, climbs the edges of your screen, naps when you wander off and
-                keeps a gentle eye on your breaks, your Pomodoros and whether you've had any water lately.
-                He's a desktop pet, not a productivity nag. (That's him walking around up the top, too.)
-              </p>
-              <ul class="bits">
-                <li>Nine flavours, from cherry to candy cane</li>
-                <li>Never steals focus or blocks your screen</li>
-              </ul>
-              <div class="meta">
-                <span class="tag tag--accent-2">v1.2.0</span>
-                <span class="tag">Windows &amp; Mac</span>
-                <span class="tag">Electron</span>
-                <span class="tag" data-pushed>recently updated</span>
-              </div>
-              <div class="buttons">
-                <a class="btn btn--secondary" href="https://github.com/NXT549/pip/releases/download/v1.2.0/Pip-Setup-1.2.0.exe">⬇ Windows</a>
-                <a class="btn btn--secondary" href="https://github.com/NXT549/pip/releases/tag/v1.2.0">⬇ Mac</a>
-                <a class="btn btn--ghost" href="https://github.com/NXT549/pip">See the code</a>
-              </div>
-            </div>
-          </article>
-
-        </div>
+        <!-- Generated from GitHub by showcase/build.mjs. Pick the featured repos in showcase/config.json. -->
+        <!-- showcase:spotlight:start -->
+        <!-- showcase:spotlight:end -->
       </section>
 
       <section id="workbench" class="section container">
         <header class="section-head">
           <p class="eyebrow">02 · workbench</p>
           <h2>On the workbench</h2>
-          <p class="sub">Everything on my GitHub, most recently touched first. This list updates by itself.</p>
+          <p class="sub">Everything on my GitHub, most recently touched first. Pulled from the GitHub API, so it updates by itself.</p>
         </header>
-        <div class="bench" id="bench">
-          <a class="mini glass glow" href="https://github.com/NXT549/hamster-slots"><strong>hamster-slots</strong><span>A cute pixel-art idle slot machine.</span></a>
-          <a class="mini glass glow" href="https://github.com/NXT549/pip"><strong>pip</strong><span>A jellybean who lives on your desktop.</span></a>
-        </div>
+        <!-- Generated from GitHub by showcase/build.mjs. -->
+        <!-- showcase:repos:start -->
+        <!-- showcase:repos:end -->
       </section>
 
       <section id="about" class="section container">
@@ -419,59 +298,6 @@
         } else {
           requestAnimationFrame(tick);
         }
-      })();
-
-      // ---------- Live data from GitHub ----------
-      (function () {
-        var BLURBS = {
-          "hamster-slots": "A cute pixel-art idle slot machine.",
-          pip: "A jellybean who lives on your desktop."
-        };
-        var HIDE = { "charleshageit.com": 1, "python-scripts": 1 };
-
-        function ago(iso) {
-          var days = Math.floor((Date.now() - new Date(iso)) / 86400000);
-          if (days <= 0) return "updated today";
-          if (days === 1) return "updated yesterday";
-          if (days < 30) return "updated " + days + " days ago";
-          var months = Math.floor(days / 30);
-          if (months < 12) return "updated " + months + (months === 1 ? " month ago" : " months ago");
-          return "updated over a year ago";
-        }
-
-        fetch("https://api.github.com/users/NXT549/repos?sort=pushed&per_page=100")
-          .then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); })
-          .then(function (repos) {
-            repos.forEach(function (repo) {
-              var tag = document.querySelector('.card[data-repo="' + repo.name + '"] [data-pushed]');
-              if (tag) tag.textContent = ago(repo.pushed_at);
-            });
-
-            var bench = document.getElementById("bench");
-            bench.innerHTML = "";
-            repos
-              .filter(function (r) { return !r.fork && !r.archived && !HIDE[r.name]; })
-              .forEach(function (repo) {
-                var a = document.createElement("a");
-                a.className = "mini glass glow";
-                a.href = repo.html_url;
-                var name = document.createElement("strong");
-                name.textContent = repo.name;
-                var desc = document.createElement("span");
-                desc.textContent = repo.description || BLURBS[repo.name] || "A new thing. No description yet!";
-                var small = document.createElement("small");
-                small.textContent = [repo.language, ago(repo.pushed_at)].filter(Boolean).join(" · ");
-                a.append(name, desc, small);
-                bench.appendChild(a);
-              });
-
-            var more = document.createElement("a");
-            more.className = "mini add";
-            more.href = "https://github.com/NXT549?tab=repositories";
-            more.innerHTML = "<span><strong>+ more soon</strong>see it all on GitHub</span>";
-            bench.appendChild(more);
-          })
-          .catch(function () { /* Offline or rate-limited: the hand-written list stays. */ });
       })();
     </script>
   </body>

@@ -1,0 +1,167 @@
+{
+  "data": {
+    "user": {
+      "login": "NXT549",
+      "name": "Charles",
+      "avatarUrl": "https://avatars.githubusercontent.com/u/94941422?v=4",
+      "url": "https://github.com/NXT549",
+      "bio": null,
+      "followers": { "totalCount": 3 },
+      "repositories": {
+        "totalCount": 7,
+        "pageInfo": { "hasNextPage": false, "endCursor": "Y3Vyc29yOjc=" },
+        "nodes": [
+          {
+            "name": "charleshageit.com",
+            "nameWithOwner": "NXT549/charleshageit.com",
+            "url": "https://github.com/NXT549/charleshageit.com",
+            "description": null,
+            "homepageUrl": "charleshageit.com",
+            "stargazerCount": 0,
+            "forkCount": 0,
+            "isFork": false,
+            "isArchived": false,
+            "isPrivate": false,
+            "createdAt": "2023-01-01T00:00:00Z",
+            "updatedAt": "2026-10-09T12:20:38Z",
+            "pushedAt": "2026-10-09T12:20:38Z",
+            "primaryLanguage": { "name": "HTML", "color": "#e34c26" },
+            "languages": { "edges": [{ "size": 24063, "node": { "name": "HTML", "color": "#e34c26" } }] },
+            "repositoryTopics": { "nodes": [] },
+            "latestRelease": null,
+            "defaultBranchRef": { "target": { "oid": "fda68ac739991c546cafc58ddace26d76c250b3d", "abbreviatedOid": "fda68ac", "messageHeadline": "Turn the site into a showcase for my GitHub projects (#1)", "committedDate": "2026-10-09T12:20:38Z", "url": "https://github.com/NXT549/charleshageit.com/commit/fda68ac" } },
+            "packageJson": null, "requirements": null, "pyproject": null, "readme": null, "readmeLower": null
+          },
+          {
+            "name": "hamster-slots",
+            "nameWithOwner": "NXT549/hamster-slots",
+            "url": "https://github.com/NXT549/hamster-slots",
+            "description": "A cute pixel-art idle slot machine.",
+            "homepageUrl": "https://nxt549.github.io/hamster-slots/",
+            "stargazerCount": 4,
+            "forkCount": 1,
+            "isFork": false,
+            "isArchived": false,
+            "isPrivate": false,
+            "createdAt": "2026-06-01T00:00:00Z",
+            "updatedAt": "2026-10-07T09:00:00Z",
+            "pushedAt": "2026-10-07T09:00:00Z",
+            "primaryLanguage": { "name": "TypeScript", "color": "#3178c6" },
+            "languages": {
+              "edges": [
+                { "size": 90000, "node": { "name": "TypeScript", "color": "#3178c6" } },
+                { "size": 8000, "node": { "name": "CSS", "color": "#663399" } },
+                { "size": 2000, "node": { "name": "HTML", "color": "#e34c26" } }
+              ]
+            },
+            "repositoryTopics": { "nodes": [{ "topic": { "name": "game" } }, { "topic": { "name": "pixel-art" } }, { "topic": { "name": "idle-game" } }, { "topic": { "name": "featured" } }] },
+            "latestRelease": {
+              "tagName": "v1.9.1",
+              "name": "Welcome Mat",
+              "publishedAt": "2026-10-01T10:00:00Z",
+              "url": "https://github.com/NXT549/hamster-slots/releases/tag/v1.9.1",
+              "releaseAssets": { "nodes": [] }
+            },
+            "defaultBranchRef": { "target": { "oid": "a1b2c3d4e5f60718293a4b5c6d7e8f9012345678", "abbreviatedOid": "a1b2c3d", "messageHeadline": "Tune the Snack Stacker payout table", "committedDate": "2026-10-07T09:00:00Z", "url": "https://github.com/NXT549/hamster-slots/commit/a1b2c3d" } },
+            "packageJson": { "text": "{\"name\":\"hamster-slots\",\"private\":true,\"scripts\":{\"dev\":\"vite\",\"build\":\"tsc && vite build\"},\"devDependencies\":{\"typescript\":\"^5.6.0\",\"vite\":\"^6.0.0\"}}" },
+            "requirements": null,
+            "pyproject": null,
+            "readme": { "text": "# 🐹 Hamster Slots\n\n[![Deploy](https://github.com/NXT549/hamster-slots/actions/workflows/deploy.yml/badge.svg)](https://github.com/NXT549/hamster-slots/actions)\n\n<p align=\"center\"><img src=\"docs/hero.png\" width=\"600\"></p>\n\nA cute **pixel-art idle slot machine**, powered by a hamster on a wheel. Spin the reels, win coins and buy upgrades until your hamster runs the wheel by itself.\n\n## Play\n\nOpen [the live game](https://nxt549.github.io/hamster-slots/) or run `npm run dev`.\n" },
+            "readmeLower": null
+          },
+          {
+            "name": "pip",
+            "nameWithOwner": "NXT549/pip",
+            "url": "https://github.com/NXT549/pip",
+            "description": "A jellybean who lives on your desktop.",
+            "homepageUrl": "",
+            "stargazerCount": 2,
+            "forkCount": 0,
+            "isFork": false,
+            "isArchived": false,
+            "isPrivate": false,
+            "createdAt": "2026-05-01T00:00:00Z",
+            "updatedAt": "2026-09-20T09:00:00Z",
+            "pushedAt": "2026-09-20T09:00:00Z",
+            "primaryLanguage": { "name": "JavaScript", "color": "#f1e05a" },
+            "languages": { "edges": [{ "size": 50000, "node": { "name": "JavaScript", "color": "#f1e05a" } }, { "size": 5000, "node": { "name": "HTML", "color": "#e34c26" } }] },
+            "repositoryTopics": { "nodes": [{ "topic": { "name": "desktop-pet" } }, { "topic": { "name": "electron-app" } }] },
+            "latestRelease": {
+              "tagName": "v1.2.0",
+              "name": "v1.2.0",
+              "publishedAt": "2026-09-01T00:00:00Z",
+              "url": "https://github.com/NXT549/pip/releases/tag/v1.2.0",
+              "releaseAssets": {
+                "nodes": [
+                  { "name": "Pip-Setup-1.2.0.exe", "downloadUrl": "https://github.com/NXT549/pip/releases/download/v1.2.0/Pip-Setup-1.2.0.exe" },
+                  { "name": "Pip-Setup-1.2.0.exe.blockmap", "downloadUrl": "https://github.com/NXT549/pip/releases/download/v1.2.0/Pip-Setup-1.2.0.exe.blockmap" },
+                  { "name": "Pip-1.2.0-arm64.dmg", "downloadUrl": "https://github.com/NXT549/pip/releases/download/v1.2.0/Pip-1.2.0-arm64.dmg" },
+                  { "name": "latest.yml", "downloadUrl": "https://github.com/NXT549/pip/releases/download/v1.2.0/latest.yml" }
+                ]
+              }
+            },
+            "defaultBranchRef": { "target": { "oid": "0f1e2d3c4b5a69788796a5b4c3d2e1f0aabbccdd", "abbreviatedOid": "0f1e2d3", "messageHeadline": "Add the candy cane flavour", "committedDate": "2026-09-20T09:00:00Z", "url": "https://github.com/NXT549/pip/commit/0f1e2d3" } },
+            "packageJson": { "text": "{\"name\":\"pip\",\"main\":\"main.js\",\"devDependencies\":{\"electron\":\"^33.0.0\",\"electron-builder\":\"^25.0.0\"}}" },
+            "requirements": null,
+            "pyproject": null,
+            "readme": null,
+            "readmeLower": { "text": "# Pip\n\n> A tiny friend.\n\nPip is a tiny pixel-art jellybean who lives on your desktop and reminds you to drink water.\n" }
+          },
+          {
+            "name": "python-scripts",
+            "nameWithOwner": "NXT549/python-scripts",
+            "url": "https://github.com/NXT549/python-scripts",
+            "description": "Odds and ends",
+            "homepageUrl": null,
+            "stargazerCount": 0, "forkCount": 0, "isFork": false, "isArchived": false, "isPrivate": false,
+            "createdAt": "2022-01-01T00:00:00Z", "updatedAt": "2024-01-01T00:00:00Z", "pushedAt": "2024-01-01T00:00:00Z",
+            "primaryLanguage": { "name": "Python", "color": "#3572A5" },
+            "languages": { "edges": [] }, "repositoryTopics": { "nodes": [] }, "latestRelease": null,
+            "defaultBranchRef": null,
+            "packageJson": null, "requirements": null, "pyproject": null, "readme": null, "readmeLower": null
+          },
+          {
+            "name": "weather-bot",
+            "nameWithOwner": "NXT549/weather-bot",
+            "url": "https://github.com/NXT549/weather-bot",
+            "description": "Posts the <b>Brisbane</b> forecast <script>alert(1)</script> to `#general`",
+            "homepageUrl": "javascript:alert(1)",
+            "stargazerCount": 1234, "forkCount": 0, "isFork": false, "isArchived": false, "isPrivate": false,
+            "createdAt": "2025-01-01T00:00:00Z", "updatedAt": "2025-03-01T00:00:00Z", "pushedAt": "2025-03-01T00:00:00Z",
+            "primaryLanguage": { "name": "Python", "color": "#3572A5" },
+            "languages": { "edges": [{ "size": 100, "node": { "name": "Python", "color": "#3572A5" } }] },
+            "repositoryTopics": { "nodes": [{ "topic": { "name": "discord" } }] },
+            "latestRelease": null,
+            "defaultBranchRef": { "target": { "oid": "1234567890abcdef1234567890abcdef12345678", "abbreviatedOid": "1234567", "messageHeadline": "Handle \"rain\" & <hail>", "committedDate": "2025-03-01T00:00:00Z", "url": "https://github.com/NXT549/weather-bot/commit/1234567" } },
+            "packageJson": null,
+            "requirements": { "text": "# bot deps\nrequests==2.32.0\nFlask>=3.0\n" },
+            "pyproject": null,
+            "readme": null, "readmeLower": null
+          },
+          {
+            "name": "some-fork",
+            "nameWithOwner": "NXT549/some-fork",
+            "url": "https://github.com/NXT549/some-fork",
+            "description": "Someone else's project",
+            "homepageUrl": null,
+            "stargazerCount": 0, "forkCount": 0, "isFork": true, "isArchived": false, "isPrivate": false,
+            "createdAt": "2026-10-08T00:00:00Z", "updatedAt": "2026-10-08T00:00:00Z", "pushedAt": "2026-10-08T00:00:00Z",
+            "primaryLanguage": null, "languages": { "edges": [] }, "repositoryTopics": { "nodes": [] }, "latestRelease": null,
+            "defaultBranchRef": null, "packageJson": null, "requirements": null, "pyproject": null, "readme": null, "readmeLower": null
+          },
+          {
+            "name": "NXT549",
+            "nameWithOwner": "NXT549/NXT549",
+            "url": "https://github.com/NXT549/NXT549",
+            "description": "My profile README",
+            "homepageUrl": null,
+            "stargazerCount": 0, "forkCount": 0, "isFork": false, "isArchived": false, "isPrivate": false,
+            "createdAt": "2023-01-01T00:00:00Z", "updatedAt": "2023-01-01T00:00:00Z", "pushedAt": "2023-01-01T00:00:00Z",
+            "primaryLanguage": null, "languages": { "edges": [] }, "repositoryTopics": { "nodes": [] }, "latestRelease": null,
+            "defaultBranchRef": null, "packageJson": null, "requirements": null, "pyproject": null, "readme": null, "readmeLower": null
+          }
+        ]
+      }
+    }
+  }
+}

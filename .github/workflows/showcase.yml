@@ -1,0 +1,78 @@
+name: GitHub showcase
+
+# Pulls the latest repo data from the GitHub API and re-renders the project
+# cards in index.html. On main it commits the result, which redeploys Pages.
+on:
+  schedule:
+    - cron: "23 */6 * * *" # every 6 hours
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths:
+      - "index.html"
+      - "showcase/**"
+      - ".github/workflows/showcase.yml"
+  pull_request:
+    paths:
+      - "index.html"
+      - "showcase/**"
+      - "css/showcase.css"
+      - "js/showcase.js"
+      - ".github/workflows/showcase.yml"
+
+permissions:
+  contents: write
+  pages: write
+
+concurrency:
+  group: showcase-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Test
+        run: node --test "showcase/test/*.test.mjs"
+
+      - name: Fetch from GitHub and render
+        # SHOWCASE_TOKEN (optional repo secret) is a personal token, if you ever want
+        # private-repo stats or a higher rate limit. The built-in token is plenty otherwise.
+        run: node showcase/build.mjs ${{ github.event_name == 'pull_request' && '--strict' || '' }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.SHOWCASE_TOKEN || secrets.GITHUB_TOKEN }}
+
+      - name: Summary
+        run: node showcase/build.mjs --summary >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Show the generated data
+        if: github.event_name == 'pull_request'
+        run: cat data/github.json
+
+      - name: Commit the refreshed showcase
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        run: |
+          git add data/github.json index.html
+          if git diff --cached --quiet; then
+            echo "Nothing changed."
+            exit 0
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898283+github-actions[bot]@users.noreply.github.com"
+          git commit -m "Refresh the GitHub showcase"
+          git push
+
+      - name: Ask Pages to redeploy
+        # Pages normally rebuilds on any push to main; this is a nudge in case a bot push doesn't trigger it.
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        continue-on-error: true
+        run: gh api -X POST "repos/${{ github.repository }}/pages/builds" --silent
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
