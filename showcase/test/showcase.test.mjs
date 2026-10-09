@@ -201,7 +201,7 @@ test("repos carry filterable language, frameworks, topics and tags", async () =>
     ["typescript", "TypeScript", 1],
   ]);
   assert.deepEqual(data.facets.frameworks.map((f) => f.label), ["Electron", "Flask", "Vite"]);
-  assert.equal(data.user.lastPushRepo, "charleshageit.com");
+  assert.equal(data.user.lastPushRepo, "hamster-slots"); // not the hidden site repo, which the workflow pushes to
   assert.equal(data.user.totalStars, 1240);
 });
 

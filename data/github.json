@@ -1,0 +1,229 @@
+{
+  "generatedAt": "2026-10-09T13:28:21.685Z",
+  "user": {
+    "login": "NXT549",
+    "name": null,
+    "avatarUrl": "https://avatars.githubusercontent.com/u/94941422?v=4",
+    "url": "https://github.com/NXT549",
+    "bio": null,
+    "followers": 0,
+    "publicRepos": 3,
+    "lastPushAt": "2026-10-06T03:58:00Z",
+    "lastPushRepo": "pip",
+    "totalStars": 0
+  },
+  "featured": [
+    "hamster-slots",
+    "pip"
+  ],
+  "facets": {
+    "languages": [
+      {
+        "slug": "javascript",
+        "label": "JavaScript",
+        "count": 1
+      },
+      {
+        "slug": "typescript",
+        "label": "TypeScript",
+        "count": 1
+      }
+    ],
+    "frameworks": [
+      {
+        "slug": "electron",
+        "label": "Electron",
+        "count": 1
+      },
+      {
+        "slug": "vite",
+        "label": "Vite",
+        "count": 1
+      }
+    ],
+    "topics": []
+  },
+  "repos": [
+    {
+      "name": "pip",
+      "title": "Pip",
+      "fullName": "NXT549/pip",
+      "url": "https://github.com/NXT549/pip",
+      "description": "A tiny pixel-art jellybean who lives on your desktop. Pip trots about on four stubby legs, climbs the edges of your screen, naps when you…",
+      "blurb": "A tiny pixel-art jellybean who lives on your desktop. Pip trots about on four stubby legs, climbs the edges of your screen, naps when you wander off and keeps a gentle eye on your breaks, your Pomodoros and whether you've had any water lately. He's a desktop pet, not a productivity nag. (That's him walking around up the top, too.)",
+      "highlights": [
+        "Nine flavours, from cherry to candy cane",
+        "Never steals focus or blocks your screen"
+      ],
+      "homepage": null,
+      "embed": null,
+      "image": {
+        "src": "./img/pip-icon.png",
+        "alt": "Pip, a cherry-red pixel jellybean with four stubby legs",
+        "width": 256,
+        "height": 256,
+        "pixelArt": true
+      },
+      "status": "done",
+      "featured": true,
+      "stars": 0,
+      "forks": 0,
+      "language": {
+        "name": "JavaScript",
+        "slug": "javascript",
+        "color": "#f1e05a"
+      },
+      "languages": [
+        {
+          "name": "JavaScript",
+          "slug": "javascript",
+          "color": "#f1e05a",
+          "share": 97.5
+        },
+        {
+          "name": "HTML",
+          "slug": "html",
+          "color": "#e34c26",
+          "share": 1.6
+        },
+        {
+          "name": "CSS",
+          "slug": "css",
+          "color": "#663399",
+          "share": 0.9
+        },
+        {
+          "name": "NSIS",
+          "slug": "nsis",
+          "color": "#8b949e",
+          "share": 0.1
+        }
+      ],
+      "topics": [],
+      "frameworks": [
+        "electron"
+      ],
+      "tags": [
+        "javascript",
+        "electron"
+      ],
+      "createdAt": "2026-10-05T02:23:32Z",
+      "pushedAt": "2026-10-06T03:58:00Z",
+      "latestCommit": {
+        "sha": "abf14e2b55f422f7fa71b10e5bcb3e0646f62178",
+        "shortSha": "abf14e2",
+        "message": "Build the installers in CI and attach them to the GitHub release (#12)",
+        "date": "2026-10-06T03:57:59Z",
+        "url": "https://github.com/NXT549/pip/commit/abf14e2b55f422f7fa71b10e5bcb3e0646f62178"
+      },
+      "release": {
+        "tag": "v1.2.0",
+        "name": "v1.2.0",
+        "date": "2026-10-05T12:00:38Z",
+        "url": "https://github.com/NXT549/pip/releases/tag/v1.2.0",
+        "downloads": [
+          {
+            "platform": "windows",
+            "label": "Windows",
+            "name": "Pip-Setup-1.2.0.exe",
+            "url": "https://github.com/NXT549/pip/releases/download/v1.2.0/Pip-Setup-1.2.0.exe"
+          },
+          {
+            "platform": "macos",
+            "label": "macOS",
+            "name": null,
+            "url": "https://github.com/NXT549/pip/releases/tag/v1.2.0"
+          }
+        ]
+      },
+      "readmeExcerpt": "A tiny pixel-art jellybean who lives on your desktop. Pip trots about on four stubby legs, climbs the edges of your screen, naps when you wander off, and keeps a gentle eye on your breaks, your Pomodoros and whether you have had any water lately."
+    },
+    {
+      "name": "hamster-slots",
+      "title": "Hamster Slots",
+      "fullName": "NXT549/hamster-slots",
+      "url": "https://github.com/NXT549/hamster-slots",
+      "description": "A cute pixel-art idle slot machine, powered by a hamster on a wheel. Play it in your browser: https://nxt549.github.io/hamster-slots/",
+      "blurb": "A cute pixel-art idle slot machine, powered by a hamster on a wheel. Spin the reels, win (pretend) coins, buy upgrades and teach your hamster to run the wheel by itself. Then retire to the Big Cage, grow the Family Tree and eventually open a whole hamster casino.",
+      "highlights": [
+        "Eight slot machines, a jackpot wheel and a card gamble",
+        "Every sprite and sound is made in code, no game engine"
+      ],
+      "homepage": "https://nxt549.github.io/hamster-slots/",
+      "embed": "https://nxt549.github.io/hamster-slots/",
+      "image": {
+        "src": "./img/hamster-slots.webp",
+        "alt": "Hamster Slots: a BIG WIN on the Snack Stacker, with coins flying everywhere",
+        "width": 1200,
+        "height": 630,
+        "pixelArt": false
+      },
+      "status": "wip",
+      "featured": true,
+      "stars": 0,
+      "forks": 0,
+      "language": {
+        "name": "TypeScript",
+        "slug": "typescript",
+        "color": "#3178c6"
+      },
+      "languages": [
+        {
+          "name": "TypeScript",
+          "slug": "typescript",
+          "color": "#3178c6",
+          "share": 60
+        },
+        {
+          "name": "JavaScript",
+          "slug": "javascript",
+          "color": "#f1e05a",
+          "share": 28
+        },
+        {
+          "name": "CSS",
+          "slug": "css",
+          "color": "#663399",
+          "share": 9.3
+        },
+        {
+          "name": "HTML",
+          "slug": "html",
+          "color": "#e34c26",
+          "share": 2.5
+        },
+        {
+          "name": "Batchfile",
+          "slug": "batchfile",
+          "color": "#C1F12E",
+          "share": 0.1
+        }
+      ],
+      "topics": [],
+      "frameworks": [
+        "vite"
+      ],
+      "tags": [
+        "typescript",
+        "vite"
+      ],
+      "createdAt": "2026-09-26T13:35:49Z",
+      "pushedAt": "2026-10-03T17:30:42Z",
+      "latestCommit": {
+        "sha": "83a62bdba4775089dbc80084d74545937842578a",
+        "shortSha": "83a62bd",
+        "message": "Fix five bugs from a 1.8.0 bug hunt and code read (#13)",
+        "date": "2026-10-03T15:23:20Z",
+        "url": "https://github.com/NXT549/hamster-slots/commit/83a62bdba4775089dbc80084d74545937842578a"
+      },
+      "release": {
+        "tag": "v1.8.0",
+        "name": "1.8.0",
+        "date": "2026-10-03T13:02:14Z",
+        "url": "https://github.com/NXT549/hamster-slots/releases/tag/v1.8.0",
+        "downloads": []
+      },
+      "readmeExcerpt": "A cute pixel-art idle slot machine, powered by a hamster on a wheel. Play it in your browser: https://nxt549.github.io/hamster-slots/"
+    }
+  ]
+}

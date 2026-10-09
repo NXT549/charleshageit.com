@@ -391,9 +391,9 @@ export function normalize({ user, repos }, config, { generatedAt = new Date().to
     .sort((a, b) => rank(a) - rank(b) || b.stars - a.stars || String(b.pushedAt).localeCompare(String(a.pushedAt)))
     .map((r) => r.name);
 
-  // Most recent push across every public repo the user owns, shown or not.
-  const lastPushed = repos
-    .filter((r) => !r.isPrivate && !r.isFork)
+  // Most recent push to a shown repo. Hidden ones (like this site, which the refresh
+  // workflow itself pushes to) would make every refresh look like new activity.
+  const lastPushed = shown
     .reduce((best, r) => (!best || String(r.pushedAt) > String(best.pushedAt) ? r : best), null);
 
   return {
