@@ -10,7 +10,7 @@ It's plain HTML with no build step. To see it locally, open `index.html` in a br
 1. Put a screenshot in `img/` (a `.webp` or `.png` around 1200×630 works well).
 2. In `index.html`, copy one `<article class="card">` block under **The projects** and change the
    words, links and image. Set `data-repo="your-repo-name"` and the "updated … ago" tag fills in by itself.
-3. The sticker can be `done` (Released!), `wip` (Playable & growing) or `learn` (Learning).
+3. The sticker can be `done` (Released!) or `wip` (Playable & growing).
 
 The **On the workbench** list fetches every public repo from GitHub when the page loads, so new repos
 show up there automatically. Give a repo a description on GitHub and it appears on its card.

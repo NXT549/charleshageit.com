@@ -160,15 +160,6 @@
         background: #c58b5a; border-top: 3px solid var(--line);
       }
       .shot.pip-shot img { position: absolute; left: 50%; bottom: calc(30% - 52px); transform: translateX(-50%); width: 168px; height: 168px; image-rendering: pixelated; z-index: 1; }
-      .shot.term {
-        background: #16121c; color: #b8f5a0; font: 500 15px/1.55 ui-monospace, "SFMono-Regular", Menlo, Consolas, monospace;
-        place-items: stretch; padding: 62px 22px 22px;
-      }
-      .term pre { margin: 0; white-space: pre-wrap; }
-      .term .dim { color: #7f7590; }
-      .term .bar { display: inline-block; height: 10px; vertical-align: middle; border-radius: 2px; }
-      .cursor { display: inline-block; width: 9px; height: 17px; background: #b8f5a0; vertical-align: -3px; animation: blink 1s steps(1) infinite; }
-      @keyframes blink { 50% { opacity: 0; } }
 
       .sticker {
         position: absolute; top: 14px; left: 14px; z-index: 2;
@@ -177,7 +168,6 @@
       }
       .sticker.done { background: var(--lime); }
       .sticker.wip { background: var(--lemon); }
-      .sticker.learn { background: #9fd0ff; }
 
       .info { padding: 24px 24px 26px; display: flex; flex-direction: column; gap: 12px; }
       .info h3 { font: 700 30px/1.1 var(--pixel); margin: 0; }
@@ -251,7 +241,6 @@
         <div class="chips">
           <span class="chip"><i>🐹</i>idle games</span>
           <span class="chip"><i>🫘</i>desktop pets</span>
-          <span class="chip"><i>🐍</i>python experiments</span>
           <span class="chip"><i>🤖</i>built with AI</span>
         </div>
 
@@ -330,34 +319,6 @@
             </div>
           </article>
 
-          <article class="card" data-repo="python-scripts">
-            <div class="shot term">
-              <span class="sticker learn">Learning</span>
-              <pre aria-label="Example output of health.py"><span class="dim">$</span> python3 health.py
-
-  CPU   <span class="bar" style="width:62px;background:#68c445"></span> 23%
-  RAM   <span class="bar" style="width:140px;background:#f2cc3d"></span> 54%
-  Disk  <span class="bar" style="width:96px;background:#4a7fe0"></span> 37%
-
-<span class="dim">all good 👍</span>
-<span class="dim">$</span> <span class="cursor"></span></pre>
-            </div>
-            <div class="info">
-              <h3>Python scripts</h3>
-              <p class="tagline">Where I'm learning Python, one small script at a time.</p>
-              <p>
-                It started with "Hello, world!" and now there's a quick system health check that shows how busy your
-                CPU, RAM and disk are. More to come as I learn.
-              </p>
-              <div class="meta">
-                <span>Python</span>
-                <span class="fresh" data-pushed>work in progress</span>
-              </div>
-              <div class="buttons">
-                <a class="btn plain" href="https://github.com/NXT549/python-scripts">See the code</a>
-              </div>
-            </div>
-          </article>
         </div>
       </section>
 
@@ -367,7 +328,6 @@
         <div class="bench" id="bench">
           <a class="mini" href="https://github.com/NXT549/hamster-slots"><strong>hamster-slots</strong><span>A cute pixel-art idle slot machine.</span></a>
           <a class="mini" href="https://github.com/NXT549/pip"><strong>pip</strong><span>A jellybean who lives on your desktop.</span></a>
-          <a class="mini" href="https://github.com/NXT549/python-scripts"><strong>python-scripts</strong><span>Learning Python.</span></a>
         </div>
       </section>
 
@@ -480,10 +440,9 @@
       (function () {
         var BLURBS = {
           "hamster-slots": "A cute pixel-art idle slot machine.",
-          pip: "A jellybean who lives on your desktop.",
-          "python-scripts": "Learning Python, one script at a time."
+          pip: "A jellybean who lives on your desktop."
         };
-        var HIDE = { "charleshageit.com": 1 };
+        var HIDE = { "charleshageit.com": 1, "python-scripts": 1 };
 
         function ago(iso) {
           var days = Math.floor((Date.now() - new Date(iso)) / 86400000);
