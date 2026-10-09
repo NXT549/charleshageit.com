@@ -23,7 +23,7 @@ accessibility, best practices and SEO (`lighthouserc.json`); the reports are att
 ## The projects (from GitHub)
 
 The project cards are built from the GitHub API, not written by hand. Every build pulls every public
-repo (stars, language, topics, latest commit, latest release, README) and renders the cards into the page,
+repo (stars, language, topics, recent commits, releases, README) and renders the cards into the page,
 and the site rebuilds every 6 hours and on every push to `main`. Nothing calls GitHub when someone visits
 the page. If GitHub can't be reached, the build falls back to the copy saved in `data/github-raw.json`,
 with the current `showcase/config.json` applied.
@@ -69,9 +69,24 @@ labels and code use Geist Mono, and the handwritten notes use Caveat.
   and `.eyebrow`. The comment at the top of the file lists them all.
 - `src/scripts/fx.js` makes the stamps thunk down as they scroll into view.
 
+## Pages
+
+- `/`: the home page: the hero, the featured projects, the workbench grid and a short about.
+- `/projects/<repo>/`: a spec sheet for every project on the workbench, made automatically from GitHub: what it is,
+  how to get it, its languages, its latest releases and commits, and its whole README (links inside the repo go to GitHub).
+- `/about/`: the longer about, how a thing gets made here, and what's on the bench right now.
+- `/log/`: the workshop log, every recent commit, release and new project across the workbench, newest first.
+- `/404.html`: "This page went walkabout.", where GitHub Pages sends any address that doesn't exist.
+
+The hero's terminal takes commands once its intro has typed out: `help` lists them (`ls`, `open pip`, `play
+hamster-slots`, `log`, `pip grape`, `pip say hi`, ...). Pip remembers his flavour between visits, and the tab icon matches it.
+
 ## Files
 
-- `src/pages/index.astro`: the page, put together from the sections in `src/components/`.
+- `src/pages/index.astro`: the home page, put together from the sections in `src/components/`.
+- `src/pages/projects/[name].astro`, `about.astro`, `log.astro`, `404.astro`: the other pages, all on `src/layouts/Page.astro`.
+- `src/lib/readme.ts`: turns a README into HTML for its project page (`src/styles/prose.css` styles it).
+- `src/scripts/shell.ts`: the hero terminal's commands.
 - `src/components/Hero.astro`: the intro, with the GitHub status badge (`StatusBadge.astro`), jump-links to the
   featured projects and Pip (`Pip.astro`).
 - `src/components/FilterBar.astro`: the language / framework / topic filter for the workbench grid.

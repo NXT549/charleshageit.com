@@ -1,0 +1,69 @@
+---
+// "Sheet not found": GitHub Pages serves this for any address that doesn't exist.
+import Base from "../layouts/Base.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import Pip from "../components/Pip.astro";
+import { SITE } from "../lib/site";
+---
+
+<Base title={`Sheet not found · ${SITE.name}`} description="This page isn't in the workshop. Head back to see the projects." canonical={false}>
+  <Header home="/" />
+  <main>
+    <section class="hero container lost">
+      <div>
+        <span class="badge badge--wip lost__stamp">Missing</span>
+        <p class="eyebrow">Sheet 404 · Not found</p>
+        <h1>
+          This page went{" "}
+          <span class="circled">walkabout.<svg viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M22 58 C 22 16, 268 6, 288 40 C 302 76, 128 98, 44 84 C 2 76, 4 40, 64 24" /></svg></span>
+        </h1>
+        <p class="lede">
+          Whatever was at this address has wandered off, or was never drawn in the first place. Pip's out
+          looking for it, but he's easily distracted.
+        </p>
+        <nav class="lost__actions" aria-label="Where to next">
+          <a class="btn btn--primary" href="/">Back to the workshop</a>
+          <a class="btn btn--ghost" href="/#projects">See the projects</a>
+        </nav>
+      </div>
+
+      <div class="terminal glass sheet">
+        <div class="terminal__bar">
+          <span class="terminal__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+          <span class="terminal__title">Fig. 404 · you@workshop: ~</span>
+        </div>
+        <div class="terminal__body">
+          <p class="terminal__line"><span class="prompt">you@workshop<span class="prompt__path">:~</span><span class="prompt__sym">$</span></span>cd <span data-missing>that-page</span></p>
+          <p class="terminal__line terminal__out lost__err">cd: no such file or directory: <span data-missing>that-page</span></p>
+          <p class="terminal__line"><span class="prompt">you@workshop<span class="prompt__path">:~</span><span class="prompt__sym">$</span></span>cd ~ <span class="lost__comment"># home is safer</span></p>
+          <p class="terminal__line"><span class="prompt">you@workshop<span class="prompt__path">:~</span><span class="prompt__sym">$</span></span><span class="cursor" aria-hidden="true"></span></p>
+        </div>
+        <Pip hint="he's looking for it" />
+        <div class="titleblock">
+          <div><small>Drawing</small>Missing page</div>
+          <div><small>Status</small>Lost</div>
+          <div><small>Sheet</small>404</div>
+        </div>
+      </div>
+    </section>
+  </main>
+  <Footer sheet="404" />
+</Base>
+
+<script>
+  // Show the address they actually asked for.
+  let path = location.pathname;
+  try { path = decodeURIComponent(path); } catch { /* keep it encoded */ }
+  path = path.replace(/^\/+/, "") || "that-page";
+  for (const el of document.querySelectorAll("[data-missing]")) el.textContent = path.length > 40 ? path.slice(0, 39) + "…" : path;
+</script>
+
+<style>
+  .lost { min-height: calc(100vh - 64px - 220px); }
+  .lost h1 { font-size: clamp(2.5rem, 1.25rem + 4vw, 4.25rem); }
+  .lost__stamp { --rot: -8deg; margin-bottom: var(--space-5); font-size: var(--text-sm); }
+  .lost__actions { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-5); }
+  .lost__err { color: var(--danger); }
+  .lost__comment { color: var(--text-faint); }
+</style>

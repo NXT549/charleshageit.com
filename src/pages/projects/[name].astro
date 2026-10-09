@@ -1,0 +1,300 @@
+---
+// A spec sheet for every project on the page: what it is, how to get it, what it's made of, what changed
+// lately, and its whole README. Built from the same GitHub data as the cards, so new repos get one too.
+import Page from "../../layouts/Page.astro";
+import Pip from "../../components/Pip.astro";
+import { getShowcase, type Repo } from "../../lib/showcase";
+import { renderReadme } from "../../lib/readme";
+import {
+  cloneButton,
+  esc,
+  icon,
+  iconSprite,
+  liveLabel,
+  releaseTag,
+  richText,
+  safeUrl,
+  splitBlurb,
+  stats,
+  statusBadge,
+  tagList,
+  time,
+} from "../../../showcase/render.mjs";
+import { SITE } from "../../lib/site";
+import "../../styles/prose.css";
+
+export async function getStaticPaths() {
+  const data = await getShowcase();
+  // Featured projects first, in their spotlight order, then the rest by last push: the sheet numbers.
+  const order = [...data.featured, ...data.repos.filter((r) => !r.featured).map((r) => r.name)];
+  const repos = order.map((n) => data.repos.find((r) => r.name === n)!);
+  return repos.map((repo, i) => ({
+    params: { name: repo.name },
+    props: { repo, index: i, prev: repos[i - 1] ?? null, next: repos[i + 1] ?? null },
+  }));
+}
+
+interface Commit { sha: string; shortSha?: string; message: string; date: string; url: string }
+interface Release { tag: string; name: string; date: string | null; url: string; prerelease?: boolean }
+interface Download { label: string; url: string; name?: string }
+interface Props { repo: Repo; index: number; prev: Repo | null; next: Repo | null }
+
+const { repo, index, prev, next } = Astro.props;
+const sheet = `P-${String(index + 1).padStart(2, "0")}`;
+
+const r = repo as Repo & {
+  fullName: string;
+  blurb: string | null;
+  highlights: string[];
+  embed: string | null;
+  image: { src: string; alt: string; width: number | null; height: number | null; pixelArt: boolean } | null;
+  scene: string | null;
+  note: string | null;
+  status: string | null;
+  forks: number;
+  createdAt: string | null;
+  languages: { name: string; slug: string; color: string | null; share: number }[];
+  commits: Commit[];
+  releases: Release[];
+  release: { tag: string; downloads: Download[] } | null;
+  readme: string | null;
+};
+
+const [tagline, blurb] = splitBlurb(r.blurb || r.description || "");
+const repoUrl = safeUrl(r.url);
+const live = safeUrl(r.homepage);
+const embed = safeUrl(r.embed);
+// Card images are page-relative ("./img/x.webp") for the home page; from here they need the site root.
+const src = r.image ? safeUrl(r.image.src) : null;
+const img = src && !/^https?:/i.test(src) ? src.replace(/^\.?\/?/, "/") : src;
+// Pip's own sheet gets the real Pip, walking about (his blurb says he's "up the top").
+const livePip = r.name === "pip";
+const readme = r.readme ? renderReadme(r.readme, { fullName: r.fullName, title: r.title, name: r.name }) : null;
+
+const actions = [
+  live ? `<a class="btn btn--primary" href="${esc(live)}">${icon("play")}${esc(liveLabel(r))}</a>` : "",
+  ...(r.release?.downloads ?? []).map(
+    (d) => `<a class="btn btn--secondary" href="${esc(safeUrl(d.url) || "#")}" title="${esc(d.name || d.label)}">${icon("download")}${esc(d.label)}</a>`
+  ),
+  repoUrl ? `<a class="btn btn--ghost" href="${esc(repoUrl)}">${icon("code")}See the code</a>` : "",
+  cloneButton(r),
+].join("");
+
+const fmt = new Intl.DateTimeFormat("en-AU", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+const date = (iso: string | null | undefined) => (iso ? fmt.format(new Date(iso)) : "—");
+
+const spec = [
+  ["Language", r.language?.name ?? "—"],
+  ["Frameworks", r.frameworks.length ? r.frameworks.join(", ") : "—"],
+  ["Latest release", r.releases[0]?.tag ?? "none yet"],
+  ["Started", date(r.createdAt)],
+  ["Last push", date(r.pushedAt)],
+  ["Stars", String(r.stars)],
+];
+
+const materials = r.languages.filter((l) => l.share >= 0.5);
+const title = `${r.title} · ${SITE.name}`;
+const description = tagline || `${r.title}, one of the little things in Charles's workshop.`;
+---
+
+<Page title={title} description={description} current="projects" sheet={sheet}>
+  <Fragment set:html={iconSprite()} />
+
+  <section class="container proj-top">
+    <div class="proj-intro">
+      <nav class="proj-crumbs" aria-label="Breadcrumb">
+        <a href="/#workbench">~/projects</a><span aria-hidden="true">/</span><span aria-current="page">{r.name}</span>
+      </nav>
+      <Fragment set:html={statusBadge(r, "proj-status")} />
+      <p class="eyebrow">Sheet {sheet} · Project</p>
+      <h1>{r.title}</h1>
+      {tagline && <p class="lede proj-tagline" set:html={richText(tagline)} />}
+      {blurb && <p class="proj-blurb" set:html={richText(blurb)} />}
+      {
+        r.highlights.length > 0 && (
+          <ul class="spotlight__highlights proj-highlights">
+            {r.highlights.map((h) => <li set:html={richText(h)} />)}
+          </ul>
+        )
+      }
+      <div class="repo-actions" set:html={actions} />
+    </div>
+
+    <figure class="proj-fig glass sheet">
+      {livePip ? <Pip hint="that's him! click him" /> : (
+      <div class:list={["spotlight__media proj-media", r.scene && `spotlight__media--${r.scene}`]}>
+        {r.scene === "desk" && <span class="dim spotlight__dim" aria-hidden="true">168 px</span>}
+        {
+          img ? (
+            <img
+              class:list={["spotlight__shot", r.image?.pixelArt && "spotlight__shot--pixel"]}
+              src={img}
+              alt={r.image?.alt ?? ""}
+              width={r.image?.width ?? undefined}
+              height={r.image?.height ?? undefined}
+              decoding="async"
+              fetchpriority="high"
+            />
+          ) : (
+            <div class="spotlight__placeholder" aria-hidden="true"><span class="prompt">~/</span>{r.name}<span class="cursor" /></div>
+          )
+        }
+        {r.note && <span class="hand spotlight__note" set:html={esc(r.note).replace(/\n/g, "<br />")} />}
+        {
+          embed && (
+            <button class="btn btn--primary btn--sm spotlight__demo" type="button" data-embed={embed} data-title={`${r.title} demo`} hidden>
+              <Fragment set:html={icon("play")} />
+              <span>Try it right here</span>
+            </button>
+          )
+        }
+      </div>
+      )}
+      <figcaption class="titleblock">
+        <div><small>Drawing</small>{r.title}</div>
+        <div><small>Repo</small><a href={repoUrl ?? undefined}>{r.fullName}</a></div>
+        <div><small>Sheet</small>{sheet}</div>
+      </figcaption>
+    </figure>
+  </section>
+
+  <section class="container proj-body">
+    <aside class="proj-aside" aria-label="Project details">
+      <div class="panel proj-panel">
+        <h2 class="proj-panel__title">Spec</h2>
+        <dl class="proj-spec">
+          {spec.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
+        </dl>
+        <div class="repo-meta" set:html={stats(r) + releaseTag(r, { named: true })} />
+        <Fragment set:html={tagList(r, 12)} />
+      </div>
+
+      {
+        materials.length > 0 && (
+          <div class="panel proj-panel">
+            <h2 class="proj-panel__title">Materials</h2>
+            <div class="proj-bar" aria-hidden="true">
+              {materials.map((l) => <span style={`--w: ${l.share}%; --c: ${l.color ?? "var(--text-faint)"}`} />)}
+            </div>
+            <ul class="proj-materials">
+              {materials.map((l) => (
+                <li><i style={`--c: ${l.color ?? "var(--text-faint)"}`} />{l.name}<span>{l.share}%</span></li>
+              ))}
+            </ul>
+          </div>
+        )
+      }
+
+      {
+        r.releases.length > 0 && (
+          <div class="panel proj-panel">
+            <h2 class="proj-panel__title">Releases</h2>
+            <ol class="proj-list">
+              {r.releases.slice(0, 6).map((rel) => (
+                <li>
+                  <a href={safeUrl(rel.url) ?? undefined}>{rel.tag}</a>
+                  {rel.name && rel.name !== rel.tag && rel.name.replace(/^v/, "") !== rel.tag.replace(/^v/, "") && <span class="proj-list__msg">{rel.name}</span>}
+                  {rel.date && <Fragment set:html={time(rel.date)} />}
+                </li>
+              ))}
+            </ol>
+          </div>
+        )
+      }
+
+      {
+        r.commits.length > 0 && (
+          <div class="panel proj-panel">
+            <h2 class="proj-panel__title">Recent changes</h2>
+            <ol class="proj-list">
+              {r.commits.slice(0, 8).map((c) => (
+                <li>
+                  <a href={safeUrl(c.url) ?? undefined}><code>{c.shortSha ?? c.sha.slice(0, 7)}</code></a>
+                  <span class="proj-list__msg">{c.message}</span>
+                  <Fragment set:html={time(c.date)} />
+                </li>
+              ))}
+            </ol>
+            <a class="proj-more" href="/log/">the whole workshop log →</a>
+          </div>
+        )
+      }
+    </aside>
+
+    <article class="terminal glass sheet proj-readme" aria-labelledby="readme-title">
+      <div class="terminal__bar">
+        <span class="terminal__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <h2 class="terminal__title" id="readme-title">{r.name}/README.md</h2>
+      </div>
+      <div class="terminal__body readme">
+        {readme ? <Fragment set:html={readme} /> : <p>No README yet. {repoUrl && <a href={repoUrl}>See the code on GitHub</a>}</p>}
+      </div>
+    </article>
+  </section>
+
+  <nav class="container proj-pager" aria-label="More projects">
+    {prev ? <a class="btn btn--ghost" href={`/projects/${prev.name}/`}>← {prev.title}</a> : <a class="btn btn--ghost" href="/">← The workshop</a>}
+    {next ? <a class="btn btn--ghost" href={`/projects/${next.name}/`}>{next.title} →</a> : <a class="btn btn--ghost" href="/#workbench">Everything else →</a>}
+  </nav>
+</Page>
+
+<style>
+  .proj-top { display: grid; gap: var(--space-7); align-items: start; padding-top: var(--space-8); }
+  @media (min-width: 940px) { .proj-top { grid-template-columns: 1fr 1.05fr; align-items: center; } }
+  .proj-intro { display: grid; gap: var(--space-4); justify-items: start; min-width: 0; }
+  .proj-intro h1 { font-size: clamp(2.5rem, 1.5rem + 4vw, 4.25rem); }
+  .proj-crumbs { display: flex; gap: var(--space-2); font: 500 var(--text-xs) / 1 var(--font-mono); letter-spacing: 0.08em; color: var(--text-faint); }
+  .proj-crumbs a { color: var(--accent-2); text-decoration: none; }
+  .proj-crumbs a:hover { text-decoration: underline; }
+  .proj-crumbs [aria-current] { color: var(--text); }
+  :global(.proj-status) { --rot: -4deg; font-size: var(--text-sm); }
+  .proj-tagline { color: var(--text); font-weight: 600; }
+  .proj-blurb { color: var(--text-muted); max-width: 60ch; }
+  .proj-highlights { margin: 0; }
+  .proj-intro :global(.repo-actions) { margin-top: var(--space-2); }
+
+  .proj-fig { margin: 0; min-width: 0; background: var(--surface); }
+  .proj-media { min-height: 300px; aspect-ratio: 1200 / 630; border: 0; }
+  .proj-media.spotlight__media--desk { aspect-ratio: auto; min-height: 340px; }
+  .proj-media.is-playing { aspect-ratio: auto; min-height: min(70vh, 560px); }
+  .proj-fig .titleblock { border-top: var(--outline); }
+  .proj-fig :global(.stage) { height: 260px; margin: var(--space-7) var(--space-5) var(--space-5); }
+  .proj-fig .titleblock a { color: inherit; }
+
+  .proj-body { display: grid; gap: var(--space-6); align-items: start; padding-top: var(--space-8); }
+  @media (min-width: 940px) {
+    .proj-body { grid-template-columns: minmax(0, 1fr) 320px; }
+    .proj-aside { order: 2; position: sticky; top: 88px; max-height: calc(100vh - 104px); overflow-y: auto; scrollbar-width: thin; }
+  }
+  .proj-aside { display: grid; gap: var(--space-4); min-width: 0; }
+  .proj-panel { display: grid; gap: var(--space-3); padding: var(--space-4); min-width: 0; }
+  .proj-panel__title { font: 600 11px / 1 var(--font-mono); letter-spacing: var(--tracking-mono); text-transform: uppercase; color: var(--accent-2); }
+  .proj-spec { display: grid; grid-template-columns: 1fr 1fr; margin: 0; border: var(--outline); }
+  .proj-spec div { padding: 7px 10px; border-bottom: 1px solid var(--border); min-width: 0; }
+  .proj-spec div:nth-child(odd) { border-right: 1px solid var(--border); }
+  .proj-spec div:nth-last-child(-n + 2) { border-bottom: 0; }
+  .proj-spec dt { font: 500 9px / 1.3 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); }
+  .proj-spec dd { margin: 2px 0 0; font: 500 var(--text-xs) / 1.3 var(--font-mono); overflow-wrap: anywhere; }
+
+  .proj-bar { display: flex; height: 10px; border: var(--outline); }
+  .proj-bar span { width: var(--w); background: var(--c); }
+  .proj-bar span + span { border-left: 1.5px solid var(--bg); }
+  .proj-materials { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font: 450 var(--text-xs) / 1.4 var(--font-mono); color: var(--text-muted); }
+  .proj-materials li { display: flex; align-items: center; gap: var(--space-2); }
+  .proj-materials i { width: 10px; height: 10px; border-radius: 2px; background: var(--c); box-shadow: 0 0 0 1.5px var(--line); }
+  .proj-materials span { margin-left: auto; color: var(--text-faint); }
+
+  .proj-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); font: 400 var(--text-xs) / 1.45 var(--font-mono); color: var(--text-faint); }
+  .proj-list li { display: grid; grid-template-columns: auto 1fr; gap: 2px var(--space-2); }
+  .proj-list a { color: var(--accent-2); text-decoration: none; }
+  .proj-list a:hover { text-decoration: underline; }
+  .proj-list code { color: inherit; border: 0; padding: 0; font-size: 1em; }
+  .proj-list__msg { color: var(--text-muted); overflow-wrap: anywhere; }
+  .proj-list :global(time) { grid-column: 2; }
+  .proj-more { font: 500 var(--text-xs) / 1 var(--font-mono); text-decoration: none; }
+
+  .proj-readme { min-width: 0; }
+  .proj-readme .terminal__title { margin-right: 42px; }
+
+  .proj-pager { display: flex; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; padding-top: var(--space-7); }
+</style>

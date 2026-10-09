@@ -133,6 +133,8 @@
 .spotlight__path { font: 450 var(--text-xs) / 1 var(--font-mono); color: var(--text-faint); letter-spacing: var(--tracking-mono); }
 .spotlight__path span:last-child { color: var(--text); }
 .spotlight__title { font-size: clamp(1.75rem, 1.35rem + 1.4vw, 2.375rem); }
+.spotlight__title a { color: inherit; text-decoration: none; }
+.spotlight__title a:hover { color: var(--accent); text-decoration: underline; text-decoration-thickness: 3px; }
 .spotlight__tagline { color: var(--text); font-weight: 600; }
 .spotlight__blurb { color: var(--text-muted); }
 

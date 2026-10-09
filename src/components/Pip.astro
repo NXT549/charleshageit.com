@@ -1,7 +1,22 @@
+---
+// Pip, walking around a little stage. Click him to change his flavour; the hero's terminal can also
+// talk to him (`pip mint`, `pip say hi`) by dispatching a "pip" event on window, see src/scripts/shell.ts.
+// His flavour is remembered between visits, and the browser tab's icon changes to match.
+import SPRITES from "./pip-sprites.js";
+
+interface Props {
+  /** The handwritten note pointing at Pip. */
+  hint?: string;
+}
+
+const { hint = "this is Pip! click him" } = Astro.props;
+const flavours = Object.keys(SPRITES.flavors);
+---
+
 <div class="stage" aria-label="Pip, a pixel-art jellybean, walking around. Click him to change his flavour.">
-  <canvas id="pip" width="32" height="19" tabindex="0" role="button" aria-label="Pip. Click to change his flavour."></canvas>
+  <canvas id="pip" width="32" height="19" tabindex="0" role="button" aria-label="Pip. Click to change his flavour." data-flavours={flavours.join(" ")}></canvas>
   <div class="bubble" id="bubble">hi!</div>
-  <div class="stage-hint hand" aria-hidden="true">this is Pip! click him<svg viewBox="0 0 46 30"><path d="M42 3 C 32 8, 22 20, 6 26 M6 26 l9 -1 M6 26 l4 -8" /></svg></div>
+  <div class="stage-hint hand" aria-hidden="true">{hint}<svg viewBox="0 0 46 30"><path d="M42 3 C 32 8, 22 20, 6 26 M6 26 l9 -1 M6 26 l4 -8" /></svg></div>
   <div class="ground"></div>
 </div>
 
@@ -11,6 +26,9 @@
   type Frame = keyof typeof SPRITES.frames;
   type Flavour = keyof typeof SPRITES.flavors;
   type Palette = Record<string, string>;
+  type Mode = "walk" | "idle" | "wave" | "happy" | "dizzy";
+  /** What the terminal (or anything else) can ask Pip to do: window.dispatchEvent(new CustomEvent("pip", { detail })). */
+  type PipCommand = { do: "poke" | "flavour" | "say" | "wave" | "jump" | "spin"; value?: string };
 
   // Pip walks around the hero.
   const canvas = document.getElementById("pip") as HTMLCanvasElement | null;
@@ -20,25 +38,51 @@
 
   if (canvas && bubble && ctx && stage) {
     const W = 32, H = 19;
+    const STORE = "pip-flavour";
     const flavours = Object.keys(SPRITES.flavors) as Flavour[];
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const sayings = ["hi!", "boing", "had any water?", "yum, ", "wheee", "take a break!", "*squish*"];
     let flavour = 0;
     let x = 40, dir = 1, t = 0, last = 0, modeUntil = 0;
-    let mode: "walk" | "idle" | "wave" | "happy" = "walk";
+    let mode: Mode = "walk";
     let bubbleTimer: ReturnType<typeof setTimeout> | undefined;
 
-    const draw = (name: Frame, flip: boolean) => {
+    const paint = (target: CanvasRenderingContext2D, name: Frame, flip: boolean, dy = 0) => {
       const frame = SPRITES.frames[name];
       const pal: Palette = { ...SPRITES.base, ...SPRITES.flavors[flavours[flavour]] };
-      ctx.clearRect(0, 0, W, H);
       for (let i = 0; i < frame.length; i++) {
         const ch = frame[i];
         if (ch === ".") continue;
         const px = i % W, py = (i / W) | 0;
-        ctx.fillStyle = pal[ch];
-        ctx.fillRect(flip ? W - 1 - px : px, py, 1, 1);
+        target.fillStyle = pal[ch];
+        target.fillRect(flip ? W - 1 - px : px, py + dy, 1, 1);
       }
+    };
+
+    const draw = (name: Frame, flip: boolean) => {
+      ctx.clearRect(0, 0, W, H);
+      paint(ctx, name, flip);
+    };
+
+    // The tab icon wears Pip's current flavour (the cherry PNG is the default).
+    const icon = document.querySelector<HTMLLinkElement>('link[rel="icon"]');
+    const original = icon?.href;
+    const updateIcon = () => {
+      if (!icon) return;
+      if (flavour === 0) { if (original) icon.href = original; return; }
+      const c = document.createElement("canvas");
+      c.width = c.height = W;
+      const g = c.getContext("2d");
+      if (!g) return;
+      paint(g, "idle_0", false, (W - H) >> 1);
+      icon.href = c.toDataURL("image/png");
+    };
+
+    const setFlavour = (i: number) => {
+      flavour = ((i % flavours.length) + flavours.length) % flavours.length;
+      canvas.dataset.flavour = flavours[flavour];
+      try { localStorage.setItem(STORE, flavours[flavour]); } catch { /* private mode: just don't remember */ }
+      updateIcon();
     };
 
     const say = (text: string) => {
@@ -46,20 +90,38 @@
       bubble.style.left = x + 64 + "px";
       bubble.classList.add("show");
       clearTimeout(bubbleTimer);
-      bubbleTimer = setTimeout(() => bubble.classList.remove("show"), 1600);
+      bubbleTimer = setTimeout(() => bubble.classList.remove("show"), Math.max(1600, text.length * 90));
+    };
+
+    const act = (next: Mode, ms: number, still: Frame) => {
+      stage.classList.add("poked");
+      mode = next;
+      modeUntil = t + ms;
+      if (reduced) draw(still, false);
     };
 
     const poke = () => {
-      flavour = (flavour + 1) % flavours.length;
-      stage.classList.add("poked");
-      mode = "happy";
-      modeUntil = t + 900;
+      setFlavour(flavour + 1);
+      act("happy", 900, "happy_1");
       const s = sayings[(Math.random() * sayings.length) | 0];
       say(s === "yum, " ? "yum, " + flavours[flavour] + "!" : s);
     };
     canvas.addEventListener("click", poke);
     canvas.addEventListener("keydown", (e) => {
       if (e.key === "Enter" || e.key === " ") { e.preventDefault(); poke(); }
+    });
+
+    window.addEventListener("pip", (e) => {
+      const cmd = (e as CustomEvent<PipCommand>).detail;
+      if (!cmd) return;
+      if (cmd.do === "poke") poke();
+      else if (cmd.do === "flavour" && cmd.value) {
+        const i = flavours.indexOf(cmd.value as Flavour);
+        if (i >= 0) { setFlavour(i); act("happy", 900, "happy_1"); say("yum, " + flavours[flavour] + "!"); }
+      } else if (cmd.do === "say" && cmd.value) { act("wave", 1800, "wave_1"); say(cmd.value); }
+      else if (cmd.do === "wave") { act("wave", 1800, "wave_1"); say("hi!"); }
+      else if (cmd.do === "jump") { act("happy", 1200, "happy_1"); say("boing"); }
+      else if (cmd.do === "spin") { act("dizzy", 1600, "dizzy_1"); say("whoa..."); }
     });
 
     const tick = (now: number) => {
@@ -80,17 +142,21 @@
       if (mode === "walk") f = `walk_${((t / 140) | 0) % 4}` as Frame;
       else if (mode === "wave") f = `wave_${((t / 200) | 0) % 3}` as Frame;
       else if (mode === "happy") f = `happy_${((t / 150) | 0) % 3}` as Frame;
+      else if (mode === "dizzy") f = `dizzy_${((t / 160) | 0) % 4}` as Frame;
       else f = ((t / 2400) | 0) % 3 === 2 && t % 2400 < 180 ? "idle_blink" : (`idle_${((t / 400) | 0) % 4}` as Frame);
       draw(f, dir < 0);
       requestAnimationFrame(tick);
     };
 
+    let saved: string | null = null;
+    try { saved = localStorage.getItem(STORE); } catch { /* no storage, start on cherry */ }
+    if (saved && flavours.includes(saved as Flavour)) setFlavour(flavours.indexOf(saved as Flavour));
+    else canvas.dataset.flavour = flavours[flavour];
+
     if (reduced) {
-      // Stand still and just wave when poked.
+      // Stand still; pokes and commands swap to a still pose instead of animating.
       canvas.style.transform = "translateX(40px)";
       draw("idle_0", false);
-      canvas.addEventListener("click", () => draw("happy_1", false));
-      canvas.addEventListener("keydown", () => draw("happy_1", false));
     } else {
       requestAnimationFrame(tick);
     }

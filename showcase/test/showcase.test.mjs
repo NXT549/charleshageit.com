@@ -70,8 +70,9 @@ function restFetch(calls = []) {
       const n = byName.get(m[1]);
       if (m[2] === "commits") {
         const c = n.defaultBranchRef && n.defaultBranchRef.target;
+        const history = c ? (c.history ? c.history.nodes : [c]) : [];
         return c
-          ? json([{ sha: c.oid, html_url: c.url, commit: { message: c.messageHeadline + "\n\nbody", committer: { date: c.committedDate } } }])
+          ? json(history.map((h) => ({ sha: h.oid, html_url: h.url, commit: { message: h.messageHeadline + "\n\n" + (h.messageBody || "body"), committer: { date: h.committedDate } } })))
           : json({ message: "Git Repository is empty." }, 409);
       }
       const r = n.latestRelease;
@@ -216,6 +217,21 @@ test("repos carry filterable language, frameworks, topics and tags", async () =>
   assert.equal(data.user.totalStars, 1240);
 });
 
+test("repos keep recent commits, published releases and the README for their own pages", async () => {
+  const data = await graphqlData();
+  const pip = data.repos.find((r) => r.name === "pip");
+  assert.deepEqual(
+    pip.commits.map((c) => [c.shortSha, c.message]),
+    [["0f1e2d3", "Add the candy cane flavour"], ["9a8b7c6", "Teach Pip to nap when you wander off (#4)"]]
+  );
+  assert.deepEqual(pip.releases.map((r) => [r.tag, r.name]), [["v1.2.0", "v1.2.0"], ["v1.0.0", "First steps"]]); // no drafts
+  assert.match(pip.readme, /desktop/);
+  // Without a history (old caches), the latest commit and release stand in.
+  const slots = data.repos.find((r) => r.name === "hamster-slots");
+  assert.deepEqual(slots.commits, [slots.latestCommit]);
+  assert.equal(slots.releases[0].tag, slots.release.tag);
+});
+
 // ---------------------------------------------------------------- fetching
 
 test("without a token it uses REST and stays well inside the anonymous rate limit", async () => {
@@ -226,7 +242,8 @@ test("without a token it uses REST and stays well inside the anonymous rate limi
   assert.ok(!api.some((u) => /python-scripts|some-fork|charleshageit/.test(u)), "no requests for hidden repos");
 
   const viaGraphQL = await graphqlData();
-  const strip = (d) => d.repos.map((r) => ({ ...r, languages: null }));
+  // REST only knows each repo's latest release, and per-language sizes.
+  const strip = (d) => d.repos.map((r) => ({ ...r, languages: null, releases: null }));
   assert.deepEqual(strip({ ...data, generatedAt: NOW }), strip(viaGraphQL));
 });
 
@@ -264,6 +281,9 @@ test("project cards expose data attributes for filtering", async () => {
   assert.match(html, /data-repo="hamster-slots" data-language="typescript" data-frameworks="vite" data-topics="game pixel-art idle-game"/);
   assert.match(html, /<time datetime="2026-10-07T09:00:00.000Z" data-relative>7 Oct 2026<\/time>/);
   assert.match(html, /1\.2k<span class="visually-hidden"> stars/);
+  // each card's name opens the project's own page; the code is one click further
+  assert.match(html, /<a class="repo-card__link" href="\/projects\/hamster-slots\/">hamster-slots<\/a>/);
+  assert.match(html, /href="https:\/\/github\.com\/NXT549\/hamster-slots"><svg[^>]*><use href="#i-code"\/><\/svg>Code<\/a>/);
 });
 
 test("spotlight shows the README, release downloads, live link and demo", async () => {
@@ -290,6 +310,8 @@ test("spotlight shows the README, release downloads, live link and demo", async 
   // the hero sits above the spotlight, so no spotlight image should compete with it for LCP
   assert.doesNotMatch(html, /loading="eager"/);
   assert.match(html, /<symbol id="i-star"/);
+  assert.match(html, /<h3 class="spotlight__title"><a href="\/projects\/pip\/">Pip<\/a><\/h3>/);
+  assert.match(html, /href="\/projects\/pip\/"><svg[^>]*><use href="#i-sheet"\/><\/svg>Spec sheet<\/a>/);
 });
 
 test("injection replaces only the marked regions and is repeatable", async () => {

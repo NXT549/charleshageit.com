@@ -1,0 +1,30 @@
+---
+// Every page but the home page: the head, the header (with this page marked), the content and the
+// footer's title block. The home page puts the same pieces together itself in src/pages/index.astro.
+import Base from "./Base.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+
+interface Props {
+  title: string;
+  description: string;
+  /** Which header link is this page: "log", "about" or "projects". */
+  current?: string;
+  /** The footer title block's sheet number. */
+  sheet?: string;
+  canonical?: boolean;
+  image?: string;
+  imageAlt?: string;
+}
+
+const { title, description, current, sheet, canonical, image, imageAlt } = Astro.props;
+---
+
+<Base title={title} description={description} canonical={canonical} image={image} imageAlt={imageAlt}>
+  <slot name="head" slot="head" />
+  <Header home="/" current={current} />
+  <main>
+    <slot />
+  </main>
+  <Footer sheet={sheet} />
+</Base>

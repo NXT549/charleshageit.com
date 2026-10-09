@@ -39,10 +39,10 @@ const total = groups.reduce((n, g) => n + g.items.length, 0);
                 data-key={g.key}
                 data-attr={g.attr}
                 data-value={f.slug}
-                aria-label={`${g.label} ${f.label}`}
               >
+                <span class="visually-hidden">{g.label}: </span>
                 {f.label}
-                <span class="filters__count" aria-hidden="true">{f.count}</span>
+                <span class="filters__count">{f.count}<span class="visually-hidden"> {f.count === 1 ? "project" : "projects"}</span></span>
               </button>
             ))}
           </div>

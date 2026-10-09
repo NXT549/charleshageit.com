@@ -2,11 +2,29 @@
 import Pip from "./Pip.astro";
 import StatusBadge from "./StatusBadge.astro";
 import { getShowcase } from "../lib/showcase";
+import type { ShellData } from "../scripts/shell";
 
 const data = await getShowcase();
 const byName = new Map(data.repos.map((r) => [r.name, r]));
 // The featured repos, in the order showcase/config.json lists them: the hero's jump-links.
 const top = data.featured.map((name) => byName.get(name)).filter((r) => r !== undefined);
+
+// What the terminal knows about: every project on the page, featured ones first (src/scripts/shell.ts).
+const firstSentence = (text: unknown) => /^(.+?[.!?])(\s|$)/.exec(String(text ?? "").trim())?.[1] ?? String(text ?? "").trim();
+const shell: ShellData = {
+  github: data.user.url,
+  projects: [...top, ...data.repos.filter((r) => !r.featured)].map((r) => ({
+    name: r.name,
+    title: r.title,
+    tagline: firstSentence(r.blurb || r.description),
+    url: r.url,
+    live: r.homepage,
+    featured: r.featured,
+    downloads: ((r.release as { downloads?: { label: string }[] } | null)?.downloads ?? []).map((d) => d.label),
+  })),
+};
+// JSON inside <script> must not be able to close the tag.
+const shellJson = JSON.stringify(shell).replace(/</g, "\\u003c");
 ---
 
 <section class="hero container">
@@ -39,12 +57,12 @@ const top = data.featured.map((name) => byName.get(name)).filter((r) => r !== un
       <span class="terminal__dots" aria-hidden="true"><i></i><i></i><i></i></span>
       <span class="terminal__title">Fig. 1 · charles@workshop: ~</span>
     </div>
-    <div class="terminal__body">
+    <div class="terminal__body" data-shell>
       <p class="terminal__line"><span class="prompt">charles@workshop<span class="prompt__path">:~</span><span class="prompt__sym">$</span></span><span class="type" style="--chars: 6; --delay: 0.3s">whoami</span></p>
       <p class="terminal__line terminal__out reveal" style="--delay: 0.75s">charles · vibe-coder · Redlands, Brisbane</p>
       <p class="terminal__line reveal" style="--delay: 1.1s"><span class="prompt">charles@workshop<span class="prompt__path">:~</span><span class="prompt__sym">$</span></span><span class="type" style="--chars: 13; --delay: 1.3s">ls ~/projects</span></p>
       <p class="terminal__line terminal__out reveal" style="--delay: 2.15s">{top.map((repo, i) => <Fragment>{i > 0 && "\u00a0 "}<a href={`#project-${repo.name}`}>{repo.name}/</a></Fragment>)}</p>
-      <p class="terminal__line reveal" style="--delay: 2.45s"><span class="prompt">charles@workshop<span class="prompt__path">:~</span><span class="prompt__sym">$</span></span><span class="cursor" aria-hidden="true"></span></p>
+      <div class="terminal__line reveal" style="--delay: 2.45s" data-shell-prompt><span class="prompt">you@workshop<span class="prompt__path">:~</span><span class="prompt__sym">$</span></span><span class="cursor" aria-hidden="true"></span></div>
     </div>
     <Pip />
     <div class="titleblock">
@@ -54,6 +72,12 @@ const top = data.featured.map((name) => byName.get(name)).filter((r) => r !== un
     </div>
   </div>
 </section>
+
+<script type="application/json" id="shell-data" set:html={shellJson} />
+
+<script>
+  import "../scripts/shell";
+</script>
 
 <style>
   .hero-jump { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin-top: var(--space-5); }

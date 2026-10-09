@@ -177,6 +177,11 @@ html { scrollbar-color: var(--border-strong) var(--bg); }
   transform: translate(-4px, -4px);
   box-shadow: 8px 8px 0 calc(var(--stroke) * -1) var(--bg), 8px 8px 0 0 var(--pop, var(--accent));
 }
+/* .is-pointed: the same lift, for a moment, when something points at the card (the hero terminal's `open`). */
+.glow.is-pointed {
+  transform: translate(-4px, -4px);
+  box-shadow: 8px 8px 0 calc(var(--stroke) * -1) var(--bg), 8px 8px 0 0 var(--pop, var(--accent));
+}
 .glow:active { transform: translate(-1px, -1px); box-shadow: 2px 2px 0 calc(var(--stroke) * -1) var(--bg), 2px 2px 0 0 var(--pop, var(--accent)); transition-duration: var(--dur-fast); }
 
 /* ---------- Terminal ---------- */
