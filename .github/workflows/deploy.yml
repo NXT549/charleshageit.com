@@ -8,6 +8,9 @@ on:
   schedule:
     - cron: "23 */6 * * *"
   workflow_dispatch:
+  # Other repos can ask for a rebuild right after they change; see docs/keeping-it-fresh.md.
+  repository_dispatch:
+    types: [repo-updated]
 
 permissions:
   contents: read
