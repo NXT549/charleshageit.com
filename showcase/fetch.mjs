@@ -5,7 +5,7 @@
 // so it stays inside the 60 requests an hour GitHub allows anonymous callers.
 // Manifests and READMEs come from raw.githubusercontent.com in REST mode, which isn't rate-limited the same way.
 
-import { detectFrameworks, frameworkLabel, language, readmeExcerpt, releaseDownloads, slugify } from "./detect.mjs";
+import { commitHeadline, detectFrameworks, frameworkLabel, language, readmeExcerpt, releaseDownloads, slugify } from "./detect.mjs";
 
 const API = "https://api.github.com";
 const RAW = "https://raw.githubusercontent.com";
@@ -88,7 +88,7 @@ query Showcase($login: String!, $cursor: String) {
           releaseAssets(first: 20) { nodes { name downloadUrl } }
         }
         defaultBranchRef {
-          target { ... on Commit { oid abbreviatedOid messageHeadline committedDate url } }
+          target { ... on Commit { oid abbreviatedOid messageHeadline messageBody committedDate url } }
         }
         packageJson: object(expression: "HEAD:package.json") { ... on Blob { text } }
         requirements: object(expression: "HEAD:requirements.txt") { ... on Blob { text } }
@@ -135,7 +135,13 @@ export function fromGraphQLRepo(node) {
       : null,
     latestCommit:
       commit && commit.oid
-        ? { sha: commit.oid, shortSha: commit.abbreviatedOid, message: commit.messageHeadline, date: commit.committedDate, url: commit.url }
+        ? {
+            sha: commit.oid,
+            shortSha: commit.abbreviatedOid,
+            message: commitHeadline(commit.messageHeadline, commit.messageBody),
+            date: commit.committedDate,
+            url: commit.url,
+          }
         : null,
     packageJson: node.packageJson && node.packageJson.text,
     requirements: node.requirements && node.requirements.text,
@@ -235,10 +241,11 @@ export async function fetchViaRest({ login, token, config, fetchImpl = fetch }) 
     ]);
     const c = Array.isArray(commits) && commits[0];
     if (c) {
+      const [headline, ...body] = String(c.commit.message).split("\n");
       repo.latestCommit = {
         sha: c.sha,
         shortSha: c.sha.slice(0, 7),
-        message: String(c.commit.message).split("\n")[0],
+        message: commitHeadline(headline, body.join("\n")),
         date: c.commit.committer ? c.commit.committer.date : c.commit.author.date,
         url: c.html_url,
       };
@@ -365,7 +372,7 @@ export function normalize({ user, repos }, config, { generatedAt = new Date().to
               name: r.release.name || r.release.tag,
               date: r.release.date,
               url: r.release.url,
-              downloads: releaseDownloads(r.release.assets),
+              downloads: releaseDownloads(r.release.assets, { expected: o.platforms || [], releaseUrl: r.release.url }),
             }
           : null,
         readmeExcerpt: excerpt,

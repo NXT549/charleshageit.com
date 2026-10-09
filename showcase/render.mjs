@@ -176,7 +176,10 @@ function spotlightCard(repo, index) {
   const actions = [
     live ? `<a class="btn btn--primary" href="${esc(live)}">${icon("play")}${esc(liveLabel(repo))}</a>` : "",
     ...((repo.release && repo.release.downloads) || []).map(
-      (d) => `<a class="btn btn--secondary" href="${esc(safeUrl(d.url) || "#")}" title="${esc(d.name)}">${icon("download")}${esc(d.label)}</a>`
+      (d) =>
+        `<a class="btn btn--secondary" href="${esc(safeUrl(d.url) || "#")}" title="${esc(d.name || `${d.label} downloads for ${repo.release.tag}`)}">${icon(
+          "download"
+        )}${esc(d.label)}</a>`
     ),
     repoUrl ? `<a class="btn btn--ghost" href="${esc(repoUrl)}">${icon("code")}View the code</a>` : "",
     cloneButton(repo),

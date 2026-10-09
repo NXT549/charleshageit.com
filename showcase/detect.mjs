@@ -206,18 +206,30 @@ export function readmeExcerpt(markdown, maxLength = 320) {
 }
 
 const PLATFORMS = [
-  ["windows", "Windows", /\.(exe|msi|msix|appx)$|[-_.]win(dows|32|64)?[-_.].*\.zip$/i],
-  ["macos", "macOS", /\.(dmg|pkg)$|[-_.](mac|macos|darwin|osx)[-_.].*\.zip$/i],
-  ["linux", "Linux", /\.(appimage|deb|rpm|flatpak|snap)$|[-_.]linux[-_.].*\.(zip|tar\.gz|tgz)$/i],
+  ["windows", "Windows", /\.(exe|msi|msix|appx)$|[-_.]win(dows|32|64)?([-_.][^/]*)?\.zip$/i],
+  ["macos", "macOS", /\.(dmg|pkg)$|[-_.](mac|macos|darwin|osx|universal)([-_.][^/]*)?\.zip$/i],
+  ["linux", "Linux", /\.(appimage|deb|rpm|flatpak|snap)$|[-_.]linux([-_.][^/]*)?\.(zip|tar\.gz|tgz)$/i],
   ["android", "Android", /\.apk$/i],
 ];
 
-/** One download button per platform from a release's assets (first match wins). */
-export function releaseDownloads(assets = []) {
+/**
+ * One download button per platform from a release's assets (first match wins).
+ * Platforms listed in `expected` that have no asset link to the release page instead,
+ * for apps whose installer for that platform lives somewhere else.
+ */
+export function releaseDownloads(assets = [], { expected = [], releaseUrl = null } = {}) {
   const out = [];
   for (const [platform, label, pattern] of PLATFORMS) {
     const asset = assets.find((a) => a && a.name && pattern.test(a.name) && !/\.blockmap$/i.test(a.name));
     if (asset) out.push({ platform, label, name: asset.name, url: asset.url });
+    else if (expected.includes(platform) && releaseUrl) out.push({ platform, label, name: null, url: releaseUrl });
   }
   return out;
+}
+
+/** "Merge pull request #13 from owner/branch" says nothing; use the PR title from the body instead. */
+export function commitHeadline(headline, body) {
+  const m = /^Merge pull request #(\d+) from \S+$/.exec(String(headline || "").trim());
+  const title = String(body || "").split("\n").map((l) => l.trim()).find(Boolean);
+  return m && title ? `${title} (#${m[1]})` : headline;
 }

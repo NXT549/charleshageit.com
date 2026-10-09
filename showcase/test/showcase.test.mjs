@@ -2,7 +2,7 @@
 import { test } from "node:test";
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
-import { detectFrameworks, readmeExcerpt, releaseDownloads, slugify } from "../detect.mjs";
+import { commitHeadline, detectFrameworks, readmeExcerpt, releaseDownloads, slugify } from "../detect.mjs";
 import { fetchShowcase, fetchViaGraphQL, homepageUrl, normalize, RateLimitError } from "../fetch.mjs";
 import { inject, renderInto, renderRepoGrid, renderSpotlight, safeUrl } from "../render.mjs";
 
@@ -134,6 +134,18 @@ test("release downloads pick one asset per platform and skip blockmaps", () => {
     [["windows", "Pip-Setup-1.2.0.exe"], ["macos", "Pip-1.2.0-arm64.dmg"]]
   );
   assert.deepEqual(releaseDownloads([{ name: "app-linux-x64.tar.gz", url: "u" }, { name: "checksums.txt", url: "u" }]).map((d) => d.platform), ["linux"]);
+  assert.deepEqual(releaseDownloads([{ name: "Pip-1.2.0-arm64-mac.zip", url: "u" }, { name: "Pip-win.zip", url: "u" }]).map((d) => d.platform), ["windows", "macos"]);
+  // an expected platform with no asset falls back to the release page
+  assert.deepEqual(releaseDownloads([{ name: "Pip-Setup.exe", url: "exe" }], { expected: ["windows", "macos"], releaseUrl: "rel" }), [
+    { platform: "windows", label: "Windows", name: "Pip-Setup.exe", url: "exe" },
+    { platform: "macos", label: "macOS", name: null, url: "rel" },
+  ]);
+});
+
+test("merge commits show the pull request title", () => {
+  assert.equal(commitHeadline("Merge pull request #13 from NXT549/claude/x", "\nAdd the Welcome Mat\n\nmore"), "Add the Welcome Mat (#13)");
+  assert.equal(commitHeadline("Merge pull request #13 from NXT549/claude/x", ""), "Merge pull request #13 from NXT549/claude/x");
+  assert.equal(commitHeadline("Fix the reels", "body"), "Fix the reels");
 });
 
 test("homepages without a scheme get https, anything else is dropped", () => {

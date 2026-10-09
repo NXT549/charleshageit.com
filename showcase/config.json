@@ -27,6 +27,7 @@
       "imageWidth": 256,
       "imageHeight": 256,
       "pixelArt": true,
+      "platforms": ["windows", "macos"],
       "frameworks": ["electron"]
     }
   }
