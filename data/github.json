@@ -65,8 +65,9 @@
         "pixelArt": true
       },
       "status": "done",
-      "pop": "cherry",
+      "pop": "blue-pencil",
       "scene": "desk",
+      "note": "that's him\nup the top too!",
       "featured": true,
       "stars": 0,
       "forks": 0,
@@ -132,7 +133,7 @@
           },
           {
             "platform": "macos",
-            "label": "macOS",
+            "label": "Mac",
             "name": null,
             "url": "https://github.com/NXT549/pip/releases/tag/v1.2.0"
           }
@@ -161,8 +162,9 @@
         "pixelArt": false
       },
       "status": "wip",
-      "pop": "lemon",
+      "pop": "highlighter",
       "scene": null,
+      "note": null,
       "featured": true,
       "stars": 0,
       "forks": 0,

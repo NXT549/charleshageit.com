@@ -27,8 +27,8 @@
 }
 .repo-release { gap: 5px; }
 .repo-release.is-new::after {
-  content: "new"; margin-left: 2px; padding: 1px 5px; border-radius: var(--radius-full);
-  background: var(--accent); color: var(--accent-fg); font-size: 10px; font-weight: 650;
+  content: "new"; margin-left: 2px; padding: 1px 5px; border-radius: var(--radius-sm);
+  background: var(--accent); color: var(--accent-fg); font-size: 10px; font-weight: 700;
 }
 
 .repo-commit {
@@ -50,21 +50,18 @@
 .showcase-empty { color: var(--text-muted); font-family: var(--font-mono); font-size: var(--text-sm); }
 
 /* ---------- spotlight ---------- */
-.spotlight-list { display: grid; gap: var(--space-6); }
+.spotlight-list { display: grid; gap: var(--space-7); }
 
 .spotlight {
   display: grid;
   grid-template-columns: 1fr;
-  overflow: hidden;
   scroll-margin-top: 80px;
 }
-@media (min-width: 880px) {
-  .spotlight { grid-template-columns: 1.1fr 1fr; }
-  .spotlight--flip { grid-template-columns: 1fr 1.1fr; }
+@media (min-width: 840px) {
+  .spotlight { grid-template-columns: 1.15fr 1fr; }
+  .spotlight--flip { grid-template-columns: 1fr 1.15fr; }
   .spotlight--flip .spotlight__media { order: 2; border-right: 0; border-left: var(--outline); }
 }
-.spotlight { --tilt: -0.3deg; }
-.spotlight--flip { --tilt: 0.3deg; }
 
 .spotlight__media {
   position: relative;
@@ -74,7 +71,7 @@
   background: var(--surface-2);
   border-bottom: var(--outline);
 }
-@media (min-width: 880px) {
+@media (min-width: 840px) {
   .spotlight__media { border-bottom: 0; border-right: var(--outline); min-height: 100%; }
 }
 .spotlight__shot {
@@ -88,25 +85,25 @@
   object-fit: contain; image-rendering: pixelated;
 }
 .spotlight:hover .spotlight__shot--pixel { transform: translateY(-6px) rotate(-3deg); }
-/* "scene": "desk" in the config: Pip's desk at night (from the theme's original Pip card) */
-.spotlight__media--desk {
-  background:
-    radial-gradient(2px 2px at 18% 22%, var(--text) 50%, transparent 51%),
-    radial-gradient(2px 2px at 72% 14%, var(--lemon) 50%, transparent 51%),
-    radial-gradient(2px 2px at 86% 38%, var(--text) 50%, transparent 51%),
-    radial-gradient(2px 2px at 40% 10%, var(--cyan) 50%, transparent 51%),
-    radial-gradient(2px 2px at 8% 50%, var(--text-muted) 50%, transparent 51%),
-    linear-gradient(180deg, #241d3d 0%, #2f2652 70%);
+/* "scene": "desk" in the config: Pip's spec drawing (a dashed frame, a dimension line and a hatched desk) */
+.spotlight__media--desk { min-height: 340px; background: color-mix(in srgb, var(--bg) 60%, transparent); }
+.spotlight__media--desk::before {
+  content: ""; position: absolute; inset: 40px 44px 56px;
+  border: var(--outline-dashed);
 }
 .spotlight__media--desk::after {
   content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 30%;
-  background: repeating-linear-gradient(90deg, #8a5a3b 0 46px, #7a4f33 46px 48px);
   border-top: var(--outline);
+  background: repeating-linear-gradient(-45deg, var(--border) 0 1px, transparent 1px 9px);
 }
+.spotlight__dim { position: absolute; left: 44px; right: 44px; top: 16px; }
+/* the dimension line above says 168 px, so keep the sprite that wide */
 .spotlight__media--desk .spotlight__shot--pixel {
   position: absolute; inset: auto auto calc(30% - 52px) 50%; z-index: 1;
   width: 168px; translate: -50% 0;
 }
+/* a handwritten note on the drawing ("note" in the config) */
+.spotlight__note { position: absolute; right: 22px; top: 52px; z-index: 2; --rot: 5deg; text-align: right; }
 .spotlight__placeholder { font: 500 var(--text-xl) / 1 var(--font-mono); color: var(--text-muted); }
 
 .spotlight__frame {
@@ -115,27 +112,34 @@
 }
 .spotlight__media.is-playing { min-height: min(70vh, 520px); }
 
-.spotlight__status { position: absolute; top: var(--space-4); left: var(--space-4); z-index: 3; }
 .spotlight__demo { position: absolute; right: var(--space-4); bottom: var(--space-4); z-index: 3; }
 
 .spotlight__body {
-  display: flex; flex-direction: column; gap: var(--space-4);
+  position: relative;
+  display: flex; flex-direction: column; gap: var(--space-3);
   padding: var(--space-5);
   min-width: 0;
 }
-@media (min-width: 640px) { .spotlight__body { padding: var(--space-6); } }
+@media (min-width: 840px) { .spotlight__body { padding: var(--space-6); } }
+/* the status stamp sits in the top corner of the text, like on a drawing;
+   on phones it's stamped across the edge of the picture (clear of the demo button) so the path gets the whole line */
+.spotlight__status { position: absolute; top: -14px; left: 18px; z-index: 3; }
+.spotlight--flip .spotlight__status { --rot: 5deg; }
+@media (min-width: 840px) {
+  .spotlight__status { top: 20px; left: auto; right: 18px; }
+  .spotlight__path { padding-right: 150px; }
+}
 
 .spotlight__path { font: 450 var(--text-xs) / 1 var(--font-mono); color: var(--text-faint); letter-spacing: var(--tracking-mono); }
 .spotlight__path span:last-child { color: var(--text); }
-.spotlight__title { font-size: var(--text-3xl); letter-spacing: var(--tracking-tight); line-height: 1.1; }
+.spotlight__title { font-size: clamp(1.75rem, 1.35rem + 1.4vw, 2.375rem); }
+.spotlight__tagline { color: var(--text); font-weight: 600; }
 .spotlight__blurb { color: var(--text-muted); }
 
 .spotlight__readme {
-  --bar: var(--pop, var(--grape));
   margin: 0;
   border: var(--outline);
   border-radius: var(--radius);
-  box-shadow: var(--shadow-sm);
   font-size: var(--text-xs);
 }
 .spotlight__readme .terminal__bar { padding: 7px 12px; }
@@ -143,39 +147,37 @@
 .spotlight__readme .terminal__body { padding: var(--space-3) var(--space-4) var(--space-4); }
 
 .spotlight__highlights { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; color: var(--text-muted); font-size: var(--text-sm); }
-.spotlight__highlights li { display: flex; gap: var(--space-2); }
-.spotlight__highlights li::before { content: "★"; color: var(--pop, var(--lemon)); flex: none; }
+.spotlight__highlights li { display: flex; gap: 10px; }
+.spotlight__highlights li::before { content: "+"; font-family: var(--font-mono); color: var(--accent-2); flex: none; }
+.spotlight .repo-meta { padding-top: var(--space-3); border-top: var(--outline-dashed); }
 
 /* ---------- project grid ---------- */
 .repo-grid {
   display: grid;
-  gap: var(--space-4);
+  gap: var(--space-5);
   grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
 }
 
 .repo-card {
   display: flex; flex-direction: column; gap: var(--space-3);
-  padding: var(--space-5);
+  padding: var(--space-4) var(--space-5) var(--space-5);
   min-width: 0;
   scroll-margin-top: 80px;
 }
 .repo-card__head { display: flex; align-items: center; gap: var(--space-2); min-width: 0; color: var(--text-faint); }
-.repo-card__name { flex: 1; min-width: 0; font: 700 var(--text-xl) / 1.2 var(--font-display); }
+.repo-card__name { flex: 1; min-width: 0; font: 700 var(--text-lg) / 1.25 var(--font-display); letter-spacing: -0.01em; }
 .repo-card__link { color: var(--text); text-decoration: none; overflow-wrap: anywhere; }
 .repo-card__link:hover { color: var(--accent); }
 /* the whole card is the link to the repo; other links and buttons sit above it */
 .repo-card__link::after { content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: 0; }
 .repo-card__link:focus-visible { outline: none; }
-.repo-card__link:focus-visible::after { outline: 3px solid var(--lemon); outline-offset: 3px; }
+.repo-card__link:focus-visible::after { outline: 2px solid var(--accent); outline-offset: 3px; }
 .repo-card a:not(.repo-card__link), .repo-card button { position: relative; z-index: 2; }
-.repo-card__featured { text-decoration: none; }
-/* a different candy colour and tilt for each card, unless the config picks one */
-.repo-card:nth-child(6n + 1) { --pop: var(--lemon); }
-.repo-card:nth-child(6n + 2) { --pop: var(--cyan); --tilt: 0.8deg; }
-.repo-card:nth-child(6n + 3) { --pop: var(--bubblegum); --tilt: -0.8deg; }
-.repo-card:nth-child(6n + 4) { --pop: var(--lime); --tilt: 0.6deg; }
-.repo-card:nth-child(6n + 5) { --pop: var(--pumpkin); --tilt: -0.6deg; }
-.repo-card:nth-child(6n + 6) { --pop: var(--blueberry); --tilt: 1deg; }
+.repo-card__featured { flex: none; padding: 4px 7px 3px; font-size: 10px; text-decoration: none; --rot: 4deg; }
+/* each card leaves a different pen colour behind on hover, unless the config picks one */
+.repo-card:nth-child(4n + 2) { --pop: var(--accent-2); }
+.repo-card:nth-child(4n + 3) { --pop: var(--success); }
+.repo-card:nth-child(4n + 4) { --pop: var(--warn); }
 
 .repo-card__desc {
   flex: 1;
@@ -189,4 +191,7 @@
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: var(--space-3);
   margin-top: var(--space-5);
 }
-.showcase-synced { display: inline-flex; align-items: center; gap: var(--space-2); font: 400 var(--text-xs) / 1 var(--font-mono); color: var(--text-faint); }
+.showcase-synced { display: inline-flex; align-items: center; gap: var(--space-2); font: 500 11px / 1 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); }
+.showcase-more { display: inline-flex; align-items: center; gap: var(--space-3); color: var(--text-muted); text-decoration: none; }
+.showcase-more:hover { color: var(--text); }
+.showcase-more .hand { font-size: 1.4rem; }

@@ -138,7 +138,7 @@ test("release downloads pick one asset per platform and skip blockmaps", () => {
   // an expected platform with no asset falls back to the release page
   assert.deepEqual(releaseDownloads([{ name: "Pip-Setup.exe", url: "exe" }], { expected: ["windows", "macos"], releaseUrl: "rel" }), [
     { platform: "windows", label: "Windows", name: "Pip-Setup.exe", url: "exe" },
-    { platform: "macos", label: "macOS", name: null, url: "rel" },
+    { platform: "macos", label: "Mac", name: null, url: "rel" },
   ]);
 });
 
@@ -194,8 +194,9 @@ test("repos carry filterable language, frameworks, topics and tags", async () =>
   const bot = data.repos.find((r) => r.name === "weather-bot");
   assert.deepEqual(bot.frameworks, ["flask"]);
   assert.equal(bot.homepage, null);
-  assert.equal(hs.pop, "lemon");
+  assert.equal(hs.pop, "highlighter");
   assert.equal(pip.scene, "desk");
+  assert.equal(pip.note, "that's him\nup the top too!");
 
   // config colours end up in a style attribute, so only plain names get through
   const sneaky = normalize(
@@ -269,16 +270,23 @@ test("spotlight shows the README, release downloads, live link and demo", async 
   const html = renderSpotlight(await graphqlData());
   assert.ok(html.indexOf('id="project-hamster-slots"') < html.indexOf('id="project-pip"'));
   assert.match(html, /data-embed="https:\/\/nxt549\.github\.io\/hamster-slots\/"/);
-  assert.match(html, /Play it live/);
+  assert.match(html, /Play in your browser/);
   assert.match(html, /href="https:\/\/github\.com\/NXT549\/pip\/releases\/download\/v1\.2\.0\/Pip-Setup-1\.2\.0\.exe"[^>]*>.*Windows/);
-  assert.match(html, />.*macOS<\/a>/);
+  assert.match(html, />.*Mac<\/a>/);
   assert.match(html, /README\.md/);
   // hamster-slots' README just restates its blurb, so only Pip's README is shown
   assert.equal((html.match(/<figure class="terminal spotlight__readme">/g) || []).length, 1);
   assert.ok(html.indexOf("spotlight__readme") > html.indexOf('id="project-pip"'));
   assert.match(html, /spotlight__shot--pixel/);
-  assert.match(html, /id="project-pip"[^>]* style="--pop: var\(--cherry\)"/);
+  assert.match(html, /id="project-pip"[^>]* style="--pop: var\(--blue-pencil\)"/);
   assert.match(html, /spotlight__media spotlight__media--desk/);
+  assert.match(html, /<span class="hand spotlight__note">that&#39;s him<br \/>up the top too!<\/span>/);
+  // the blurb's first sentence becomes the tagline
+  assert.match(html, /<p class="spotlight__tagline">A tiny pixel-art jellybean who lives on your desktop\.<\/p>\s*<p class="spotlight__blurb">Pip trots/);
+  assert.match(html, /<span class="badge badge--live spotlight__status">Shipped<\/span>/);
+  // release names show when they say more than the version
+  assert.match(html, /<\/svg>v1\.9\.1 &quot;Welcome Mat&quot;<\/a>/);
+  assert.match(html, /<\/svg>v1\.2\.0<\/a>/);
   // the hero sits above the spotlight, so no spotlight image should compete with it for LCP
   assert.doesNotMatch(html, /loading="eager"/);
   assert.match(html, /<symbol id="i-star"/);

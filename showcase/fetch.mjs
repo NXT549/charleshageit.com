@@ -354,6 +354,7 @@ export function normalize({ user, repos }, config, { generatedAt = new Date().to
         status: o.status || null,
         pop: /^[a-z-]+$/.test(o.pop || "") ? o.pop : null,
         scene: /^[a-z-]+$/.test(o.scene || "") ? o.scene : null,
+        note: o.note || null,
         featured,
         stars: r.stars || 0,
         forks: r.forks || 0,

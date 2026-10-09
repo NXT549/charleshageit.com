@@ -17,15 +17,16 @@ the cards into `index.html` and commits the result. Nothing calls GitHub when so
 - **The projects** (the big spotlight cards) are the repos listed under `featured` in `showcase/config.json`,
   plus any repo with the `featured` topic on GitHub.
 - **Hide a repo** by adding it to `hide` in `showcase/config.json`.
-- **Customise a card** under `repos` in `showcase/config.json`: `blurb`, `highlights`, `status` (`done` or
-  `wip`), `image` and `imageAlt` (put screenshots in `img/`, around 1200×630), `live` (the "Play it live"
-  link, otherwise the repo's website from GitHub), `embed: true` (adds a "Try it right here" button that
-  plays the live site inside the card), `pop` (the card's hover colour, a theme colour name like `lemon`
-  or `cherry`), `scene: "desk"` (Pip's night-time desk behind a pixel-art image), `platforms` (download
-  buttons to always show, linking to the release page when there's no installer for one) and `frameworks`
-  (extra framework tags if they aren't detected).
+- **Customise a card** under `repos` in `showcase/config.json`: `blurb` (its first sentence becomes the bold
+  tagline), `highlights`, `status` (`done` stamps it "Shipped", `wip` "In progress"), `image` and `imageAlt`
+  (put screenshots in `img/`, around 1200×630), `live` (the "Play in your browser" link, otherwise the repo's
+  website from GitHub), `embed: true` (adds a "Try it right here" button that plays the live site inside the
+  card), `pop` (the colour the card leaves behind on hover, a theme colour name like `highlighter` or
+  `blue-pencil`), `scene: "desk"` (Pip's spec drawing behind a pixel-art image), `note` (a handwritten note on
+  the picture, `\n` for a new line), `platforms` (download buttons to always show, linking to the release page
+  when there's no installer for one) and `frameworks` (extra framework tags if they aren't detected).
 - **Download buttons** come from the latest GitHub release: an `.exe`/`.msi` becomes Windows, a `.dmg`
-  becomes macOS, an `.AppImage`/`.deb` becomes Linux.
+  becomes Mac, an `.AppImage`/`.deb` becomes Linux.
 - **Frameworks** (Vite, Electron, React, Flask, ...) are detected from each repo's `package.json`,
   `requirements.txt` or `pyproject.toml`, and from its topics.
 
@@ -43,17 +44,17 @@ Don't edit anything between the `<!-- showcase:… -->` markers in `index.html`;
 
 ## Theme
 
-The site is a dark toy box: an inky purple night with cream text, candy colours from Pip's flavours
-(plus emerald `#10B981` and cyan `#06B6D4` as the main accents), chunky outlines and hard shadows.
-Headings use Pixelify Sans, body text Geist, and code and labels Geist Mono.
+The site is drawn like a blueprint for the workshop: navy grid paper, chalk-white linework, a yellow
+highlighter, cyan dimension lines, handwritten notes and rubber stamps. Headings and body text use Geist,
+labels and code use Geist Mono, and the handwritten notes use Caveat.
 
-- Colours, fonts, spacing and effects are CSS variables in `css/tokens.css`. Use those instead of hard-coding values.
-- Reusable pieces live in `css/theme.css`: `.panel` / `.glass` (chunky card), `.glow` (hops up on hover with a
-  candy shadow; set `--pop` to pick the colour), `.terminal` (retro window with prompt lines, typed commands and a
-  cursor), `.btn--primary` / `--secondary` / `--ghost`, `.tag`, `.badge--live` / `--wip` / `--info` (stickers),
-  `.eyebrow` (tilted sticker label; set `--sticker`), `.text-pop` and `.wiggle`. The comment at the top of the file lists them all.
-- Clicking Pip changes `--flavour`, so hover shadows and the hero's "for fun." turn his colour.
-- `js/fx.js` adds pixel sparkles when you press a button (or anything with `data-sparkle`).
+- Colours, fonts, spacing and linework are CSS variables in `css/tokens.css`. Use those instead of hard-coding values.
+- Reusable pieces live in `css/theme.css`: `.panel` / `.glass` (drawing frame), `.glow` (lifts on hover and leaves an
+  offset outline; set `--pop` for its colour), `.sheet` and `.titleblock` (crop marks and the drawing's title block),
+  `.terminal`, `.btn--primary` / `--secondary` / `--ghost`, `.tag`, `.badge--live` / `--wip` / `--info` (rubber stamps),
+  `.hand` (handwritten note), `.circled` (hand-drawn loop around a word), `.text-pop` (highlighter), `.dim` (dimension line)
+  and `.eyebrow`. The comment at the top of the file lists them all.
+- `js/fx.js` makes the stamps thunk down as they scroll into view.
 
 ## Files
 
@@ -62,7 +63,7 @@ Headings use Pixelify Sans, body text Geist, and code and labels Geist Mono.
 - `data/github.json`: the repo data the cards were built from, and `data/github-raw.json`, the cached API response it came from (both generated).
 - `css/showcase.css`, `js/showcase.js`: card layout, plus "3 days ago" dates, copy-to-clipboard and demo embeds.
 - `css/tokens.css`, `css/theme.css`, `js/fx.js`: the shared theme (see above).
-- `fonts/`: Pixelify Sans, Geist and Geist Mono, trimmed to Latin characters, with their licences (SIL OFL).
+- `fonts/`: Geist, Geist Mono and Caveat, trimmed to Latin characters, with their licences (SIL OFL).
 - `pip-sprites.js`: Pip's sprites and flavours, copied from [NXT549/pip](https://github.com/NXT549/pip), for the Pip who walks around the top of the page.
 - `img/`: screenshots and icons.
 - `CNAME`: the custom domain. Don't delete it.

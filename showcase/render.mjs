@@ -76,14 +76,15 @@ function dataAttrs(repo) {
   ].join(" ");
 }
 
+// Rubber stamps: keep the words short, the theme sets them in uppercase.
 const STATUS = {
-  done: ["badge--live", "released"],
-  wip: ["badge--wip", "playable & growing"],
-  live: ["badge--live", "live"],
-  archived: ["badge--info", "archived"],
+  done: ["badge--live", "Shipped"],
+  wip: ["badge--wip", "In progress"],
+  live: ["badge--live", "Live"],
+  archived: ["badge--info", "Archived"],
 };
 
-/** A card's hover colour, from a theme colour name in the config ("lemon" -> var(--lemon)). */
+/** A card's hover colour, from a theme colour name in the config ("blue-pencil" -> var(--blue-pencil)). */
 function popStyle(repo) {
   return repo.pop ? ` style="--pop: var(--${esc(repo.pop)})"` : "";
 }
@@ -99,11 +100,21 @@ function languageChip(lang) {
   return `<span class="repo-lang"><i style="--lang:${esc(lang.color)}"></i>${esc(lang.name)}</span>`;
 }
 
-function releaseTag(repo) {
+/** The tag, plus the release's name when it says more than the version: v1.9.1 "Welcome Mat". */
+function releaseLabel(r) {
+  const version = String(r.tag).replace(/^v/i, "").replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+  const extra = String(r.name || "")
+    .replace(new RegExp(`^v?${version}`, "i"), "")
+    .replace(/^[\s:–—-]+/, "")
+    .trim();
+  return extra && extra.toLowerCase() !== String(r.tag).toLowerCase() ? `${r.tag} "${extra}"` : r.tag;
+}
+
+function releaseTag(repo, { named = false } = {}) {
   const r = repo.release;
   if (!r) return "";
   const url = safeUrl(r.url);
-  const label = `${icon("tag")}${esc(r.tag)}`;
+  const label = `${icon("tag")}${esc(named ? releaseLabel(r) : r.tag)}`;
   const attrs = `class="tag tag--accent repo-release" data-released="${esc(r.date || "")}" title="Latest release${r.name && r.name !== r.tag ? `: ${esc(r.name)}` : ""}"`;
   return url ? `<a ${attrs} href="${esc(url)}">${label}</a>` : `<span ${attrs}>${label}</span>`;
 }
@@ -149,7 +160,13 @@ function cloneButton(repo) {
 }
 
 function liveLabel(repo) {
-  return repo.status === "wip" || /game|play/i.test(repo.topics.join(" ")) ? "Play it live" : "Live preview";
+  return repo.status === "wip" || /game|play/i.test(repo.topics.join(" ")) ? "Play in your browser" : "Live preview";
+}
+
+/** "First sentence. The rest." -> the first sentence as a bold tagline, the rest as the paragraph under it. */
+function splitBlurb(text) {
+  const m = /^(.+?[.!?])\s+(\S[\s\S]*)$/.exec(String(text || "").trim());
+  return m ? [m[1], m[2]] : [String(text || "").trim(), ""];
 }
 
 // ------------------------------------------------------------------ spotlight
@@ -186,7 +203,7 @@ function spotlightCard(repo, index) {
           "download"
         )}${esc(d.label)}</a>`
     ),
-    repoUrl ? `<a class="btn btn--ghost" href="${esc(repoUrl)}">${icon("code")}View the code</a>` : "",
+    repoUrl ? `<a class="btn btn--ghost" href="${esc(repoUrl)}">${icon("code")}See the code</a>` : "",
     cloneButton(repo),
   ].filter(Boolean);
 
@@ -200,6 +217,11 @@ function spotlightCard(repo, index) {
         </figure>`
     : "";
 
+  const [tagline, blurb] = splitBlurb(repo.blurb || repo.description);
+  // Pip's spec drawing: a dimension line over the sprite (css/showcase.css draws it 168px wide).
+  const sceneBits = repo.scene === "desk" ? `<span class="dim spotlight__dim" aria-hidden="true">168 px</span>` : "";
+  const note = repo.note ? `<span class="hand spotlight__note">${esc(repo.note).replace(/\n/g, "<br />")}</span>` : "";
+
   const highlights = repo.highlights.length
     ? `<ul class="spotlight__highlights">${repo.highlights.map((h) => `<li>${richText(h)}</li>`).join("")}</ul>`
     : "";
@@ -207,17 +229,19 @@ function spotlightCard(repo, index) {
   return `
     <article class="spotlight glass glow${index % 2 ? " spotlight--flip" : ""}" id="project-${esc(repo.name)}" ${dataAttrs(repo)}${popStyle(repo)}>
       <div class="spotlight__media${repo.scene ? ` spotlight__media--${esc(repo.scene)}` : ""}">
-        ${media}
-        ${statusBadge(repo, "spotlight__status")}
+        ${sceneBits}${media}
+        ${note}
         ${demo}
       </div>
       <div class="spotlight__body">
+        ${statusBadge(repo, "spotlight__status")}
         <p class="spotlight__path"><span class="prompt__path">~/${esc(repo.fullName.split("/")[0])}/</span><span>${esc(repo.name)}</span></p>
         <h3 class="spotlight__title">${esc(repo.title)}</h3>
-        ${repo.blurb || repo.description ? `<p class="spotlight__blurb">${richText(repo.blurb || repo.description)}</p>` : ""}
+        ${tagline ? `<p class="spotlight__tagline">${richText(tagline)}</p>` : ""}
+        ${blurb ? `<p class="spotlight__blurb">${richText(blurb)}</p>` : ""}
         ${readme}
         ${highlights}
-        <div class="repo-meta">${stats(repo)}${releaseTag(repo)}</div>
+        <div class="repo-meta">${stats(repo)}${releaseTag(repo, { named: true })}</div>
         ${commitLine(repo)}
         ${tagList(repo)}
         <div class="repo-actions">${actions.join("")}</div>
@@ -267,7 +291,7 @@ export function renderRepoGrid(data) {
   <p class="showcase-empty" id="repo-grid-empty" hidden>No projects match those filters.</p>
   <div class="showcase-foot">
     ${synced}
-    <a class="btn btn--ghost btn--sm" href="${esc(profile)}?tab=repositories">${icon("external")}See it all on GitHub</a>
+    <a class="showcase-more" href="${esc(profile)}?tab=repositories"><span class="hand">+ more soon</span><span>see it all on GitHub</span></a>
   </div>`;
 }
 
