@@ -21,7 +21,7 @@ export function safeUrl(url) {
 }
 
 /** Escaped text with `inline code` turned into <code>. */
-function richText(text) {
+export function richText(text) {
   return esc(text).replace(/`([^`]+)`/g, "<code>$1</code>");
 }
 
@@ -36,6 +36,7 @@ const ICONS = {
   copy: "M0 6.75C0 5.784.784 5 1.75 5h1.5a.75.75 0 0 1 0 1.5h-1.5a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-1.5a.75.75 0 0 1 1.5 0v1.5A1.75 1.75 0 0 1 9.25 16h-7.5A1.75 1.75 0 0 1 0 14.25ZM5 1.75C5 .784 5.784 0 6.75 0h7.5C15.216 0 16 .784 16 1.75v7.5A1.75 1.75 0 0 1 14.25 11h-7.5A1.75 1.75 0 0 1 5 9.25Zm1.75-.25a.25.25 0 0 0-.25.25v7.5c0 .138.112.25.25.25h7.5a.25.25 0 0 0 .25-.25v-7.5a.25.25 0 0 0-.25-.25Z",
   play: "M8 0a8 8 0 1 1 0 16A8 8 0 0 1 8 0ZM1.5 8a6.5 6.5 0 1 0 13 0 6.5 6.5 0 0 0-13 0Zm4.879-2.773 4.264 2.559a.25.25 0 0 1 0 .428l-4.264 2.559A.25.25 0 0 1 6 10.559V5.442a.25.25 0 0 1 .379-.215Z",
   code: "m11.28 3.22 4.25 4.25a.75.75 0 0 1 0 1.06l-4.25 4.25a.749.749 0 0 1-1.275-.326.749.749 0 0 1 .215-.734L13.94 8l-3.72-3.72a.749.749 0 0 1 .326-1.275.749.749 0 0 1 .734.215Zm-6.56 0a.751.751 0 0 1 1.042.018.751.751 0 0 1 .018 1.042L2.06 8l3.72 3.72a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L.47 8.53a.75.75 0 0 1 0-1.06Z",
+  sheet: "M2 1.75C2 .784 2.784 0 3.75 0h6.586c.464 0 .909.184 1.237.513l2.914 2.914c.329.328.513.773.513 1.237v9.586A1.75 1.75 0 0 1 13.25 16h-9.5A1.75 1.75 0 0 1 2 14.25Zm1.75-.25a.25.25 0 0 0-.25.25v12.5c0 .138.112.25.25.25h9.5a.25.25 0 0 0 .25-.25V6h-2.75A1.75 1.75 0 0 1 9 4.25V1.5Zm6.75.062V4.25c0 .138.112.25.25.25h2.688l-.011-.013-2.914-2.914-.013-.011Z",
   close: "M3.72 3.72a.75.75 0 0 1 1.06 0L8 6.94l3.22-3.22a.749.749 0 0 1 1.275.326.749.749 0 0 1-.215.734L9.06 8l3.22 3.22a.749.749 0 0 1-.326 1.275.749.749 0 0 1-.734-.215L8 9.06l-3.22 3.22a.751.751 0 0 1-1.042-.018.751.751 0 0 1-.018-1.042L6.94 8 3.72 4.78a.75.75 0 0 1 0-1.06Z",
 };
 
@@ -46,14 +47,14 @@ export function iconSprite() {
   return `<svg class="icon-sprite" aria-hidden="true" hidden>${symbols}</svg>`;
 }
 
-function icon(name) {
+export function icon(name) {
   return `<svg class="icon" aria-hidden="true" width="16" height="16"><use href="#i-${name}"/></svg>`;
 }
 
 const DATE_FMT = new Intl.DateTimeFormat("en-AU", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
 
 /** A <time> showing an absolute date; js/showcase.js swaps in "3 days ago" on load. */
-function time(iso) {
+export function time(iso) {
   if (!iso) return "";
   const d = new Date(iso);
   if (Number.isNaN(d.getTime())) return "";
@@ -76,6 +77,11 @@ function dataAttrs(repo) {
   ].join(" ");
 }
 
+/** Each project's own page on the site (src/pages/projects/[name].astro). */
+export function projectPath(repo) {
+  return `/projects/${encodeURIComponent(repo.name)}/`;
+}
+
 // Rubber stamps: keep the words short, the theme sets them in uppercase.
 const STATUS = {
   done: ["badge--live", "Shipped"],
@@ -85,11 +91,11 @@ const STATUS = {
 };
 
 /** A card's hover colour, from a theme colour name in the config ("blue-pencil" -> var(--blue-pencil)). */
-function popStyle(repo) {
+export function popStyle(repo) {
   return repo.pop ? ` style="--pop: var(--${esc(repo.pop)})"` : "";
 }
 
-function statusBadge(repo, extraClass = "") {
+export function statusBadge(repo, extraClass = "") {
   const s = STATUS[repo.status];
   if (!s) return "";
   return `<span class="badge ${s[0]} ${extraClass}">${esc(s[1])}</span>`;
@@ -110,7 +116,7 @@ function releaseLabel(r) {
   return extra && extra.toLowerCase() !== String(r.tag).toLowerCase() ? `${r.tag} "${extra}"` : r.tag;
 }
 
-function releaseTag(repo, { named = false } = {}) {
+export function releaseTag(repo, { named = false } = {}) {
   const r = repo.release;
   if (!r) return "";
   const url = safeUrl(r.url);
@@ -119,7 +125,7 @@ function releaseTag(repo, { named = false } = {}) {
   return url ? `<a ${attrs} href="${esc(url)}">${label}</a>` : `<span ${attrs}>${label}</span>`;
 }
 
-function tagList(repo, max = 8) {
+export function tagList(repo, max = 8) {
   const items = [
     ...repo.frameworks.map((f) => `<li class="tag tag--accent-2" data-facet="framework" data-value="${esc(f)}">${esc(f)}</li>`),
     ...repo.topics
@@ -129,7 +135,7 @@ function tagList(repo, max = 8) {
   return items.length ? `<ul class="repo-tags" aria-label="Tags">${items.join("")}</ul>` : "";
 }
 
-function stats(repo) {
+export function stats(repo) {
   const parts = [
     languageChip(repo.language),
     `<span class="repo-stat" title="${repo.stars} star${repo.stars === 1 ? "" : "s"}">${icon("star")}${compact(repo.stars)}<span class="visually-hidden"> stars</span></span>`,
@@ -152,19 +158,19 @@ function commitLine(repo) {
   )}</span><span class="repo-commit__when">${time(c.date)}</span></p>`;
 }
 
-function cloneButton(repo) {
+export function cloneButton(repo) {
   const cmd = `git clone ${repo.url}.git`;
   return `<button class="btn btn--ghost btn--sm repo-copy" type="button" data-copy="${esc(cmd)}" title="${esc(cmd)}" hidden>${icon(
     "copy"
   )}<span>git clone</span></button>`;
 }
 
-function liveLabel(repo) {
+export function liveLabel(repo) {
   return repo.status === "wip" || /game|play/i.test(repo.topics.join(" ")) ? "Play in your browser" : "Live preview";
 }
 
 /** "First sentence. The rest." -> the first sentence as a bold tagline, the rest as the paragraph under it. */
-function splitBlurb(text) {
+export function splitBlurb(text) {
   const m = /^(.+?[.!?])\s+(\S[\s\S]*)$/.exec(String(text || "").trim());
   return m ? [m[1], m[2]] : [String(text || "").trim(), ""];
 }
@@ -203,6 +209,7 @@ function spotlightCard(repo, index) {
           "download"
         )}${esc(d.label)}</a>`
     ),
+    `<a class="btn btn--ghost" href="${esc(projectPath(repo))}">${icon("sheet")}Spec sheet</a>`,
     repoUrl ? `<a class="btn btn--ghost" href="${esc(repoUrl)}">${icon("code")}See the code</a>` : "",
     cloneButton(repo),
   ].filter(Boolean);
@@ -236,7 +243,7 @@ function spotlightCard(repo, index) {
       <div class="spotlight__body">
         ${statusBadge(repo, "spotlight__status")}
         <p class="spotlight__path"><span class="prompt__path">~/${esc(repo.fullName.split("/")[0])}/</span><span>${esc(repo.name)}</span></p>
-        <h3 class="spotlight__title">${esc(repo.title)}</h3>
+        <h3 class="spotlight__title"><a href="${esc(projectPath(repo))}">${esc(repo.title)}</a></h3>
         ${tagline ? `<p class="spotlight__tagline">${richText(tagline)}</p>` : ""}
         ${blurb ? `<p class="spotlight__blurb">${richText(blurb)}</p>` : ""}
         ${readme}
@@ -268,7 +275,7 @@ function repoCard(repo) {
       <article class="repo-card glass glow" ${dataAttrs(repo)}${popStyle(repo)}>
         <header class="repo-card__head">
           ${icon("repo")}
-          <h3 class="repo-card__name"><a class="repo-card__link" href="${esc(repoUrl || "#")}">${esc(repo.name)}</a></h3>
+          <h3 class="repo-card__name"><a class="repo-card__link" href="${esc(projectPath(repo))}">${esc(repo.name)}</a></h3>
           ${repo.featured ? `<a class="badge badge--info repo-card__featured" href="#project-${esc(repo.name)}">featured</a>` : ""}
         </header>
         <p class="repo-card__desc">${richText(desc)}</p>
@@ -277,6 +284,7 @@ function repoCard(repo) {
         ${commitLine(repo)}
         <div class="repo-card__actions">
           ${live ? `<a class="btn btn--secondary btn--sm" href="${esc(live)}">${icon("external")}${esc(liveLabel(repo))}</a>` : ""}
+          ${repoUrl ? `<a class="btn btn--ghost btn--sm" href="${esc(repoUrl)}">${icon("code")}Code</a>` : ""}
           ${cloneButton(repo)}
         </div>
       </article>`;

@@ -1,0 +1,57 @@
+/* Long-form text on the blueprint: rendered READMEs on the project pages (src/lib/readme.ts) and the
+   about page. Body text in Geist, headings drawn like labels on a drawing, code in Geist Mono. */
+
+.readme {
+  display: grid; gap: var(--space-4);
+  font: 400 var(--text-base) / var(--leading-normal) var(--font-sans);
+  color: var(--text-muted);
+  overflow-wrap: anywhere;
+}
+.readme > * { margin: 0; min-width: 0; }
+.readme strong { color: var(--text); font-weight: 650; }
+.readme a { color: var(--accent-2); }
+.readme a:hover { color: var(--accent); }
+
+.readme h2, .readme h3, .readme h4, .readme h5, .readme h6 {
+  color: var(--text); scroll-margin-top: 88px; margin-top: var(--space-4);
+}
+.readme h3 {
+  font-size: var(--text-xl); padding-bottom: var(--space-2);
+  border-bottom: var(--outline-dashed);
+}
+.readme h3::before { content: "§ "; color: var(--accent); font-family: var(--font-mono); font-weight: 500; }
+.readme h4 { font-size: var(--text-lg); }
+.readme h5, .readme h6 {
+  font: 600 var(--text-xs) / 1.3 var(--font-mono); letter-spacing: var(--tracking-mono); text-transform: uppercase;
+  color: var(--accent-2);
+}
+
+.readme ul, .readme ol { padding-left: 1.4em; display: grid; gap: var(--space-2); }
+.readme ul { list-style: none; padding-left: 1.2em; }
+.readme ul > li { position: relative; }
+.readme ul > li::before { content: "+"; position: absolute; left: -1.2em; font-family: var(--font-mono); color: var(--accent-2); }
+.readme ol > li::marker { font-family: var(--font-mono); color: var(--accent-2); }
+.readme li > ul, .readme li > ol { margin-top: var(--space-2); }
+
+.readme hr { border: 0; border-top: var(--outline-dashed); width: 100%; }
+
+.readme blockquote {
+  padding: var(--space-3) var(--space-4); border-left: 3px solid var(--accent);
+  background: var(--accent-soft); color: var(--text);
+}
+
+.readme img { max-width: 100%; height: auto; border: var(--outline); }
+
+.readme pre { font-size: var(--text-sm); color: var(--text); }
+.readme pre code { border: 0; padding: 0; color: inherit; font-size: 1em; }
+
+/* Tables are drawn as a schedule: chalk frame, mono headers, and they scroll on narrow screens. */
+.readme table {
+  display: block; max-width: 100%; overflow-x: auto;
+  border-collapse: collapse; font-size: var(--text-sm);
+}
+.readme th, .readme td { padding: 8px 12px; border: 1px solid var(--border-strong); text-align: left; vertical-align: top; }
+.readme th {
+  font: 600 11px / 1.3 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--accent-2); background: var(--accent-2-soft);
+}
