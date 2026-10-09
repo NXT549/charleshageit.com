@@ -59,7 +59,7 @@ jobs:
       - name: Commit the refreshed showcase
         if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
         run: |
-          git add data/github.json index.html
+          git add data/github.json data/github-raw.json index.html
           if git diff --cached --quiet; then
             echo "Nothing changed."
             exit 0
