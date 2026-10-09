@@ -9,7 +9,7 @@
       content="Charles's workshop: a hamster slot machine, a jellybean desktop pet and other little things I've vibe-coded, finished and in progress."
     />
     <meta name="color-scheme" content="dark" />
-    <meta name="theme-color" content="#09090b" />
+    <meta name="theme-color" content="#0b2240" />
     <link rel="canonical" href="https://charleshageit.com/" />
     <link rel="icon" href="./img/pip-icon.png" />
     <link rel="apple-touch-icon" href="./img/pip-icon.png" />
@@ -21,8 +21,8 @@
     <meta property="og:image" content="https://charleshageit.com/img/hamster-slots.webp" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <link rel="preload" href="./fonts/PixelifySans-Variable.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="./fonts/Geist-Variable.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="./fonts/GeistMono-Variable.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="./css/tokens.css" />
     <link rel="stylesheet" href="./css/theme.css" />
     <script src="./js/fx.js" defer></script>
@@ -35,55 +35,57 @@
         position: sticky; top: 0; z-index: 50;
         background: var(--bg);
         border-bottom: var(--outline);
-        box-shadow: 0 4px 0 rgb(11 9 16 / 0.6);
       }
       .site-header .container { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); height: 64px; }
       .brand {
         display: flex; align-items: center; gap: 10px;
-        font: 700 var(--text-xl) / 1 var(--font-display); color: var(--text); text-decoration: none;
+        font: 700 var(--text-sm) / 1 var(--font-mono); letter-spacing: var(--tracking-mono); text-transform: uppercase;
+        color: var(--text); text-decoration: none;
       }
       .brand:hover { color: var(--text); }
-      .brand img { width: 32px; height: 32px; image-rendering: pixelated; transition: transform var(--dur) var(--ease-bounce); }
-      .brand:hover img { transform: translateY(-4px) rotate(-8deg); }
+      .brand img { width: 30px; height: 30px; image-rendering: pixelated; transition: transform var(--dur) var(--ease-bounce); }
+      .brand:hover img { transform: translateY(-3px) rotate(-8deg); }
       .nav { display: flex; align-items: center; gap: 4px; }
       .nav a:not(.btn) {
-        font: 600 var(--text-sm) / 1 var(--font-sans); color: var(--text-muted); text-decoration: none;
-        padding: 9px 12px; border-radius: var(--radius-full); transition: color var(--dur-fast), background-color var(--dur-fast);
+        font: 500 var(--text-xs) / 1 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase;
+        color: var(--text); text-decoration: none; padding: 10px 10px;
+        background: linear-gradient(var(--accent), var(--accent)) 10px calc(100% - 4px) / 0 2px no-repeat;
+        transition: background-size var(--dur) var(--ease-out);
       }
-      .nav a:not(.btn):hover { color: var(--text); background: var(--surface-2); }
+      .nav a:not(.btn):hover { background-size: calc(100% - 20px) 2px; }
       .nav .btn { margin-left: var(--space-2); }
       @media (max-width: 600px) { .nav a:not(.btn) { display: none; } }
 
       /* ---------- hero ---------- */
       .hero { display: grid; gap: var(--space-7); align-items: center; padding-block: var(--space-8) var(--space-4); }
       @media (min-width: 940px) { .hero { grid-template-columns: 1.05fr 1fr; padding-top: var(--space-9); } }
-      .hero h1 { margin: var(--space-5) 0; }
+      .hero h1 { margin: var(--space-4) 0 var(--space-5); }
       .lede { font-size: var(--text-lg); color: var(--text-muted); max-width: 52ch; }
       .lede strong { color: var(--text); font-weight: 650; }
       .hero-tags { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-5); }
-      .hero .terminal { min-width: 0; transform: rotate(1deg); }
-      @media (max-width: 939px) { .hero .terminal { transform: none; } }
+      .hero .terminal { min-width: 0; }
 
-      /* Pip walks along a strip of pixel grass at the bottom of the terminal */
-      .stage { position: relative; height: 122px; }
-      .stage .ground {
-        position: absolute; left: 0; right: 0; bottom: 0; height: 16px;
-        background: repeating-linear-gradient(90deg, var(--lime) 0 12px, #4fa632 12px 24px);
-        border-top: var(--outline);
+      /* Pip, drawn as figure 1 at the bottom of the terminal */
+      .stage { position: relative; height: 150px; margin: 0 var(--space-5) var(--space-4); border: var(--outline-dashed); }
+      .stage .dim { position: absolute; left: 0; right: 0; top: -22px; }
+      .stage .ground { position: absolute; left: 0; right: 0; bottom: 14px; border-top: var(--outline); }
+      .stage .ground::after {
+        content: ""; position: absolute; left: 0; right: 0; top: 0; height: 10px;
+        background: repeating-linear-gradient(-45deg, var(--border) 0 1px, transparent 1px 7px);
       }
       #pip {
-        position: absolute; bottom: 13px; left: 0; width: 128px; height: 76px;
-        image-rendering: pixelated; cursor: pointer; touch-action: manipulation; border-radius: var(--radius-sm);
+        position: absolute; bottom: 14px; left: 0; width: 128px; height: 76px;
+        image-rendering: pixelated; cursor: pointer; touch-action: manipulation;
       }
       .bubble {
-        position: absolute; bottom: 92px; transform: translateX(-50%);
-        padding: 5px 10px; border-radius: var(--radius);
-        font: 700 var(--text-sm) / 1.2 var(--font-display); color: var(--line); white-space: nowrap;
-        background: var(--text); border: var(--outline); box-shadow: var(--shadow-sm);
+        position: absolute; bottom: 92px; transform: translateX(-50%) rotate(-3deg);
+        font: 600 1.45rem / 1 var(--font-hand); color: var(--accent); white-space: nowrap;
         opacity: 0; transition: opacity var(--dur); pointer-events: none; z-index: 2;
       }
       .bubble.show { opacity: 1; }
-      .stage-hint { position: absolute; right: var(--space-5); top: 6px; font: 700 var(--text-sm) / 1 var(--font-display); color: var(--lemon); transition: opacity var(--dur); }
+      .stage-hint { position: absolute; right: 14px; top: 10px; --rot: 4deg; text-align: right; transition: opacity var(--dur); }
+      .stage-hint svg { width: 46px; height: 30px; margin: 2px 0 0 auto; }
+      .stage-hint path { fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
       .stage.poked .stage-hint { opacity: 0; }
       @media (max-width: 560px) { .stage-hint { display: none; } }
 
@@ -92,88 +94,85 @@
 
       /* ---------- project cards ---------- */
       .projects { display: grid; gap: var(--space-7); }
-      .card { display: grid; grid-template-columns: 1fr; overflow: hidden; }
+      .card { display: grid; grid-template-columns: 1fr; }
       @media (min-width: 840px) {
         .card { grid-template-columns: 1.15fr 1fr; }
-        .card.flip { grid-template-columns: 1fr 1.15fr; --tilt: 0.4deg; }
+        .card.flip { grid-template-columns: 1fr 1.15fr; }
         .card.flip .shot { order: 2; border-right: 0; border-left: var(--outline); }
       }
       .shot {
         position: relative; min-height: 240px; border-bottom: var(--outline);
-        display: grid; place-items: center; overflow: hidden; background: var(--surface-2);
+        display: grid; place-items: center; overflow: hidden;
       }
       @media (min-width: 840px) { .shot { border-bottom: 0; border-right: var(--outline); } }
       .shot img.cover { width: 100%; height: 100%; object-fit: cover; }
-      /* Pip's desk at night */
-      .shot.pip-shot {
-        background:
-          radial-gradient(2px 2px at 18% 22%, var(--text) 50%, transparent 51%),
-          radial-gradient(2px 2px at 72% 14%, var(--lemon) 50%, transparent 51%),
-          radial-gradient(2px 2px at 86% 38%, var(--text) 50%, transparent 51%),
-          radial-gradient(2px 2px at 40% 10%, var(--cyan) 50%, transparent 51%),
-          radial-gradient(2px 2px at 8% 50%, var(--text-muted) 50%, transparent 51%),
-          linear-gradient(180deg, #241d3d 0%, #2f2652 70%);
-      }
-      .shot.pip-shot .desk {
+      /* Pip's spec drawing */
+      .shot.pip-shot { background: rgb(8 26 51 / 0.6); }
+      .pip-shot .frame { position: absolute; inset: 40px 44px 56px; border: var(--outline-dashed); }
+      .pip-shot .dim { position: absolute; left: 44px; right: 44px; top: 16px; }
+      .pip-shot .desk {
         position: absolute; left: 0; right: 0; bottom: 0; height: 30%;
-        background: repeating-linear-gradient(90deg, #8a5a3b 0 46px, #7a4f33 46px 48px);
         border-top: var(--outline);
+        background: repeating-linear-gradient(-45deg, var(--border) 0 1px, transparent 1px 9px);
       }
-      .shot.pip-shot img {
+      .pip-shot img {
         position: absolute; left: 50%; bottom: calc(30% - 52px); transform: translateX(-50%);
         width: 168px; height: 168px; image-rendering: pixelated; z-index: 1;
       }
-      .shot .badge { position: absolute; top: 16px; left: 16px; z-index: 2; }
-
-      .info { padding: var(--space-5); display: flex; flex-direction: column; gap: var(--space-3); }
+      .pip-shot .hand { position: absolute; right: 22px; top: 52px; --rot: 5deg; z-index: 2; }
+      .info { position: relative; padding: var(--space-5); display: flex; flex-direction: column; gap: var(--space-3); }
       @media (min-width: 840px) { .info { padding: var(--space-6); } }
-      .info h3 { font-size: clamp(1.75rem, 1.35rem + 1.4vw, 2.375rem); }
-      .info .tagline { color: var(--text); font-weight: 650; }
+      .info .badge { position: absolute; top: 20px; right: 18px; }
+      .info h3 { font-size: clamp(1.75rem, 1.35rem + 1.4vw, 2.375rem); padding-right: 150px; }
+      .info .tagline { color: var(--text); font-weight: 600; }
       .info p { color: var(--text-muted); }
       .bits { margin: 0; padding: 0; list-style: none; color: var(--text-muted); display: grid; gap: 4px; }
       .bits li { display: flex; gap: 10px; }
-      .bits li::before { content: "★"; color: var(--pop, var(--lemon)); }
-      .meta { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+      .bits li::before { content: "+"; font-family: var(--font-mono); color: var(--accent-2); }
+      .meta { display: flex; flex-wrap: wrap; gap: var(--space-2); padding-top: var(--space-3); border-top: var(--outline-dashed); }
       .buttons { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: auto; padding-top: var(--space-3); }
 
       /* ---------- workbench (live from GitHub) ---------- */
       .bench { display: grid; gap: var(--space-5); grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
-      .mini { display: flex; flex-direction: column; gap: 6px; padding: var(--space-4) var(--space-5); text-decoration: none; color: var(--text); border-radius: var(--radius); }
+      .mini { display: flex; flex-direction: column; gap: 6px; padding: var(--space-4) var(--space-5); text-decoration: none; color: var(--text); }
       .mini:hover { color: var(--text); }
-      .mini:nth-child(6n + 1) { --pop: var(--lemon); }
-      .mini:nth-child(6n + 2) { --pop: var(--cyan); --tilt: 0.8deg; }
-      .mini:nth-child(6n + 3) { --pop: var(--bubblegum); --tilt: -0.8deg; }
-      .mini:nth-child(6n + 4) { --pop: var(--lime); --tilt: 0.6deg; }
-      .mini:nth-child(6n + 5) { --pop: var(--pumpkin); --tilt: -0.6deg; }
-      .mini:nth-child(6n + 6) { --pop: var(--blueberry); --tilt: 1deg; }
-      .mini strong { font: 700 var(--text-xl) / 1.2 var(--font-display); }
+      .mini:nth-child(4n + 2) { --pop: var(--accent-2); }
+      .mini:nth-child(4n + 3) { --pop: var(--success); }
+      .mini:nth-child(4n + 4) { --pop: var(--warn); }
+      .mini strong { font: 700 var(--text-lg) / 1.25 var(--font-sans); letter-spacing: -0.01em; }
       .mini span { font-size: var(--text-sm); color: var(--text-muted); }
-      .mini small { margin-top: auto; padding-top: var(--space-2); font: 400 var(--text-xs) / 1.4 var(--font-mono); color: var(--text-faint); }
+      .mini small {
+        margin-top: auto; padding-top: var(--space-2);
+        font: 500 11px / 1.4 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint);
+      }
       .mini.add {
         align-items: center; justify-content: center; text-align: center; min-height: 112px;
-        border: 2px dashed var(--border-strong); color: var(--text-muted);
-        transition: border-color var(--dur), color var(--dur), transform var(--dur) var(--ease-bounce);
+        border: var(--outline-dashed); color: var(--text-muted);
+        transition: border-color var(--dur), color var(--dur);
       }
-      .mini.add:hover { border-color: var(--lemon); color: var(--text); transform: rotate(-1deg); }
-      .mini.add strong { display: block; color: var(--lemon); }
+      .mini.add:hover { border-color: var(--accent); color: var(--text); }
+      .mini.add strong { display: block; font: 600 1.6rem / 1 var(--font-hand); color: var(--accent); }
 
       /* ---------- about ---------- */
-      .about { max-width: 760px; --bar: var(--cyan); }
+      .about { max-width: 760px; }
       .about .terminal__body { display: grid; gap: var(--space-4); font: 400 var(--text-base) / var(--leading-normal) var(--font-sans); color: var(--text-muted); }
       .about strong { color: var(--text); font-weight: 650; }
+      .about .hand { justify-self: end; --rot: -4deg; }
 
       /* ---------- footer ---------- */
       .site-footer {
-        margin-top: var(--space-9); padding-block: var(--space-6) var(--space-7); border-top: var(--outline);
-        font: 400 var(--text-sm) / 1.6 var(--font-sans); color: var(--text-faint); text-align: center;
+        margin-top: var(--space-9); border-top: var(--outline);
+        font: 500 11px / 1.6 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint);
       }
-      .site-footer a { font-weight: 650; }
+      .site-footer .titleblock { border-top: 0; grid-auto-flow: row; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+      .site-footer .titleblock > * { padding-block: var(--space-4); }
+      @media (max-width: 640px) { .site-footer .titleblock > * { border-left: 0; } }
     </style>
   </head>
   <body>
     <header class="site-header">
       <div class="container">
-        <a class="brand" href="#top"><img src="./img/pip-icon.png" alt="" width="26" height="26" /><span>charles's workshop</span></a>
+        <a class="brand" href="#top"><img src="./img/pip-icon.png" alt="" width="30" height="30" /><span>Charles's Workshop</span></a>
         <nav class="nav" aria-label="Main">
           <a href="#projects">Projects</a>
           <a href="#workbench">Workbench</a>
@@ -190,24 +189,27 @@
       <!-- hero:start -->
       <section class="hero container">
         <div>
-          <p class="eyebrow">hi! welcome to my workshop</p>
-          <h1>I make little things <span class="text-pop wiggle">for fun.</span></h1>
+          <p class="eyebrow">Sheet 01 · Things I've vibe-coded</p>
+          <h1>
+            I make little things
+            <span class="circled">for fun.<svg viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M22 58 C 22 16, 268 6, 288 40 C 302 76, 128 98, 44 84 C 2 76, 4 40, 64 24"/></svg></span>
+          </h1>
           <p class="lede">
             Hi, I'm <strong>Charles</strong>. These are the projects I've <strong>vibe-coded</strong>: a slot machine
             run by a hamster, a jellybean who lives on your desktop, and whatever I'm tinkering with next.
             Some are finished, some are very much not.
           </p>
           <div class="hero-tags">
-            <span class="tag">🐹 idle games</span>
-            <span class="tag">🫘 desktop pets</span>
-            <span class="tag">🤖 built with AI</span>
+            <span class="tag tag--accent">Idle games</span>
+            <span class="tag">Desktop pets</span>
+            <span class="tag">Built with AI</span>
           </div>
         </div>
 
-        <div class="terminal glass">
+        <div class="terminal glass sheet">
           <div class="terminal__bar">
             <span class="terminal__dots" aria-hidden="true"><i></i><i></i><i></i></span>
-            <span class="terminal__title">charles@workshop: ~</span>
+            <span class="terminal__title">Fig. 1 · charles@workshop: ~</span>
           </div>
           <div class="terminal__body">
             <p class="terminal__line"><span class="prompt">charles@workshop<span class="prompt__path">:~</span><span class="prompt__sym">$</span></span><span class="type" style="--chars: 6; --delay: 0.3s">whoami</span></p>
@@ -219,8 +221,13 @@
           <div class="stage" aria-label="Pip, a pixel-art jellybean, walking around. Click him to change his flavour.">
             <canvas id="pip" width="32" height="19" tabindex="0" role="button" aria-label="Pip. Click to change his flavour."></canvas>
             <div class="bubble" id="bubble">hi!</div>
-            <div class="stage-hint">psst, click Pip ↓</div>
+            <div class="stage-hint hand" aria-hidden="true">this is Pip! click him<svg viewBox="0 0 46 30"><path d="M42 3 C 32 8, 22 20, 6 26 M6 26 l9 -1 M6 26 l4 -8"/></svg></div>
             <div class="ground"></div>
+          </div>
+          <div class="titleblock">
+            <div><small>Drawing</small>Pip, jellybean</div>
+            <div><small>Drawn by</small>Charles</div>
+            <div><small>Rev</small>2026.10</div>
           </div>
         </div>
       </section>
@@ -228,7 +235,7 @@
 
       <section id="projects" class="section container">
         <header class="section-head">
-          <p class="eyebrow">★ made by me</p>
+          <p class="eyebrow">Sheet 02 · Projects</p>
           <h2>The projects</h2>
           <p class="sub">The good stuff. Click around, they all work (mostly).</p>
         </header>
@@ -236,12 +243,12 @@
         <div class="projects">
           <!-- To add a project, copy one <article class="card"> block and change the words and links. -->
 
-          <article class="card glass glow" id="project-hamster-slots" data-repo="hamster-slots" style="--pop: var(--lemon)">
+          <article class="card glass glow" id="project-hamster-slots" data-repo="hamster-slots">
             <div class="shot">
-              <span class="badge badge--wip">playable &amp; growing</span>
               <img class="cover" src="./img/hamster-slots.webp" alt="Hamster Slots: a BIG WIN on the Snack Stacker, with coins flying everywhere" width="1200" height="630" />
             </div>
             <div class="info">
+              <span class="badge badge--wip">In progress</span>
               <h3>Hamster Slots</h3>
               <p class="tagline">A cute pixel-art idle slot machine, powered by a hamster on a wheel.</p>
               <p>
@@ -264,13 +271,16 @@
             </div>
           </article>
 
-          <article class="card flip glass glow" id="project-pip" data-repo="pip">
+          <article class="card flip glass glow" id="project-pip" data-repo="pip" style="--pop: var(--accent-2)">
             <div class="shot pip-shot">
-              <span class="badge badge--live">released</span>
+              <div class="dim">168 px</div>
+              <div class="frame"></div>
               <div class="desk"></div>
+              <span class="hand">that's him<br />up the top too!</span>
               <img src="./img/pip-icon.png" alt="Pip, a cherry-red pixel jellybean with four stubby legs" width="256" height="256" />
             </div>
             <div class="info">
+              <span class="badge badge--live" style="--rot: 5deg">Shipped</span>
               <h3>Pip</h3>
               <p class="tagline">A tiny pixel-art jellybean who lives on your desktop.</p>
               <p>
@@ -301,7 +311,7 @@
 
       <section id="workbench" class="section container">
         <header class="section-head">
-          <p class="eyebrow" style="--sticker: var(--cyan)">live from GitHub</p>
+          <p class="eyebrow">Sheet 03 · Workbench</p>
           <h2>On the workbench</h2>
           <p class="sub">Everything on my GitHub, most recently touched first. This list updates by itself.</p>
         </header>
@@ -313,10 +323,10 @@
 
       <section id="about" class="section container">
         <header class="section-head">
-          <p class="eyebrow" style="--sticker: var(--bubblegum)">hello!</p>
+          <p class="eyebrow">Sheet 04 · About</p>
           <h2>About me</h2>
         </header>
-        <div class="about terminal glass">
+        <div class="about terminal glass sheet">
           <div class="terminal__bar">
             <span class="terminal__dots" aria-hidden="true"><i></i><i></i><i></i></span>
             <span class="terminal__title">about.md</span>
@@ -331,6 +341,7 @@
               and we go back and forth until it feels right. It's how a hamster ended up with a family tree.
             </p>
             <p>Got an idea, found a bug, or just want to say hi? Find me on <a href="https://github.com/NXT549">GitHub</a>.</p>
+            <span class="hand">— Charles</span>
           </div>
         </div>
       </section>
@@ -338,7 +349,12 @@
 
     <footer class="site-footer">
       <div class="container">
-        Made with too many snacks by Charles · <a href="https://github.com/NXT549/charleshageit.com">this site's code</a>
+        <div class="titleblock">
+          <div><small>Drawn by</small>Charles, with too many snacks</div>
+          <div><small>Location</small>Redlands, Brisbane</div>
+          <div><small>Source</small><a href="https://github.com/NXT549/charleshageit.com">This site's code</a></div>
+          <div><small>Sheet</small>4 of 4</div>
+        </div>
       </div>
     </footer>
 
@@ -381,21 +397,9 @@
           bubbleTimer = setTimeout(function () { bubble.classList.remove("show"); }, 1600);
         }
 
-        // Pip's flavour paints the page: hover shadows and the hero's "for fun." follow him.
-        function paint() {
-          var name = flavours[flavour], f = S.flavors[name], root = document.documentElement;
-          root.style.setProperty("--flavour", f.B);
-          root.style.setProperty("--flavour-text", name === "licorice" ? "#b3adc6" : f.L);
-        }
-
         function poke() {
           flavour = (flavour + 1) % flavours.length;
-          paint();
           stage.classList.add("poked");
-          if (window.sparkle) {
-            var r = canvas.getBoundingClientRect();
-            window.sparkle(r.left + r.width / 2, r.top + 16, 12);
-          }
           mode = "happy";
           modeUntil = t + 900;
           var s = sayings[(Math.random() * sayings.length) | 0];
