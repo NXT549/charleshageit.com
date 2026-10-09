@@ -1,0 +1,74 @@
+name: Build and deploy
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  # Rebuild every 6 hours so the GitHub data baked into the page stays fresh.
+  schedule:
+    - cron: "23 */6 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event_name == 'pull_request' && github.ref || 'deploy' }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - uses: actions/setup-node@v5
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      - run: npm run check
+
+      - name: Test the GitHub showcase
+        run: node --test "showcase/test/*.test.mjs"
+
+      - name: Build
+        run: npm run build
+        env:
+          # SHOWCASE_TOKEN (optional repo secret): a personal token for a higher rate limit or private-repo stats.
+          GITHUB_TOKEN: ${{ secrets.SHOWCASE_TOKEN || secrets.GITHUB_TOKEN }}
+
+      # Gate pull requests on the Lighthouse budget; on main, report without blocking the deploy.
+      - name: Lighthouse
+        run: npx lhci autorun
+        continue-on-error: ${{ github.event_name != 'pull_request' }}
+
+      - name: Upload Lighthouse reports
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: lighthouse
+          path: .lighthouseci/reports
+          if-no-files-found: ignore
+
+      - name: Upload site
+        if: github.event_name != 'pull_request'
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: dist
+
+  deploy:
+    if: github.event_name != 'pull_request' && github.ref == 'refs/heads/main'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

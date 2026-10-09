@@ -1,0 +1,17 @@
+---
+import { getShowcase } from "../lib/showcase";
+import { renderRepoGrid } from "../../showcase/render.mjs";
+import FilterBar from "./FilterBar.astro";
+
+const data = await getShowcase();
+---
+
+<section id="workbench" class="section container">
+  <header class="section-head">
+    <p class="eyebrow" style="--sticker: var(--cyan)">live from GitHub</p>
+    <h2>On the workbench</h2>
+    <p class="sub">Everything on my GitHub, most recently touched first. Pulled from the GitHub API, so it updates by itself.</p>
+  </header>
+  <FilterBar facets={data.facets} target="repo-grid" empty="repo-grid-empty" />
+  <Fragment set:html={renderRepoGrid(data)} />
+</section>

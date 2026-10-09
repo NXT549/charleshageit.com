@@ -1,0 +1,73 @@
+/* Page layout. Colours, type and components come from css/tokens.css and css/theme.css. */
+
+/* ---------- header ---------- */
+.site-header {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--bg);
+  border-bottom: var(--outline);
+  box-shadow: 0 4px 0 rgb(11 9 16 / 0.6);
+}
+.site-header .container { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); height: 64px; }
+.brand {
+  display: flex; align-items: center; gap: 10px;
+  font: 700 var(--text-xl) / 1 var(--font-display); color: var(--text); text-decoration: none;
+}
+.brand:hover { color: var(--text); }
+.brand img { width: 32px; height: 32px; image-rendering: pixelated; transition: transform var(--dur) var(--ease-bounce); }
+.brand:hover img { transform: translateY(-4px) rotate(-8deg); }
+.nav { display: flex; align-items: center; gap: 4px; }
+.nav a:not(.btn) {
+  font: 600 var(--text-sm) / 1 var(--font-sans); color: var(--text-muted); text-decoration: none;
+  padding: 9px 12px; border-radius: var(--radius-full); transition: color var(--dur-fast), background-color var(--dur-fast);
+}
+.nav a:not(.btn):hover { color: var(--text); background: var(--surface-2); }
+.nav .btn { margin-left: var(--space-2); }
+@media (max-width: 600px) { .nav a:not(.btn) { display: none; } }
+
+/* ---------- hero ---------- */
+.hero { display: grid; gap: var(--space-7); align-items: center; padding-block: var(--space-8) var(--space-4); }
+@media (min-width: 940px) { .hero { grid-template-columns: 1.05fr 1fr; padding-top: var(--space-9); } }
+.hero h1 { margin: var(--space-5) 0; }
+.lede { font-size: var(--text-lg); color: var(--text-muted); max-width: 52ch; }
+.lede strong { color: var(--text); font-weight: 650; }
+.hero-tags { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-5); }
+.hero .terminal { min-width: 0; transform: rotate(1deg); }
+@media (max-width: 939px) { .hero .terminal { transform: none; } }
+
+/* Pip walks along a strip of pixel grass at the bottom of the terminal */
+.stage { position: relative; height: 122px; }
+.stage .ground {
+  position: absolute; left: 0; right: 0; bottom: 0; height: 16px;
+  background: repeating-linear-gradient(90deg, var(--lime) 0 12px, #4fa632 12px 24px);
+  border-top: var(--outline);
+}
+#pip {
+  position: absolute; bottom: 13px; left: 0; width: 128px; height: 76px;
+  image-rendering: pixelated; cursor: pointer; touch-action: manipulation; border-radius: var(--radius-sm);
+}
+.bubble {
+  position: absolute; bottom: 92px; transform: translateX(-50%);
+  padding: 5px 10px; border-radius: var(--radius);
+  font: 700 var(--text-sm) / 1.2 var(--font-display); color: var(--line); white-space: nowrap;
+  background: var(--text); border: var(--outline); box-shadow: var(--shadow-sm);
+  opacity: 0; transition: opacity var(--dur); pointer-events: none; z-index: 2;
+}
+.bubble.show { opacity: 1; }
+.stage-hint { position: absolute; right: var(--space-5); top: 6px; font: 700 var(--text-sm) / 1 var(--font-display); color: var(--lemon); transition: opacity var(--dur); }
+.stage.poked .stage-hint { opacity: 0; }
+@media (max-width: 560px) { .stage-hint { display: none; } }
+
+/* ---------- sections ---------- */
+.section { padding-top: var(--space-9); }
+
+/* ---------- about ---------- */
+.about { max-width: 760px; --bar: var(--cyan); }
+.about .terminal__body { display: grid; gap: var(--space-4); font: 400 var(--text-base) / var(--leading-normal) var(--font-sans); color: var(--text-muted); }
+.about strong { color: var(--text); font-weight: 650; }
+
+/* ---------- footer ---------- */
+.site-footer {
+  margin-top: var(--space-9); padding-block: var(--space-6) var(--space-7); border-top: var(--outline);
+  font: 400 var(--text-sm) / 1.6 var(--font-sans); color: var(--text-faint); text-align: center;
+}
+.site-footer a { font-weight: 650; }
