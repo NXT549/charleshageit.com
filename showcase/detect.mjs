@@ -207,7 +207,7 @@ export function readmeExcerpt(markdown, maxLength = 320) {
 
 const PLATFORMS = [
   ["windows", "Windows", /\.(exe|msi|msix|appx)$|[-_.]win(dows|32|64)?([-_.][^/]*)?\.zip$/i],
-  ["macos", "macOS", /\.(dmg|pkg)$|[-_.](mac|macos|darwin|osx|universal)([-_.][^/]*)?\.zip$/i],
+  ["macos", "Mac", /\.(dmg|pkg)$|[-_.](mac|macos|darwin|osx|universal)([-_.][^/]*)?\.zip$/i],
   ["linux", "Linux", /\.(appimage|deb|rpm|flatpak|snap)$|[-_.]linux([-_.][^/]*)?\.(zip|tar\.gz|tgz)$/i],
   ["android", "Android", /\.apk$/i],
 ];

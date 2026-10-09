@@ -25,22 +25,24 @@ accessibility, best practices and SEO (`lighthouserc.json`); the reports are att
 The project cards are built from the GitHub API, not written by hand. Every build pulls every public
 repo (stars, language, topics, latest commit, latest release, README) and renders the cards into the page,
 and the site rebuilds every 6 hours and on every push to `main`. Nothing calls GitHub when someone visits
-the page. If GitHub can't be reached, the build uses the last saved copy in `data/github.json`.
+the page. If GitHub can't be reached, the build falls back to the copy saved in `data/github-raw.json`,
+with the current `showcase/config.json` applied.
 
 - **New repos show up by themselves** under **On the workbench**. Give a repo a description and some
   topics on GitHub and they appear on its card. Forks, archived repos and your profile repo are skipped.
 - **The projects** (the big spotlight cards) are the repos listed under `featured` in `showcase/config.json`,
   plus any repo with the `featured` topic on GitHub.
 - **Hide a repo** by adding it to `hide` in `showcase/config.json`.
-- **Customise a card** under `repos` in `showcase/config.json`: `blurb`, `highlights`, `status` (`done` or
-  `wip`), `image` and `imageAlt` (put screenshots in `public/img/`, around 1200×630), `live` (the "Play it live"
-  link, otherwise the repo's website from GitHub), `embed: true` (adds a "Try it right here" button that
-  plays the live site inside the card), `pop` (the card's hover colour, a theme colour name like `lemon`
-  or `cherry`), `scene: "desk"` (Pip's night-time desk behind a pixel-art image), `platforms` (download
-  buttons to always show, linking to the release page when there's no installer for one) and `frameworks`
-  (extra framework tags if they aren't detected).
+- **Customise a card** under `repos` in `showcase/config.json`: `blurb` (its first sentence becomes the bold
+  tagline), `highlights`, `status` (`done` stamps it "Shipped", `wip` "In progress"), `image` and `imageAlt`
+  (put screenshots in `public/img/`, around 1200×630), `live` (the "Play in your browser" link, otherwise the repo's
+  website from GitHub), `embed: true` (adds a "Try it right here" button that plays the live site inside the
+  card), `pop` (the colour the card leaves behind on hover, a theme colour name like `highlighter` or
+  `blue-pencil`), `scene: "desk"` (Pip's spec drawing behind a pixel-art image), `note` (a handwritten note on
+  the picture, `\n` for a new line), `platforms` (download buttons to always show, linking to the release page
+  when there's no installer for one) and `frameworks` (extra framework tags if they aren't detected).
 - **Download buttons** come from the latest GitHub release: an `.exe`/`.msi` becomes Windows, a `.dmg`
-  becomes macOS, an `.AppImage`/`.deb` becomes Linux.
+  becomes Mac, an `.AppImage`/`.deb` becomes Linux.
 - **Frameworks** (Vite, Electron, React, Flask, ...) are detected from each repo's `package.json`,
   `requirements.txt` or `pyproject.toml`, and from its topics.
 
