@@ -21,8 +21,8 @@
     <meta property="og:image" content="https://charleshageit.com/img/hamster-slots.webp" />
     <meta name="twitter:card" content="summary_large_image" />
 
+    <link rel="preload" href="./fonts/PixelifySans-Variable.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="preload" href="./fonts/Geist-Variable.woff2" as="font" type="font/woff2" crossorigin />
-    <link rel="preload" href="./fonts/GeistMono-Variable.woff2" as="font" type="font/woff2" crossorigin />
     <link rel="stylesheet" href="./css/tokens.css" />
     <link rel="stylesheet" href="./css/theme.css" />
     <script src="./js/fx.js" defer></script>
@@ -33,144 +33,151 @@
       /* ---------- header ---------- */
       .site-header {
         position: sticky; top: 0; z-index: 50;
-        background: rgb(9 9 11 / 0.72);
-        -webkit-backdrop-filter: blur(12px) saturate(140%);
-        backdrop-filter: blur(12px) saturate(140%);
-        border-bottom: 1px solid var(--border);
+        background: var(--bg);
+        border-bottom: var(--outline);
+        box-shadow: 0 4px 0 rgb(11 9 16 / 0.6);
       }
-      .site-header .container { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); height: 60px; }
+      .site-header .container { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); height: 64px; }
       .brand {
         display: flex; align-items: center; gap: 10px;
-        font: 500 var(--text-sm) / 1 var(--font-mono); color: var(--text); text-decoration: none;
+        font: 700 var(--text-xl) / 1 var(--font-display); color: var(--text); text-decoration: none;
       }
       .brand:hover { color: var(--text); }
-      .brand img { width: 26px; height: 26px; image-rendering: pixelated; }
-      .brand b { font-weight: inherit; color: var(--accent); }
-      .nav { display: flex; align-items: center; gap: 2px; }
+      .brand img { width: 32px; height: 32px; image-rendering: pixelated; transition: transform var(--dur) var(--ease-bounce); }
+      .brand:hover img { transform: translateY(-4px) rotate(-8deg); }
+      .nav { display: flex; align-items: center; gap: 4px; }
       .nav a:not(.btn) {
-        font: 450 var(--text-sm) / 1 var(--font-mono); color: var(--text-muted); text-decoration: none;
-        padding: 9px 10px; border-radius: var(--radius-sm); transition: color var(--dur-fast), background-color var(--dur-fast);
+        font: 600 var(--text-sm) / 1 var(--font-sans); color: var(--text-muted); text-decoration: none;
+        padding: 9px 12px; border-radius: var(--radius-full); transition: color var(--dur-fast), background-color var(--dur-fast);
       }
-      .nav a:not(.btn)::before { content: "./"; color: var(--text-faint); }
-      .nav a:not(.btn):hover { color: var(--text); background: rgb(255 255 255 / 0.05); }
+      .nav a:not(.btn):hover { color: var(--text); background: var(--surface-2); }
       .nav .btn { margin-left: var(--space-2); }
       @media (max-width: 600px) { .nav a:not(.btn) { display: none; } }
 
       /* ---------- hero ---------- */
       .hero { display: grid; gap: var(--space-7); align-items: center; padding-block: var(--space-8) var(--space-4); }
-      @media (min-width: 940px) { .hero { grid-template-columns: 1fr 1fr; padding-top: var(--space-9); } }
-      .hero h1 { margin: var(--space-4) 0 var(--space-5); }
-      .lede { font-size: var(--text-lg); color: var(--text-muted); max-width: 54ch; }
-      .lede strong { color: var(--text); font-weight: 600; }
+      @media (min-width: 940px) { .hero { grid-template-columns: 1.05fr 1fr; padding-top: var(--space-9); } }
+      .hero h1 { margin: var(--space-5) 0; }
+      .lede { font-size: var(--text-lg); color: var(--text-muted); max-width: 52ch; }
+      .lede strong { color: var(--text); font-weight: 650; }
       .hero-tags { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-5); }
-      .hero .terminal { min-width: 0; }
+      .hero .terminal { min-width: 0; transform: rotate(1deg); }
+      @media (max-width: 939px) { .hero .terminal { transform: none; } }
 
-      /* Pip walks along the bottom of the terminal */
-      .stage { position: relative; height: 118px; margin: 0 var(--space-5) var(--space-3); }
+      /* Pip walks along a strip of pixel grass at the bottom of the terminal */
+      .stage { position: relative; height: 122px; }
       .stage .ground {
-        position: absolute; left: 0; right: 0; bottom: 12px; height: 1px;
-        background: linear-gradient(90deg, transparent, rgb(16 185 129 / 0.6) 15%, rgb(6 182 212 / 0.6) 85%, transparent);
+        position: absolute; left: 0; right: 0; bottom: 0; height: 16px;
+        background: repeating-linear-gradient(90deg, var(--lime) 0 12px, #4fa632 12px 24px);
+        border-top: var(--outline);
       }
       #pip {
-        position: absolute; bottom: 12px; left: 0; width: 128px; height: 76px;
+        position: absolute; bottom: 13px; left: 0; width: 128px; height: 76px;
         image-rendering: pixelated; cursor: pointer; touch-action: manipulation; border-radius: var(--radius-sm);
       }
       .bubble {
         position: absolute; bottom: 92px; transform: translateX(-50%);
-        padding: 5px 9px; border-radius: var(--radius-sm);
-        font: 500 var(--text-xs) / 1.2 var(--font-mono); color: var(--emerald-300); white-space: nowrap;
-        background: var(--surface-2); border: 1px solid rgb(16 185 129 / 0.35);
-        opacity: 0; transition: opacity var(--dur); pointer-events: none;
+        padding: 5px 10px; border-radius: var(--radius);
+        font: 700 var(--text-sm) / 1.2 var(--font-display); color: var(--line); white-space: nowrap;
+        background: var(--text); border: var(--outline); box-shadow: var(--shadow-sm);
+        opacity: 0; transition: opacity var(--dur); pointer-events: none; z-index: 2;
       }
       .bubble.show { opacity: 1; }
-      .stage-hint { position: absolute; right: 0; top: 4px; font: 400 var(--text-xs) / 1 var(--font-mono); color: var(--text-faint); }
+      .stage-hint { position: absolute; right: var(--space-5); top: 6px; font: 700 var(--text-sm) / 1 var(--font-display); color: var(--lemon); transition: opacity var(--dur); }
+      .stage.poked .stage-hint { opacity: 0; }
       @media (max-width: 560px) { .stage-hint { display: none; } }
 
       /* ---------- sections ---------- */
       .section { padding-top: var(--space-9); }
 
       /* ---------- project cards ---------- */
-      .projects { display: grid; gap: var(--space-6); }
+      .projects { display: grid; gap: var(--space-7); }
       .card { display: grid; grid-template-columns: 1fr; overflow: hidden; }
       @media (min-width: 840px) {
         .card { grid-template-columns: 1.15fr 1fr; }
-        .card.flip { grid-template-columns: 1fr 1.15fr; }
-        .card.flip .shot { order: 2; border-right: 0; border-left: 1px solid var(--border); }
+        .card.flip { grid-template-columns: 1fr 1.15fr; --tilt: 0.4deg; }
+        .card.flip .shot { order: 2; border-right: 0; border-left: var(--outline); }
       }
       .shot {
-        position: relative; min-height: 240px; border-bottom: 1px solid var(--border);
-        display: grid; place-items: center; overflow: hidden; background: var(--zinc-900);
+        position: relative; min-height: 240px; border-bottom: var(--outline);
+        display: grid; place-items: center; overflow: hidden; background: var(--surface-2);
       }
-      @media (min-width: 840px) { .shot { border-bottom: 0; border-right: 1px solid var(--border); } }
-      .shot img.cover { width: 100%; height: 100%; object-fit: cover; transition: transform var(--dur-slow) var(--ease-out); }
-      .card:hover .shot img.cover { transform: scale(1.02); }
+      @media (min-width: 840px) { .shot { border-bottom: 0; border-right: var(--outline); } }
+      .shot img.cover { width: 100%; height: 100%; object-fit: cover; }
+      /* Pip's desk at night */
       .shot.pip-shot {
         background:
-          radial-gradient(circle at 50% 55%, rgb(16 185 129 / 0.2), transparent 55%),
-          linear-gradient(rgb(255 255 255 / 0.03) 1px, transparent 1px) 0 0 / 24px 24px,
-          linear-gradient(90deg, rgb(255 255 255 / 0.03) 1px, transparent 1px) 0 0 / 24px 24px,
-          var(--zinc-900);
+          radial-gradient(2px 2px at 18% 22%, var(--text) 50%, transparent 51%),
+          radial-gradient(2px 2px at 72% 14%, var(--lemon) 50%, transparent 51%),
+          radial-gradient(2px 2px at 86% 38%, var(--text) 50%, transparent 51%),
+          radial-gradient(2px 2px at 40% 10%, var(--cyan) 50%, transparent 51%),
+          radial-gradient(2px 2px at 8% 50%, var(--text-muted) 50%, transparent 51%),
+          linear-gradient(180deg, #241d3d 0%, #2f2652 70%);
       }
       .shot.pip-shot .desk {
         position: absolute; left: 0; right: 0; bottom: 0; height: 30%;
-        background: linear-gradient(rgb(16 185 129 / 0.08), transparent 70%);
-        border-top: 1px solid rgb(16 185 129 / 0.5); box-shadow: 0 -1px 18px rgb(16 185 129 / 0.25);
+        background: repeating-linear-gradient(90deg, #8a5a3b 0 46px, #7a4f33 46px 48px);
+        border-top: var(--outline);
       }
       .shot.pip-shot img {
         position: absolute; left: 50%; bottom: calc(30% - 52px); transform: translateX(-50%);
         width: 168px; height: 168px; image-rendering: pixelated; z-index: 1;
       }
-      .shot .badge { position: absolute; top: 14px; left: 14px; z-index: 2; }
+      .shot .badge { position: absolute; top: 16px; left: 16px; z-index: 2; }
 
       .info { padding: var(--space-5); display: flex; flex-direction: column; gap: var(--space-3); }
       @media (min-width: 840px) { .info { padding: var(--space-6); } }
-      .info h3 { font-size: clamp(1.5rem, 1.2rem + 1vw, 1.875rem); letter-spacing: -0.025em; }
-      .info .tagline { color: var(--text); font-weight: 500; }
+      .info h3 { font-size: clamp(1.75rem, 1.35rem + 1.4vw, 2.375rem); }
+      .info .tagline { color: var(--text); font-weight: 650; }
       .info p { color: var(--text-muted); }
       .bits { margin: 0; padding: 0; list-style: none; color: var(--text-muted); display: grid; gap: 4px; }
       .bits li { display: flex; gap: 10px; }
-      .bits li::before { content: "→"; font-family: var(--font-mono); color: var(--accent); }
+      .bits li::before { content: "★"; color: var(--pop, var(--lemon)); }
       .meta { display: flex; flex-wrap: wrap; gap: var(--space-2); }
-      .buttons { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: auto; padding-top: var(--space-3); }
+      .buttons { display: flex; flex-wrap: wrap; gap: var(--space-3); margin-top: auto; padding-top: var(--space-3); }
 
       /* ---------- workbench (live from GitHub) ---------- */
-      .bench { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+      .bench { display: grid; gap: var(--space-5); grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
       .mini { display: flex; flex-direction: column; gap: 6px; padding: var(--space-4) var(--space-5); text-decoration: none; color: var(--text); border-radius: var(--radius); }
       .mini:hover { color: var(--text); }
-      .mini strong { font: 550 var(--text-base) / 1.3 var(--font-mono); letter-spacing: -0.01em; }
-      .mini strong::before { content: "~/"; color: var(--text-faint); }
+      .mini:nth-child(6n + 1) { --pop: var(--lemon); }
+      .mini:nth-child(6n + 2) { --pop: var(--cyan); --tilt: 0.8deg; }
+      .mini:nth-child(6n + 3) { --pop: var(--bubblegum); --tilt: -0.8deg; }
+      .mini:nth-child(6n + 4) { --pop: var(--lime); --tilt: 0.6deg; }
+      .mini:nth-child(6n + 5) { --pop: var(--pumpkin); --tilt: -0.6deg; }
+      .mini:nth-child(6n + 6) { --pop: var(--blueberry); --tilt: 1deg; }
+      .mini strong { font: 700 var(--text-xl) / 1.2 var(--font-display); }
       .mini span { font-size: var(--text-sm); color: var(--text-muted); }
       .mini small { margin-top: auto; padding-top: var(--space-2); font: 400 var(--text-xs) / 1.4 var(--font-mono); color: var(--text-faint); }
       .mini.add {
         align-items: center; justify-content: center; text-align: center; min-height: 112px;
-        border: 1px dashed var(--border-strong); color: var(--text-muted);
-        transition: border-color var(--dur), color var(--dur);
+        border: 2px dashed var(--border-strong); color: var(--text-muted);
+        transition: border-color var(--dur), color var(--dur), transform var(--dur) var(--ease-bounce);
       }
-      .mini.add:hover { border-color: var(--accent); color: var(--text); }
-      .mini.add strong { display: block; color: var(--accent); }
-      .mini.add strong::before { content: none; }
+      .mini.add:hover { border-color: var(--lemon); color: var(--text); transform: rotate(-1deg); }
+      .mini.add strong { display: block; color: var(--lemon); }
 
       /* ---------- about ---------- */
-      .about { max-width: 760px; }
+      .about { max-width: 760px; --bar: var(--cyan); }
       .about .terminal__body { display: grid; gap: var(--space-4); font: 400 var(--text-base) / var(--leading-normal) var(--font-sans); color: var(--text-muted); }
-      .about strong { color: var(--text); font-weight: 600; }
+      .about strong { color: var(--text); font-weight: 650; }
 
       /* ---------- footer ---------- */
       .site-footer {
-        margin-top: var(--space-9); padding-block: var(--space-6) var(--space-7); border-top: 1px solid var(--border);
-        font: 400 var(--text-xs) / 1.6 var(--font-mono); color: var(--text-faint);
+        margin-top: var(--space-9); padding-block: var(--space-6) var(--space-7); border-top: var(--outline);
+        font: 400 var(--text-sm) / 1.6 var(--font-sans); color: var(--text-faint); text-align: center;
       }
-      .site-footer .container { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-3); }
+      .site-footer a { font-weight: 650; }
     </style>
   </head>
   <body>
     <header class="site-header">
       <div class="container">
-        <a class="brand" href="#top"><img src="./img/pip-icon.png" alt="" width="26" height="26" /><span>charles<b>@</b>workshop</span></a>
+        <a class="brand" href="#top"><img src="./img/pip-icon.png" alt="" width="26" height="26" /><span>charles's workshop</span></a>
         <nav class="nav" aria-label="Main">
-          <a href="#projects">projects</a>
-          <a href="#workbench">workbench</a>
-          <a href="#about">about</a>
+          <a href="#projects">Projects</a>
+          <a href="#workbench">Workbench</a>
+          <a href="#about">About</a>
           <a class="btn btn--ghost btn--sm" href="https://github.com/NXT549">
             <svg viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
             GitHub
@@ -183,17 +190,17 @@
       <!-- hero:start -->
       <section class="hero container">
         <div>
-          <p class="eyebrow">vibe-coded, finished &amp; in progress</p>
-          <h1>I make little things <span class="text-gradient">for fun.</span></h1>
+          <p class="eyebrow">hi! welcome to my workshop</p>
+          <h1>I make little things <span class="text-pop wiggle">for fun.</span></h1>
           <p class="lede">
             Hi, I'm <strong>Charles</strong>. These are the projects I've <strong>vibe-coded</strong>: a slot machine
             run by a hamster, a jellybean who lives on your desktop, and whatever I'm tinkering with next.
             Some are finished, some are very much not.
           </p>
           <div class="hero-tags">
-            <span class="tag tag--accent">#idle-games</span>
-            <span class="tag tag--accent-2">#desktop-pets</span>
-            <span class="tag">#built-with-ai</span>
+            <span class="tag">🐹 idle games</span>
+            <span class="tag">🫘 desktop pets</span>
+            <span class="tag">🤖 built with AI</span>
           </div>
         </div>
 
@@ -212,7 +219,7 @@
           <div class="stage" aria-label="Pip, a pixel-art jellybean, walking around. Click him to change his flavour.">
             <canvas id="pip" width="32" height="19" tabindex="0" role="button" aria-label="Pip. Click to change his flavour."></canvas>
             <div class="bubble" id="bubble">hi!</div>
-            <div class="stage-hint">// psst, click pip</div>
+            <div class="stage-hint">psst, click Pip ↓</div>
             <div class="ground"></div>
           </div>
         </div>
@@ -221,7 +228,7 @@
 
       <section id="projects" class="section container">
         <header class="section-head">
-          <p class="eyebrow">01 · projects</p>
+          <p class="eyebrow">★ made by me</p>
           <h2>The projects</h2>
           <p class="sub">The good stuff. Click around, they all work (mostly).</p>
         </header>
@@ -229,7 +236,7 @@
         <div class="projects">
           <!-- To add a project, copy one <article class="card"> block and change the words and links. -->
 
-          <article class="card glass glow" id="project-hamster-slots" data-repo="hamster-slots">
+          <article class="card glass glow" id="project-hamster-slots" data-repo="hamster-slots" style="--pop: var(--lemon)">
             <div class="shot">
               <span class="badge badge--wip">playable &amp; growing</span>
               <img class="cover" src="./img/hamster-slots.webp" alt="Hamster Slots: a BIG WIN on the Snack Stacker, with coins flying everywhere" width="1200" height="630" />
@@ -294,7 +301,7 @@
 
       <section id="workbench" class="section container">
         <header class="section-head">
-          <p class="eyebrow">02 · workbench</p>
+          <p class="eyebrow" style="--sticker: var(--cyan)">live from GitHub</p>
           <h2>On the workbench</h2>
           <p class="sub">Everything on my GitHub, most recently touched first. This list updates by itself.</p>
         </header>
@@ -306,7 +313,7 @@
 
       <section id="about" class="section container">
         <header class="section-head">
-          <p class="eyebrow">03 · about</p>
+          <p class="eyebrow" style="--sticker: var(--bubblegum)">hello!</p>
           <h2>About me</h2>
         </header>
         <div class="about terminal glass">
@@ -331,8 +338,7 @@
 
     <footer class="site-footer">
       <div class="container">
-        <span>made with too many snacks by charles</span>
-        <a href="https://github.com/NXT549/charleshageit.com">./this-site's-code</a>
+        Made with too many snacks by Charles · <a href="https://github.com/NXT549/charleshageit.com">this site's code</a>
       </div>
     </footer>
 
@@ -375,8 +381,21 @@
           bubbleTimer = setTimeout(function () { bubble.classList.remove("show"); }, 1600);
         }
 
+        // Pip's flavour paints the page: hover shadows and the hero's "for fun." follow him.
+        function paint() {
+          var name = flavours[flavour], f = S.flavors[name], root = document.documentElement;
+          root.style.setProperty("--flavour", f.B);
+          root.style.setProperty("--flavour-text", name === "licorice" ? "#b3adc6" : f.L);
+        }
+
         function poke() {
           flavour = (flavour + 1) % flavours.length;
+          paint();
+          stage.classList.add("poked");
+          if (window.sparkle) {
+            var r = canvas.getBoundingClientRect();
+            window.sparkle(r.left + r.width / 2, r.top + 16, 12);
+          }
           mode = "happy";
           modeUntil = t + 900;
           var s = sayings[(Math.random() * sayings.length) | 0];
