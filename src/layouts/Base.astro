@@ -13,6 +13,8 @@ interface Props {
   /** Social card image, as a site path or an absolute URL. */
   image?: string;
   imageAlt?: string;
+  /** False for pages that aren't really anywhere, like the 404: no canonical URL or og:url. */
+  canonical?: boolean;
 }
 
 const {
@@ -20,9 +22,10 @@ const {
   description = SITE.description,
   image = "/og.png",
   imageAlt = `${SITE.name}: ${SITE.shortDescription}`,
+  canonical: hasCanonical = true,
 } = Astro.props;
 
-const canonical = new URL(Astro.url.pathname, Astro.site);
+const canonical = hasCanonical ? new URL(Astro.url.pathname, Astro.site) : null;
 const imageUrl = new URL(image, Astro.site);
 
 const jsonLd = {
@@ -58,7 +61,7 @@ const jsonLd = {
     <meta name="author" content={SITE.author} />
     <meta name="color-scheme" content="dark" />
     <meta name="theme-color" content="#0b2240" />
-    <link rel="canonical" href={canonical} />
+    {canonical && <link rel="canonical" href={canonical} />}
     <link rel="icon" href="/img/pip-icon.png" />
     <link rel="apple-touch-icon" href="/img/pip-icon.png" />
     <link rel="sitemap" href="/sitemap-index.xml" />
@@ -69,7 +72,7 @@ const jsonLd = {
     <meta property="og:locale" content={SITE.locale} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
-    <meta property="og:url" content={canonical} />
+    {canonical && <meta property="og:url" content={canonical} />}
     <meta property="og:image" content={imageUrl} />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />

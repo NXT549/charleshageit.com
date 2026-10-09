@@ -1,10 +1,19 @@
+---
+interface Props {
+  /** The title block's sheet number. */
+  sheet?: string;
+}
+
+const { sheet = "4 of 4" } = Astro.props;
+---
+
 <footer class="site-footer">
   <div class="container">
     <div class="titleblock">
       <div><small>Drawn by</small>Charles, with too many snacks</div>
       <div><small>Location</small>Redlands, Brisbane</div>
       <div><small>Source</small><a href="https://github.com/NXT549/charleshageit.com">This site's code</a></div>
-      <div><small>Sheet</small>4 of 4</div>
+      <div><small>Sheet</small>{sheet}</div>
     </div>
   </div>
 </footer>
