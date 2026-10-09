@@ -1,0 +1,165 @@
+/* ==========================================================================
+   Design tokens for charleshageit.com
+   The workshop's blueprint: navy grid paper, chalk-white linework, a yellow
+   highlighter, cyan dimension lines, handwritten notes and rubber stamps.
+   Every other stylesheet (and every inline <style>) should read from these
+   instead of hard-coding.
+   ========================================================================== */
+
+/* ---------- Fonts (self-hosted, Latin subset) ---------- */
+@font-face {
+  font-family: "Geist";
+  src: url("../fonts/Geist-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist Mono";
+  src: url("../fonts/GeistMono-Variable.woff2") format("woff2");
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Caveat";
+  src: url("../fonts/Caveat-SemiBold.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
+
+:root {
+  color-scheme: dark;
+
+  /* ---------- Pens ---------- */
+  --chalk: #e6f0ff;        /* linework and text */
+  --highlighter: #ffd23f;  /* the one loud colour: CTAs, circles, notes */
+  --blue-pencil: #5fd4ff;  /* dimension lines, labels, paths */
+  --stamp-red: #ff7a5c;    /* "in progress" stamps */
+  --stamp-green: #34d399;  /* "shipped" stamps */
+  --navy: #0b2240;
+
+  /* ---------- Semantic colours ---------- */
+  --bg: var(--navy);
+  --grid: rgb(170 205 255 / 0.13);
+  --grid-major: rgb(170 205 255 / 0.26);
+  --surface: #102b4e;               /* paper inside a drawing frame */
+  --surface-2: #163663;
+  --surface-3: #1c4174;
+  --line: var(--chalk);             /* frame and outline colour */
+  --border: rgb(230 240 255 / 0.22);
+  --border-strong: rgb(230 240 255 / 0.5);
+
+  --text: var(--chalk);             /* 13.9:1 on --bg */
+  --text-muted: #a9c2e6;            /* 8.8:1 on --bg */
+  --text-faint: #8eabd3;            /* 6.8:1 on --bg, 6:1 on --surface */
+
+  --accent: var(--highlighter);     /* primary: main buttons, circles, notes */
+  --accent-2: var(--blue-pencil);   /* secondary: labels, paths, dimensions */
+  --accent-fg: var(--navy);         /* text on a filled accent (9:1 or better) */
+  --accent-soft: rgb(255 210 63 / 0.14);
+  --accent-2-soft: rgb(95 212 255 / 0.12);
+  --warn: var(--stamp-red);
+  --danger: var(--stamp-red);
+  --success: var(--stamp-green);
+
+  /* ---------- Type ---------- */
+  --font-sans: "Geist", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+  --font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --font-hand: "Caveat", "Segoe Print", "Bradley Hand", cursive;
+  --font-display: var(--font-sans);
+
+  --text-xs: 0.75rem;     /* 12px: tags, metadata */
+  --text-sm: 0.875rem;    /* 14px: captions, terminal */
+  --text-base: 1rem;      /* 16px: body */
+  --text-lg: 1.125rem;    /* 18px: lede */
+  --text-xl: 1.25rem;
+  --text-2xl: 1.75rem;
+  --text-3xl: clamp(2rem, 1.5rem + 2vw, 2.875rem);      /* h2 */
+  --text-4xl: clamp(2.75rem, 1.5rem + 5vw, 5rem);       /* h1 */
+  --text-hand: 1.6rem;                                  /* handwritten notes */
+
+  --leading-tight: 1.02;
+  --leading-snug: 1.15;
+  --leading-normal: 1.65;
+  --tracking-tight: -0.04em;
+  --tracking-snug: -0.025em;
+  --tracking-mono: 0.12em;      /* uppercase technical labels */
+
+  /* ---------- Space, radius, layout ---------- */
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 12px;
+  --space-4: 16px;
+  --space-5: 24px;
+  --space-6: 32px;
+  --space-7: 48px;
+  --space-8: 64px;
+  --space-9: 96px;
+
+  --radius-sm: 2px;       /* drawings have square corners */
+  --radius: 2px;
+  --radius-lg: 3px;
+  --radius-full: 999px;
+
+  --container: 1120px;
+  --gutter: 16px;
+
+  /* ---------- Linework & offsets ---------- */
+  --stroke: 1.5px;
+  --outline: var(--stroke) solid var(--line);
+  --outline-dashed: var(--stroke) dashed var(--border-strong);
+  --shadow-sm: none;
+  --shadow: none;
+  --shadow-lg: none;
+
+  /* ---------- Old names from earlier versions, mapped onto the blueprint ---------- */
+  --flavour: var(--highlighter);
+  --flavour-text: var(--highlighter);
+  --gradient-accent: linear-gradient(var(--accent), var(--accent));
+  --gradient-text: linear-gradient(var(--accent), var(--accent));
+  --glass-bg: rgb(11 34 64 / 0.85);
+  --glass-bg-strong: var(--surface);
+  --glass-border: var(--line);
+  --glass-blur: 0px;
+  --glass-highlight: 0 0 0 transparent;
+  --glow-accent: 5px 5px 0 calc(var(--stroke) * -1) var(--bg), 5px 5px 0 0 var(--accent);
+  --glow-accent-2: 5px 5px 0 calc(var(--stroke) * -1) var(--bg), 5px 5px 0 0 var(--accent-2);
+  --glow-text: 0 0 0 transparent;
+  --emerald: var(--stamp-green);
+  --emerald-300: var(--stamp-green);
+  --emerald-400: var(--stamp-green);
+  --emerald-500: var(--stamp-green);
+  --emerald-600: var(--stamp-green);
+  --cyan: var(--blue-pencil);
+  --cyan-300: var(--blue-pencil);
+  --cyan-400: var(--blue-pencil);
+  --cyan-500: var(--blue-pencil);
+  --cyan-600: var(--blue-pencil);
+  --lemon: var(--highlighter);
+  --amber-400: var(--highlighter);
+  --cherry: var(--stamp-red);
+  --cherry-light: var(--stamp-red);
+  --rose-400: var(--stamp-red);
+  --lime: var(--stamp-green);
+  --blueberry: var(--blue-pencil);
+  --grape: var(--surface-3);
+  --bubblegum: var(--stamp-red);
+  --pumpkin: var(--highlighter);
+  --zinc-950: var(--bg);
+  --zinc-900: var(--surface);
+  --zinc-800: var(--surface-2);
+  --zinc-700: var(--border-strong);
+  --zinc-600: var(--border-strong);
+  --zinc-400: var(--text-muted);
+  --zinc-100: var(--text);
+
+  /* ---------- Motion ---------- */
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --dur-fast: 120ms;
+  --dur: 220ms;
+  --dur-slow: 420ms;
+}
