@@ -169,7 +169,7 @@ function spotlightCard(repo, index) {
   const media = img
     ? `<img class="spotlight__shot${repo.image.pixelArt ? " spotlight__shot--pixel" : ""}" src="${esc(img)}" alt="${esc(repo.image.alt)}"${repo.image.width ? ` width="${repo.image.width}"` : ""}${
         repo.image.height ? ` height="${repo.image.height}"` : ""
-      } loading="${index === 0 ? "eager" : "lazy"}" decoding="async" />`
+      } loading="lazy" decoding="async" />`
     : `<div class="spotlight__placeholder" aria-hidden="true"><span class="prompt">~/</span>${esc(repo.name)}<span class="cursor"></span></div>`;
 
   const demo = embed
