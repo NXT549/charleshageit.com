@@ -279,6 +279,8 @@ test("spotlight shows the README, release downloads, live link and demo", async 
   assert.match(html, /spotlight__shot--pixel/);
   assert.match(html, /id="project-pip"[^>]* style="--pop: var\(--cherry\)"/);
   assert.match(html, /spotlight__media spotlight__media--desk/);
+  // the hero sits above the spotlight, so no spotlight image should compete with it for LCP
+  assert.doesNotMatch(html, /loading="eager"/);
   assert.match(html, /<symbol id="i-star"/);
 });
 
