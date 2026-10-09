@@ -11,7 +11,7 @@ The site is built with [Astro](https://astro.build) into plain static HTML, and 
 ```sh
 npm install
 npm run dev      # local preview at http://localhost:4321 with live reload
-npm run build    # writes the finished site to dist/ (SHOWCASE_OFFLINE=1 skips GitHub and uses data/github.json)
+npm run build    # writes the finished site to dist/ (SHOWCASE_OFFLINE=1 skips GitHub and uses the cached data)
 npm run check    # type-checks the .astro and .ts files
 node --test "showcase/test/*.test.mjs"
 npx lhci autorun # Lighthouse on the built site (needs Chrome; set CHROME_PATH if it can't find it)
@@ -75,7 +75,8 @@ Headings use Pixelify Sans, body text Geist, and code and labels Geist Mono.
 - `src/components/FilterBar.astro`: the language / framework / topic filter for the workbench grid.
 - `src/layouts/Base.astro`: the `<head>`: title, description, social preview tags, structured data, styles and font preloads.
 - `src/lib/site.ts`: the site's name, description and links, used everywhere above.
-- `src/lib/showcase.ts`: fetches the GitHub data once per build (falls back to `data/github.json`).
+- `src/lib/showcase.ts`: fetches the GitHub data once per build. Without GitHub it uses the cached
+  `data/github-raw.json` with the current `showcase/config.json` applied, so card edits still show up.
 - `src/pages/og.png.ts` and `src/lib/og.ts`: draw the 1200×630 social preview card at build time.
 - `showcase/`: the GitHub fetch and card rendering (`config.json` to tweak, tests in `test/`). No dependencies.
 - `data/github.json`: the last saved copy of the repo data.
