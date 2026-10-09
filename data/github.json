@@ -65,6 +65,8 @@
         "pixelArt": true
       },
       "status": "done",
+      "pop": "cherry",
+      "scene": "desk",
       "featured": true,
       "stars": 0,
       "forks": 0,
@@ -159,6 +161,8 @@
         "pixelArt": false
       },
       "status": "wip",
+      "pop": "lemon",
+      "scene": null,
       "featured": true,
       "stars": 0,
       "forks": 0,

@@ -1,0 +1,143 @@
+{
+  "user": {
+    "login": "NXT549",
+    "name": null,
+    "avatarUrl": "https://avatars.githubusercontent.com/u/94941422?v=4",
+    "url": "https://github.com/NXT549",
+    "bio": null,
+    "followers": 0,
+    "publicRepos": 3
+  },
+  "repos": [
+    {
+      "name": "pip",
+      "fullName": "NXT549/pip",
+      "url": "https://github.com/NXT549/pip",
+      "description": null,
+      "homepage": null,
+      "stars": 0,
+      "forks": 0,
+      "isFork": false,
+      "isArchived": false,
+      "isPrivate": false,
+      "createdAt": "2026-10-05T02:23:32Z",
+      "updatedAt": "2026-10-06T03:58:00Z",
+      "pushedAt": "2026-10-06T03:58:00Z",
+      "primaryLanguage": {
+        "name": "JavaScript",
+        "color": "#f1e05a"
+      },
+      "languages": [
+        {
+          "name": "JavaScript",
+          "color": "#f1e05a",
+          "size": 9744
+        },
+        {
+          "name": "HTML",
+          "color": "#e34c26",
+          "size": 155
+        },
+        {
+          "name": "CSS",
+          "color": "#663399",
+          "size": 85
+        },
+        {
+          "name": "NSIS",
+          "color": "#8b949e",
+          "size": 5
+        }
+      ],
+      "topics": [],
+      "release": {
+        "tag": "v1.2.0",
+        "name": "v1.2.0",
+        "date": "2026-10-05T12:00:38Z",
+        "url": "https://github.com/NXT549/pip/releases/tag/v1.2.0",
+        "assets": [
+          {
+            "name": "Pip-Setup-1.2.0.exe",
+            "url": "https://github.com/NXT549/pip/releases/download/v1.2.0/Pip-Setup-1.2.0.exe"
+          }
+        ]
+      },
+      "latestCommit": {
+        "sha": "abf14e2b55f422f7fa71b10e5bcb3e0646f62178",
+        "shortSha": "abf14e2",
+        "message": "Build the installers in CI and attach them to the GitHub release (#12)",
+        "date": "2026-10-06T03:57:59Z",
+        "url": "https://github.com/NXT549/pip/commit/abf14e2b55f422f7fa71b10e5bcb3e0646f62178"
+      },
+      "packageJson": null,
+      "requirements": null,
+      "pyproject": null,
+      "readme": "A tiny pixel-art jellybean who lives on your desktop. Pip trots about on four stubby legs, climbs the edges of your screen, naps when you wander off, and keeps a gentle eye on your breaks, your Pomodoros and whether you have had any water lately."
+    },
+    {
+      "name": "hamster-slots",
+      "fullName": "NXT549/hamster-slots",
+      "url": "https://github.com/NXT549/hamster-slots",
+      "description": "A cute pixel-art idle slot machine, powered by a hamster on a wheel. Play it in your browser: https://nxt549.github.io/hamster-slots/",
+      "homepage": null,
+      "stars": 0,
+      "forks": 0,
+      "isFork": false,
+      "isArchived": false,
+      "isPrivate": false,
+      "createdAt": "2026-09-26T13:35:49Z",
+      "updatedAt": "2026-10-03T17:30:42Z",
+      "pushedAt": "2026-10-03T17:30:42Z",
+      "primaryLanguage": {
+        "name": "TypeScript",
+        "color": "#3178c6"
+      },
+      "languages": [
+        {
+          "name": "TypeScript",
+          "color": "#3178c6",
+          "size": 5994
+        },
+        {
+          "name": "JavaScript",
+          "color": "#f1e05a",
+          "size": 2794
+        },
+        {
+          "name": "CSS",
+          "color": "#663399",
+          "size": 926
+        },
+        {
+          "name": "HTML",
+          "color": "#e34c26",
+          "size": 254
+        },
+        {
+          "name": "Batchfile",
+          "color": "#C1F12E",
+          "size": 14
+        }
+      ],
+      "topics": [],
+      "release": {
+        "tag": "v1.8.0",
+        "name": "1.8.0",
+        "date": "2026-10-03T13:02:14Z",
+        "url": "https://github.com/NXT549/hamster-slots/releases/tag/v1.8.0",
+        "assets": []
+      },
+      "latestCommit": {
+        "sha": "83a62bdba4775089dbc80084d74545937842578a",
+        "shortSha": "83a62bd",
+        "message": "Fix five bugs from a 1.8.0 bug hunt and code read (#13)",
+        "date": "2026-10-03T15:23:20Z",
+        "url": "https://github.com/NXT549/hamster-slots/commit/83a62bdba4775089dbc80084d74545937842578a"
+      },
+      "packageJson": null,
+      "requirements": null,
+      "pyproject": null,
+      "readme": "A cute pixel-art idle slot machine, powered by a hamster on a wheel. Play it in your browser: https://nxt549.github.io/hamster-slots/"
+    }
+  ]
+}

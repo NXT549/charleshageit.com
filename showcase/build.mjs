@@ -1,10 +1,11 @@
 #!/usr/bin/env node
 // Builds the GitHub showcase.
 //
-//   node showcase/build.mjs              fetch from GitHub, update data/github.json, render into index.html
-//   node showcase/build.mjs --offline    re-render index.html from data/github.json, no network
-//   node showcase/build.mjs --data FILE  render from another data file (no network, data/github.json untouched)
-//   node showcase/build.mjs --check      fail if index.html is out of date with data/github.json
+//   node showcase/build.mjs              fetch from GitHub, update data/, render into index.html
+//   node showcase/build.mjs --offline    no network: re-apply showcase/config.json to the cached
+//                                        data/github-raw.json and re-render (use after editing the config)
+//   node showcase/build.mjs --data FILE  render from another data file (no network, data/ untouched)
+//   node showcase/build.mjs --check      fail if data/github.json or index.html is out of date
 //   node showcase/build.mjs --strict     fail instead of keeping the old data when GitHub can't be reached
 //   node showcase/build.mjs --summary    print a Markdown summary of data/github.json
 //
@@ -14,12 +15,13 @@
 import { readFile, writeFile, mkdir } from "node:fs/promises";
 import { dirname, resolve } from "node:path";
 import { fileURLToPath } from "node:url";
-import { fetchShowcase } from "./fetch.mjs";
+import { fetchRaw, normalize } from "./fetch.mjs";
 import { renderInto } from "./render.mjs";
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), "..");
 const CONFIG = resolve(ROOT, "showcase/config.json");
 const DATA = resolve(ROOT, "data/github.json");
+const RAW = resolve(ROOT, "data/github-raw.json");
 const INDEX = resolve(ROOT, "index.html");
 
 const args = new Set(process.argv.slice(2));
@@ -59,8 +61,18 @@ function summary(data) {
   return lines.join("\n");
 }
 
+async function writeIfChanged(path, value) {
+  const text = JSON.stringify(value, null, 2) + "\n";
+  const old = await readFile(path, "utf8").catch(() => null);
+  if (old === text) return false;
+  await mkdir(dirname(path), { recursive: true });
+  await writeFile(path, text);
+  return true;
+}
+
 async function main() {
   const config = await readJson(CONFIG);
+  const check = args.has("--check");
   let data;
 
   if (args.has("--summary")) {
@@ -68,41 +80,46 @@ async function main() {
     return;
   }
 
+  const previous = await readJson(DATA);
+  // Keep the old timestamp when nothing else changed, so there's nothing to commit.
+  const settle = (next) => (previous && stable(previous) === stable(next) ? previous : next);
+
   if (dataArg) {
     data = await readJson(resolve(process.cwd(), dataArg));
-  } else if (args.has("--offline") || args.has("--check")) {
-    data = await readJson(DATA);
-    if (!data) throw new Error("data/github.json doesn't exist yet. Run without --offline first.");
+  } else if (args.has("--offline") || check) {
+    const raw = await readJson(RAW);
+    if (raw) data = settle(normalize(raw, config, { generatedAt: previous ? previous.generatedAt : undefined }));
+    else data = previous;
+    if (!data) throw new Error("No cached GitHub data in data/ yet. Run without --offline first.");
   } else {
-    const previous = await readJson(DATA);
     const token = process.env.SHOWCASE_TOKEN || process.env.GITHUB_TOKEN || process.env.GH_TOKEN || null;
     try {
-      data = await fetchShowcase(config, { token, log: (m) => console.log(m) });
-      if (previous && stable(previous) === stable(data)) {
-        data = previous; // nothing changed: keep the old timestamp so there's nothing to commit
-        console.log("GitHub data unchanged");
-      } else {
-        await mkdir(dirname(DATA), { recursive: true });
-        await writeFile(DATA, JSON.stringify(data, null, 2) + "\n");
-        console.log(`Wrote data/github.json (${data.repos.length} repos, featured: ${data.featured.join(", ")})`);
-      }
+      const raw = await fetchRaw(config, { token, log: (m) => console.log(m) });
+      await writeIfChanged(RAW, raw);
+      data = settle(normalize(raw, config));
     } catch (err) {
       if (args.has("--strict") || !previous) throw err;
       // Offline or rate-limited: keep what we had so the site still builds.
-      console.warn(`::warning::Couldn't refresh GitHub data, keeping the previous data/github.json. ${err.message}`);
+      console.warn(`::warning::Couldn't refresh GitHub data, keeping the previous data. ${err.message}`);
       data = previous;
     }
   }
 
   const html = await readFile(INDEX, "utf8");
   const next = renderInto(html, data);
-  if (args.has("--check")) {
-    if (next !== html) {
-      console.error("index.html is out of date with data/github.json. Run: node showcase/build.mjs --offline");
+  if (check) {
+    const stale = [];
+    if (data !== previous) stale.push("data/github.json");
+    if (next !== html) stale.push("index.html");
+    if (stale.length) {
+      console.error(`${stale.join(" and ")} out of date. Run: node showcase/build.mjs --offline`);
       process.exit(1);
     }
-    console.log("index.html is up to date");
+    console.log("data/github.json and index.html are up to date");
     return;
+  }
+  if (!dataArg && data !== previous && (await writeIfChanged(DATA, data))) {
+    console.log(`Wrote data/github.json (${data.repos.length} repos, featured: ${data.featured.join(", ") || "none"})`);
   }
   if (next !== html) {
     await writeFile(INDEX, next);

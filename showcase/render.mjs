@@ -83,6 +83,11 @@ const STATUS = {
   archived: ["badge--info", "archived"],
 };
 
+/** A card's hover colour, from a theme colour name in the config ("lemon" -> var(--lemon)). */
+function popStyle(repo) {
+  return repo.pop ? ` style="--pop: var(--${esc(repo.pop)})"` : "";
+}
+
 function statusBadge(repo, extraClass = "") {
   const s = STATUS[repo.status];
   if (!s) return "";
@@ -200,8 +205,8 @@ function spotlightCard(repo, index) {
     : "";
 
   return `
-    <article class="spotlight glass glow${index % 2 ? " spotlight--flip" : ""}" id="project-${esc(repo.name)}" ${dataAttrs(repo)}>
-      <div class="spotlight__media">
+    <article class="spotlight glass glow${index % 2 ? " spotlight--flip" : ""}" id="project-${esc(repo.name)}" ${dataAttrs(repo)}${popStyle(repo)}>
+      <div class="spotlight__media${repo.scene ? ` spotlight__media--${esc(repo.scene)}` : ""}">
         ${media}
         ${statusBadge(repo, "spotlight__status")}
         ${demo}
@@ -236,7 +241,7 @@ function repoCard(repo) {
   const live = safeUrl(repo.homepage);
   const desc = repo.description || "A new thing. No description yet!";
   return `
-      <article class="repo-card glass glow" ${dataAttrs(repo)}>
+      <article class="repo-card glass glow" ${dataAttrs(repo)}${popStyle(repo)}>
         <header class="repo-card__head">
           ${icon("repo")}
           <h3 class="repo-card__name"><a class="repo-card__link" href="${esc(repoUrl || "#")}">${esc(repo.name)}</a></h3>

@@ -194,6 +194,16 @@ test("repos carry filterable language, frameworks, topics and tags", async () =>
   const bot = data.repos.find((r) => r.name === "weather-bot");
   assert.deepEqual(bot.frameworks, ["flask"]);
   assert.equal(bot.homepage, null);
+  assert.equal(hs.pop, "lemon");
+  assert.equal(pip.scene, "desk");
+
+  // config colours end up in a style attribute, so only plain names get through
+  const sneaky = normalize(
+    await fetchViaGraphQL({ login: "NXT549", token: "t", fetchImpl: graphqlFetch() }),
+    { ...config, repos: { pip: { pop: "red); background: url(x" } } },
+    { generatedAt: NOW }
+  );
+  assert.equal(sneaky.repos.find((r) => r.name === "pip").pop, null);
 
   assert.deepEqual(data.facets.languages.map((f) => [f.slug, f.label, f.count]), [
     ["javascript", "JavaScript", 1],
@@ -267,6 +277,8 @@ test("spotlight shows the README, release downloads, live link and demo", async 
   assert.equal((html.match(/<figure class="terminal spotlight__readme">/g) || []).length, 1);
   assert.ok(html.indexOf("spotlight__readme") > html.indexOf('id="project-pip"'));
   assert.match(html, /spotlight__shot--pixel/);
+  assert.match(html, /id="project-pip"[^>]* style="--pop: var\(--cherry\)"/);
+  assert.match(html, /spotlight__media spotlight__media--desk/);
   assert.match(html, /<symbol id="i-star"/);
 });
 

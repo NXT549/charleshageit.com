@@ -1,10 +1,19 @@
 /* ==========================================================================
    Design tokens for charleshageit.com
-   Dark-native palette, type, spacing and effect values. Every other stylesheet
-   (and every inline <style>) should read from these instead of hard-coding.
+   A dark, toy-box look: inky purple night, cream text, candy colours taken
+   from Pip's jellybean flavours, chunky outlines and hard (unblurred) shadows.
+   Every other stylesheet (and every inline <style>) should read from these
+   instead of hard-coding.
    ========================================================================== */
 
-/* ---------- Fonts (self-hosted, Latin subset, variable weight 100–900) ---------- */
+/* ---------- Fonts (self-hosted, Latin subset, variable weight) ---------- */
+@font-face {
+  font-family: "Pixelify Sans";
+  src: url("../fonts/PixelifySans-Variable.woff2") format("woff2");
+  font-weight: 400 700;
+  font-style: normal;
+  font-display: swap;
+}
 @font-face {
   font-family: "Geist";
   src: url("../fonts/Geist-Variable.woff2") format("woff2");
@@ -23,49 +32,52 @@
 :root {
   color-scheme: dark;
 
-  /* ---------- Raw palette ---------- */
-  --zinc-950: #09090b;
-  --zinc-900: #18181b;
-  --zinc-800: #27272a;
-  --zinc-700: #3f3f46;
-  --zinc-600: #52525b;
-  --zinc-400: #a1a1aa;
-  --zinc-100: #f4f4f5;
-
-  --emerald-300: #6ee7b7;
-  --emerald-400: #34d399;
-  --emerald-500: #10b981;
-  --emerald-600: #059669;
-  --cyan-300: #67e8f9;
-  --cyan-400: #22d3ee;
-  --cyan-500: #06b6d4;
-  --cyan-600: #0891b2;
-  --amber-400: #fbbf24;
-  --rose-400: #fb7185;
+  /* ---------- Candy palette (Pip's flavours + the two accents) ---------- */
+  --cherry: #e2415a;
+  --cherry-light: #f4778c;
+  --lemon: #f2cc3d;
+  --lime: #68c445;
+  --blueberry: #4a7fe0;
+  --grape: #9b5cd6;
+  --bubblegum: #f06ec0;
+  --pumpkin: #f08a24;
+  --emerald: #10b981;
+  --cyan: #06b6d4;
 
   /* ---------- Semantic colours ---------- */
-  --bg: var(--zinc-950);
-  --surface: var(--zinc-900);
-  --surface-2: var(--zinc-800);
-  --border: rgb(255 255 255 / 0.08);
-  --border-strong: rgb(255 255 255 / 0.16);
+  --bg: #16131e;                   /* inky purple night */
+  --bg-dots: #262035;
+  --surface: #211c2c;
+  --surface-2: #2c2539;
+  --surface-3: #362e46;
+  --line: #0b0910;                 /* chunky outlines and hard shadows */
+  --border: #352d47;               /* quiet dividers */
+  --border-strong: #4a4060;
 
-  --text: var(--zinc-100);         /* 18:1 on --bg */
-  --text-muted: var(--zinc-400);   /* 7.8:1 on --bg */
-  --text-faint: #8a8a93;           /* 5.8:1 on --bg, 5.2:1 on --surface */
+  --text: #f7f0e6;                 /* cream, 16:1 on --bg */
+  --text-muted: #c3b9d2;           /* 9.8:1 on --bg */
+  --text-faint: #9d93b0;           /* 6.3:1 on --bg, 5.7:1 on --surface */
 
-  --accent: var(--emerald-500);    /* primary: links, prompts, "live" */
-  --accent-2: var(--cyan-500);     /* secondary: paths, highlights */
-  --accent-fg: var(--zinc-950);    /* text on a filled accent (7.8:1) */
-  --accent-soft: rgb(16 185 129 / 0.12);
-  --accent-2-soft: rgb(6 182 212 / 0.12);
-  --warn: var(--amber-400);
-  --danger: var(--rose-400);
+  --accent: var(--emerald);        /* primary: buttons, prompts, "released" */
+  --accent-2: var(--cyan);         /* secondary: paths, downloads, info */
+  --accent-fg: var(--line);        /* text on any candy fill (7.8:1 or better) */
+  --accent-soft: rgb(16 185 129 / 0.14);
+  --accent-2-soft: rgb(6 182 212 / 0.14);
+  --warn: var(--lemon);
+  --danger: var(--cherry);
 
-  --gradient-accent: linear-gradient(135deg, var(--emerald-500) 0%, var(--cyan-500) 100%);
-  --gradient-text: linear-gradient(120deg, var(--emerald-400) 0%, var(--cyan-400) 100%);
+  /* Pip's current flavour. Clicking Pip changes these on <html>, so anything
+     that uses them (hover shadows, the hero's "for fun.") changes with him. */
+  --flavour: var(--cherry);
+  --flavour-text: var(--cherry-light);
+
+  /* Kept for compatibility with the first version of the theme. The look is
+     flat on purpose now, so these are solid colours. */
+  --gradient-accent: linear-gradient(var(--accent), var(--accent));
+  --gradient-text: linear-gradient(var(--flavour-text), var(--flavour-text));
 
   /* ---------- Type ---------- */
+  --font-display: "Pixelify Sans", "Geist Mono", ui-monospace, monospace;
   --font-sans: "Geist", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 
@@ -74,16 +86,16 @@
   --text-base: 1rem;      /* 16px: body */
   --text-lg: 1.125rem;    /* 18px: lede */
   --text-xl: 1.25rem;
-  --text-2xl: 1.5rem;
-  --text-3xl: clamp(1.75rem, 1.35rem + 1.6vw, 2.5rem);   /* h2 */
-  --text-4xl: clamp(2.5rem, 1.6rem + 4vw, 4.5rem);       /* h1 */
+  --text-2xl: 1.75rem;
+  --text-3xl: clamp(2rem, 1.5rem + 2vw, 2.875rem);      /* h2 */
+  --text-4xl: clamp(2.75rem, 1.6rem + 5vw, 5.25rem);    /* h1 */
 
-  --leading-tight: 1.05;
-  --leading-snug: 1.3;
+  --leading-tight: 1;
+  --leading-snug: 1.15;
   --leading-normal: 1.65;
-  --tracking-tight: -0.035em;   /* big sans headings */
-  --tracking-snug: -0.015em;
-  --tracking-mono: 0.02em;      /* small mono labels */
+  --tracking-tight: -0.01em;
+  --tracking-snug: 0;
+  --tracking-mono: 0.01em;
 
   /* ---------- Space, radius, layout ---------- */
   --space-1: 4px;
@@ -98,28 +110,48 @@
 
   --radius-sm: 6px;
   --radius: 10px;
-  --radius-lg: 16px;
+  --radius-lg: 14px;
   --radius-full: 999px;
 
   --container: 1120px;
   --gutter: 16px;
 
-  /* ---------- Glass ---------- */
-  --glass-bg: rgb(24 24 27 / 0.6);
-  --glass-bg-strong: rgb(24 24 27 / 0.82);
-  --glass-border: rgb(255 255 255 / 0.08);
-  --glass-blur: 14px;
-  --glass-highlight: inset 0 1px 0 0 rgb(255 255 255 / 0.05);
+  /* ---------- Outlines & hard shadows ---------- */
+  --outline: 2px solid var(--line);
+  --shadow-sm: 2px 2px 0 var(--line);
+  --shadow: 4px 4px 0 var(--line);
+  --shadow-lg: 6px 6px 0 var(--line);
 
-  /* ---------- Glow & shadow ---------- */
-  --glow-accent: 0 0 0 1px rgb(16 185 129 / 0.25), 0 12px 40px -12px rgb(16 185 129 / 0.45);
-  --glow-accent-2: 0 0 0 1px rgb(6 182 212 / 0.25), 0 12px 40px -12px rgb(6 182 212 / 0.45);
-  --glow-text: 0 0 18px rgb(16 185 129 / 0.45);
-  --spotlight: rgb(16 185 129 / 0.1);
-  --shadow-lg: 0 24px 60px -24px rgb(0 0 0 / 0.85);
+  /* Old names, mapped onto the new look. */
+  --glass-bg: var(--surface);
+  --glass-bg-strong: var(--surface);
+  --glass-border: var(--line);
+  --glass-blur: 0px;
+  --glass-highlight: 0 0 0 transparent;
+  --glow-accent: 4px 4px 0 var(--accent);
+  --glow-accent-2: 4px 4px 0 var(--accent-2);
+  --glow-text: 0 0 0 transparent;
+  --emerald-300: #6ee7b7;
+  --emerald-400: #34d399;
+  --emerald-500: var(--emerald);
+  --emerald-600: #059669;
+  --cyan-300: #67e8f9;
+  --cyan-400: #22d3ee;
+  --cyan-500: var(--cyan);
+  --cyan-600: #0891b2;
+  --amber-400: var(--lemon);
+  --rose-400: var(--cherry-light);
+  --zinc-950: var(--bg);
+  --zinc-900: var(--surface);
+  --zinc-800: var(--surface-2);
+  --zinc-700: var(--border-strong);
+  --zinc-600: var(--border-strong);
+  --zinc-400: var(--text-muted);
+  --zinc-100: var(--text);
 
   /* ---------- Motion ---------- */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
   --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
   --dur-fast: 120ms;
   --dur: 220ms;

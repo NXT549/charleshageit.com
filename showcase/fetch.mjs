@@ -352,6 +352,8 @@ export function normalize({ user, repos }, config, { generatedAt = new Date().to
           ? { src: o.image, alt: o.imageAlt || "", width: o.imageWidth || null, height: o.imageHeight || null, pixelArt: Boolean(o.pixelArt) }
           : null,
         status: o.status || null,
+        pop: /^[a-z-]+$/.test(o.pop || "") ? o.pop : null,
+        scene: /^[a-z-]+$/.test(o.scene || "") ? o.scene : null,
         featured,
         stars: r.stars || 0,
         forks: r.forks || 0,
@@ -414,8 +416,12 @@ export function normalize({ user, repos }, config, { generatedAt = new Date().to
   };
 }
 
-/** Fetch everything for config.user. GraphQL when there's a token, REST otherwise (or if GraphQL fails). */
-export async function fetchShowcase(config, { token = null, fetchImpl = fetch, log = () => {} } = {}) {
+/**
+ * Fetch the raw repo data for config.user: GraphQL when there's a token, REST otherwise
+ * (or if GraphQL fails). Only repos the page shows are kept, so the cache in
+ * data/github-raw.json changes only when one of them does.
+ */
+export async function fetchRaw(config, { token = null, fetchImpl = fetch, log = () => {} } = {}) {
   const login = config.user;
   let raw;
   if (token) {
@@ -431,5 +437,10 @@ export async function fetchShowcase(config, { token = null, fetchImpl = fetch, l
     raw = await fetchViaRest({ login, token, config, fetchImpl });
     log(`REST${token ? "" : " (no token)"}: ${raw.repos.length} repos`);
   }
-  return normalize(raw, config);
+  return { user: raw.user, repos: raw.repos.filter((r) => isShown(r, config, login)) };
+}
+
+/** Fetch and normalise in one go. */
+export async function fetchShowcase(config, opts = {}) {
+  return normalize(await fetchRaw(config, opts), config);
 }

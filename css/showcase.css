@@ -21,8 +21,9 @@
 }
 .repo-stat, .repo-lang { display: inline-flex; align-items: center; gap: 6px; }
 .repo-lang i {
-  width: 10px; height: 10px; border-radius: 50%;
+  width: 10px; height: 10px; border-radius: 2px;
   background: var(--lang, var(--text-faint));
+  box-shadow: 0 0 0 1.5px var(--line);
 }
 .repo-release { gap: 5px; }
 .repo-release.is-new::after {
@@ -60,10 +61,10 @@
 @media (min-width: 880px) {
   .spotlight { grid-template-columns: 1.1fr 1fr; }
   .spotlight--flip { grid-template-columns: 1fr 1.1fr; }
-  .spotlight--flip .spotlight__media { order: 2; border-right: 0; border-left: 1px solid var(--border); }
+  .spotlight--flip .spotlight__media { order: 2; border-right: 0; border-left: var(--outline); }
 }
-/* the glow lift is a bit much on a card this big */
-.spotlight.glow:hover, .spotlight.glow:focus-within { transform: none; }
+.spotlight { --tilt: -0.3deg; }
+.spotlight--flip { --tilt: 0.3deg; }
 
 .spotlight__media {
   position: relative;
@@ -71,10 +72,10 @@
   display: grid; place-items: center;
   overflow: hidden;
   background: var(--surface-2);
-  border-bottom: 1px solid var(--border);
+  border-bottom: var(--outline);
 }
 @media (min-width: 880px) {
-  .spotlight__media { border-bottom: 0; border-right: 1px solid var(--border); min-height: 100%; }
+  .spotlight__media { border-bottom: 0; border-right: var(--outline); min-height: 100%; }
 }
 .spotlight__shot {
   position: absolute; inset: 0; width: 100%; height: 100%;
@@ -87,6 +88,25 @@
   object-fit: contain; image-rendering: pixelated;
 }
 .spotlight:hover .spotlight__shot--pixel { transform: translateY(-6px) rotate(-3deg); }
+/* "scene": "desk" in the config: Pip's desk at night (from the theme's original Pip card) */
+.spotlight__media--desk {
+  background:
+    radial-gradient(2px 2px at 18% 22%, var(--text) 50%, transparent 51%),
+    radial-gradient(2px 2px at 72% 14%, var(--lemon) 50%, transparent 51%),
+    radial-gradient(2px 2px at 86% 38%, var(--text) 50%, transparent 51%),
+    radial-gradient(2px 2px at 40% 10%, var(--cyan) 50%, transparent 51%),
+    radial-gradient(2px 2px at 8% 50%, var(--text-muted) 50%, transparent 51%),
+    linear-gradient(180deg, #241d3d 0%, #2f2652 70%);
+}
+.spotlight__media--desk::after {
+  content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 30%;
+  background: repeating-linear-gradient(90deg, #8a5a3b 0 46px, #7a4f33 46px 48px);
+  border-top: var(--outline);
+}
+.spotlight__media--desk .spotlight__shot--pixel {
+  position: absolute; inset: auto auto calc(30% - 52px) 50%; z-index: 1;
+  width: 168px; translate: -50% 0;
+}
 .spotlight__placeholder { font: 500 var(--text-xl) / 1 var(--font-mono); color: var(--text-muted); }
 
 .spotlight__frame {
@@ -111,19 +131,20 @@
 .spotlight__blurb { color: var(--text-muted); }
 
 .spotlight__readme {
+  --bar: var(--pop, var(--grape));
   margin: 0;
-  border: 1px solid var(--border);
+  border: var(--outline);
   border-radius: var(--radius);
-  background: var(--surface);
+  box-shadow: var(--shadow-sm);
   font-size: var(--text-xs);
 }
 .spotlight__readme .terminal__bar { padding: 7px 12px; }
-.spotlight__readme .terminal__dots i { width: 9px; height: 9px; }
+.spotlight__readme .terminal__dots i { width: 11px; height: 11px; }
 .spotlight__readme .terminal__body { padding: var(--space-3) var(--space-4) var(--space-4); }
 
 .spotlight__highlights { margin: 0; padding: 0; list-style: none; display: grid; gap: 4px; color: var(--text-muted); font-size: var(--text-sm); }
 .spotlight__highlights li { display: flex; gap: var(--space-2); }
-.spotlight__highlights li::before { content: "▸"; color: var(--accent); flex: none; }
+.spotlight__highlights li::before { content: "★"; color: var(--pop, var(--lemon)); flex: none; }
 
 /* ---------- project grid ---------- */
 .repo-grid {
@@ -139,15 +160,22 @@
   scroll-margin-top: 80px;
 }
 .repo-card__head { display: flex; align-items: center; gap: var(--space-2); min-width: 0; color: var(--text-faint); }
-.repo-card__name { flex: 1; min-width: 0; font: 600 var(--text-base) / 1.3 var(--font-mono); letter-spacing: 0; }
+.repo-card__name { flex: 1; min-width: 0; font: 700 var(--text-xl) / 1.2 var(--font-display); }
 .repo-card__link { color: var(--text); text-decoration: none; overflow-wrap: anywhere; }
 .repo-card__link:hover { color: var(--accent); }
 /* the whole card is the link to the repo; other links and buttons sit above it */
 .repo-card__link::after { content: ""; position: absolute; inset: 0; border-radius: inherit; z-index: 0; }
-.repo-card__link:focus-visible { box-shadow: none; }
-.repo-card__link:focus-visible::after { box-shadow: var(--focus-ring); }
+.repo-card__link:focus-visible { outline: none; }
+.repo-card__link:focus-visible::after { outline: 3px solid var(--lemon); outline-offset: 3px; }
 .repo-card a:not(.repo-card__link), .repo-card button { position: relative; z-index: 2; }
 .repo-card__featured { text-decoration: none; }
+/* a different candy colour and tilt for each card, unless the config picks one */
+.repo-card:nth-child(6n + 1) { --pop: var(--lemon); }
+.repo-card:nth-child(6n + 2) { --pop: var(--cyan); --tilt: 0.8deg; }
+.repo-card:nth-child(6n + 3) { --pop: var(--bubblegum); --tilt: -0.8deg; }
+.repo-card:nth-child(6n + 4) { --pop: var(--lime); --tilt: 0.6deg; }
+.repo-card:nth-child(6n + 5) { --pop: var(--pumpkin); --tilt: -0.6deg; }
+.repo-card:nth-child(6n + 6) { --pop: var(--blueberry); --tilt: 1deg; }
 
 .repo-card__desc {
   flex: 1;
