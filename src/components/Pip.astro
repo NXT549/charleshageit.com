@@ -1,0 +1,98 @@
+<div class="stage" aria-label="Pip, a pixel-art jellybean, walking around. Click him to change his flavour.">
+  <canvas id="pip" width="32" height="19" tabindex="0" role="button" aria-label="Pip. Click to change his flavour."></canvas>
+  <div class="bubble" id="bubble">hi!</div>
+  <div class="stage-hint hand" aria-hidden="true">this is Pip! click him<svg viewBox="0 0 46 30"><path d="M42 3 C 32 8, 22 20, 6 26 M6 26 l9 -1 M6 26 l4 -8" /></svg></div>
+  <div class="ground"></div>
+</div>
+
+<script>
+  import SPRITES from "./pip-sprites.js";
+
+  type Frame = keyof typeof SPRITES.frames;
+  type Flavour = keyof typeof SPRITES.flavors;
+  type Palette = Record<string, string>;
+
+  // Pip walks around the hero.
+  const canvas = document.getElementById("pip") as HTMLCanvasElement | null;
+  const bubble = document.getElementById("bubble");
+  const ctx = canvas?.getContext("2d");
+  const stage = canvas?.parentElement;
+
+  if (canvas && bubble && ctx && stage) {
+    const W = 32, H = 19;
+    const flavours = Object.keys(SPRITES.flavors) as Flavour[];
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    const sayings = ["hi!", "boing", "had any water?", "yum, ", "wheee", "take a break!", "*squish*"];
+    let flavour = 0;
+    let x = 40, dir = 1, t = 0, last = 0, modeUntil = 0;
+    let mode: "walk" | "idle" | "wave" | "happy" = "walk";
+    let bubbleTimer: ReturnType<typeof setTimeout> | undefined;
+
+    const draw = (name: Frame, flip: boolean) => {
+      const frame = SPRITES.frames[name];
+      const pal: Palette = { ...SPRITES.base, ...SPRITES.flavors[flavours[flavour]] };
+      ctx.clearRect(0, 0, W, H);
+      for (let i = 0; i < frame.length; i++) {
+        const ch = frame[i];
+        if (ch === ".") continue;
+        const px = i % W, py = (i / W) | 0;
+        ctx.fillStyle = pal[ch];
+        ctx.fillRect(flip ? W - 1 - px : px, py, 1, 1);
+      }
+    };
+
+    const say = (text: string) => {
+      bubble.textContent = text;
+      bubble.style.left = x + 64 + "px";
+      bubble.classList.add("show");
+      clearTimeout(bubbleTimer);
+      bubbleTimer = setTimeout(() => bubble.classList.remove("show"), 1600);
+    };
+
+    const poke = () => {
+      flavour = (flavour + 1) % flavours.length;
+      stage.classList.add("poked");
+      mode = "happy";
+      modeUntil = t + 900;
+      const s = sayings[(Math.random() * sayings.length) | 0];
+      say(s === "yum, " ? "yum, " + flavours[flavour] + "!" : s);
+    };
+    canvas.addEventListener("click", poke);
+    canvas.addEventListener("keydown", (e) => {
+      if (e.key === "Enter" || e.key === " ") { e.preventDefault(); poke(); }
+    });
+
+    const tick = (now: number) => {
+      const dt = Math.min(now - (last || now), 50);
+      last = now;
+      t += dt;
+      const maxX = stage.clientWidth - 128;
+      if (mode === "walk") {
+        x += dir * dt * 0.05;
+        if (x > maxX) { x = maxX; dir = -1; }
+        if (x < 0) { x = 0; dir = 1; }
+        if (Math.random() < dt / 6000) { mode = Math.random() < 0.4 ? "wave" : "idle"; modeUntil = t + 1800; }
+      } else if (t > modeUntil) {
+        mode = "walk";
+      }
+      canvas.style.transform = "translateX(" + x + "px)";
+      let f: Frame;
+      if (mode === "walk") f = `walk_${((t / 140) | 0) % 4}` as Frame;
+      else if (mode === "wave") f = `wave_${((t / 200) | 0) % 3}` as Frame;
+      else if (mode === "happy") f = `happy_${((t / 150) | 0) % 3}` as Frame;
+      else f = ((t / 2400) | 0) % 3 === 2 && t % 2400 < 180 ? "idle_blink" : (`idle_${((t / 400) | 0) % 4}` as Frame);
+      draw(f, dir < 0);
+      requestAnimationFrame(tick);
+    };
+
+    if (reduced) {
+      // Stand still and just wave when poked.
+      canvas.style.transform = "translateX(40px)";
+      draw("idle_0", false);
+      canvas.addEventListener("click", () => draw("happy_1", false));
+      canvas.addEventListener("keydown", () => draw("happy_1", false));
+    } else {
+      requestAnimationFrame(tick);
+    }
+  }
+</script>

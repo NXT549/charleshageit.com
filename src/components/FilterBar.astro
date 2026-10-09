@@ -1,0 +1,151 @@
+---
+// Filter chips for the project grid: language, framework and topic, built from the showcase facets.
+// Pick several in one group to widen the list (any of them), and across groups to narrow it (all of them).
+// The choice is kept in the URL (?language=typescript&framework=vite) so a filtered view can be shared.
+import type { Facet, Showcase } from "../lib/showcase";
+
+interface Props {
+  facets: Showcase["facets"];
+  /** id of the element whose children carry data-language / data-frameworks / data-topics. */
+  target: string;
+  /** id of the "nothing matches" message to show when every card is filtered out. */
+  empty?: string;
+}
+
+const { facets, target, empty } = Astro.props;
+const groups: { key: string; attr: string; label: string; items: Facet[] }[] = [
+  { key: "language", attr: "language", label: "language", items: facets.languages },
+  { key: "framework", attr: "frameworks", label: "framework", items: facets.frameworks },
+  { key: "topic", attr: "topics", label: "topic", items: facets.topics },
+].filter((g) => g.items.length > 0);
+const total = groups.reduce((n, g) => n + g.items.length, 0);
+---
+
+{
+  total > 1 && (
+    <div class="filters" data-filters data-target={target} data-empty={empty}>
+      <div class="filters__groups" role="group" aria-label="Filter projects">
+        <button class="tag filters__chip" type="button" aria-pressed="true" data-reset>
+          all
+        </button>
+        {groups.map((g) => (
+          <div class="filters__group">
+            <span class="filters__label" aria-hidden="true">{g.label}:</span>
+            {g.items.map((f) => (
+              <button
+                class="tag filters__chip"
+                type="button"
+                aria-pressed="false"
+                data-key={g.key}
+                data-attr={g.attr}
+                data-value={f.slug}
+                aria-label={`${g.label} ${f.label}`}
+              >
+                {f.label}
+                <span class="filters__count" aria-hidden="true">{f.count}</span>
+              </button>
+            ))}
+          </div>
+        ))}
+      </div>
+      <p class="filters__status" aria-live="polite" data-status></p>
+    </div>
+  )
+}
+
+<style>
+  .filters { display: grid; gap: var(--space-2); margin-bottom: var(--space-5); }
+  .filters__groups { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-4); }
+  .filters__group { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
+  .filters__label { font: 500 11px / 1 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); }
+  .filters__chip { cursor: pointer; min-height: 32px; background: transparent; transition: color var(--dur-fast), border-color var(--dur-fast), background-color var(--dur-fast); }
+  .filters__chip:hover { color: var(--text); border-color: var(--border-strong); }
+  .filters__chip[aria-pressed="true"] { color: var(--accent-fg); background: var(--accent); border-color: var(--accent); }
+  .filters__count { opacity: 0.7; }
+  /* Cards set their own display, which would beat the hidden attribute. */
+  :global([data-filter-hidden]) { display: none !important; }
+  .filters__status { min-height: 1.4em; font: 500 11px / 1.4 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); }
+</style>
+
+<script>
+  type Selection = Map<string, Set<string>>; // facet key -> chosen slugs
+
+  for (const bar of document.querySelectorAll<HTMLElement>("[data-filters]")) {
+    const grid = document.getElementById(bar.dataset.target ?? "");
+    if (!grid) continue;
+    const empty = bar.dataset.empty ? document.getElementById(bar.dataset.empty) : null;
+    const status = bar.querySelector<HTMLElement>("[data-status]");
+    const reset = bar.querySelector<HTMLButtonElement>("[data-reset]");
+    const chips = [...bar.querySelectorAll<HTMLButtonElement>("button[data-key]")];
+    const cards = [...grid.children].filter((el): el is HTMLElement => el instanceof HTMLElement);
+    const attrFor = new Map(chips.map((c) => [c.dataset.key!, c.dataset.attr!]));
+    const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+    const values = (card: HTMLElement, attr: string) => (card.dataset[attr] ?? "").split(/\s+/).filter(Boolean);
+    const matches = (card: HTMLElement, sel: Selection) =>
+      [...sel].every(([key, wanted]) => values(card, attrFor.get(key)!).some((v) => wanted.has(v)));
+
+    const read = (): Selection => {
+      const sel: Selection = new Map();
+      const params = new URLSearchParams(location.search);
+      for (const chip of chips) {
+        const key = chip.dataset.key!;
+        if (params.getAll(key).includes(chip.dataset.value!)) {
+          if (!sel.has(key)) sel.set(key, new Set());
+          sel.get(key)!.add(chip.dataset.value!);
+        }
+      }
+      return sel;
+    };
+
+    const write = (sel: Selection) => {
+      const params = new URLSearchParams(location.search);
+      for (const key of attrFor.keys()) params.delete(key);
+      for (const [key, set] of sel) for (const v of set) params.append(key, v);
+      const qs = params.toString();
+      history.replaceState(history.state, "", `${location.pathname}${qs ? `?${qs}` : ""}${location.hash}`);
+    };
+
+    const render = (sel: Selection) => {
+      let shown = 0;
+      for (const card of cards) {
+        const ok = matches(card, sel);
+        card.toggleAttribute("data-filter-hidden", !ok);
+        if (ok) shown++;
+      }
+      for (const chip of chips) {
+        chip.setAttribute("aria-pressed", String(sel.get(chip.dataset.key!)?.has(chip.dataset.value!) ?? false));
+      }
+      reset?.setAttribute("aria-pressed", String(sel.size === 0));
+      if (empty) empty.hidden = shown > 0;
+      if (status) status.textContent = sel.size ? `showing ${shown} of ${cards.length} projects` : "";
+    };
+
+    // Animate the reflow where the browser can, otherwise just swap.
+    const update = (sel: Selection) => {
+      write(sel);
+      const doc = document as Document & { startViewTransition?: (cb: () => void) => unknown };
+      if (doc.startViewTransition && !reduced) doc.startViewTransition(() => render(sel));
+      else render(sel);
+    };
+
+    bar.addEventListener("click", (e) => {
+      const chip = (e.target as Element).closest<HTMLButtonElement>("button");
+      if (!chip || !bar.contains(chip)) return;
+      const sel = read();
+      if (chip.hasAttribute("data-reset")) {
+        sel.clear();
+      } else {
+        const key = chip.dataset.key!, value = chip.dataset.value!;
+        const set = sel.get(key) ?? new Set<string>();
+        if (set.has(value)) set.delete(value);
+        else set.add(value);
+        if (set.size) sel.set(key, set);
+        else sel.delete(key);
+      }
+      update(sel);
+    });
+
+    render(read());
+  }
+</script>

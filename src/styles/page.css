@@ -1,0 +1,78 @@
+/* Page layout. Colours, type and components come from tokens.css and theme.css. */
+
+/* ---------- header ---------- */
+.site-header {
+  position: sticky; top: 0; z-index: 50;
+  background: var(--bg);
+  border-bottom: var(--outline);
+}
+.site-header .container { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); height: 64px; }
+.brand {
+  display: flex; align-items: center; gap: 10px;
+  font: 700 var(--text-sm) / 1 var(--font-mono); letter-spacing: var(--tracking-mono); text-transform: uppercase;
+  color: var(--text); text-decoration: none;
+}
+.brand:hover { color: var(--text); }
+.brand img { width: 30px; height: 30px; image-rendering: pixelated; transition: transform var(--dur) var(--ease-bounce); }
+.brand:hover img { transform: translateY(-3px) rotate(-8deg); }
+.nav { display: flex; align-items: center; gap: 4px; }
+.nav a:not(.btn) {
+  font: 500 var(--text-xs) / 1 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--text); text-decoration: none; padding: 10px 10px;
+  background: linear-gradient(var(--accent), var(--accent)) 10px calc(100% - 4px) / 0 2px no-repeat;
+  transition: background-size var(--dur) var(--ease-out);
+}
+.nav a:not(.btn):hover { background-size: calc(100% - 20px) 2px; }
+.nav .btn { margin-left: var(--space-2); }
+@media (max-width: 600px) { .nav a:not(.btn) { display: none; } }
+
+/* ---------- hero ---------- */
+.hero { display: grid; gap: var(--space-7); align-items: center; padding-block: var(--space-8) var(--space-4); }
+@media (min-width: 940px) { .hero { grid-template-columns: 1.05fr 1fr; padding-top: var(--space-9); } }
+.hero h1 { margin: var(--space-4) 0 var(--space-5); }
+.lede { font-size: var(--text-lg); color: var(--text-muted); max-width: 52ch; }
+.lede strong { color: var(--text); font-weight: 650; }
+.hero-tags { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-5); }
+.hero .terminal { min-width: 0; }
+
+/* Pip, drawn as figure 1 at the bottom of the terminal */
+.stage { position: relative; height: 150px; margin: 0 var(--space-5) var(--space-4); border: var(--outline-dashed); }
+.stage .dim { position: absolute; left: 0; right: 0; top: -22px; }
+.stage .ground { position: absolute; left: 0; right: 0; bottom: 14px; border-top: var(--outline); }
+.stage .ground::after {
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 10px;
+  background: repeating-linear-gradient(-45deg, var(--border) 0 1px, transparent 1px 7px);
+}
+#pip {
+  position: absolute; bottom: 14px; left: 0; width: 128px; height: 76px;
+  image-rendering: pixelated; cursor: pointer; touch-action: manipulation;
+}
+.bubble {
+  position: absolute; bottom: 92px; transform: translateX(-50%) rotate(-3deg);
+  font: 600 1.45rem / 1 var(--font-hand); color: var(--accent); white-space: nowrap;
+  opacity: 0; transition: opacity var(--dur); pointer-events: none; z-index: 2;
+}
+.bubble.show { opacity: 1; }
+.stage-hint { position: absolute; right: 14px; top: 10px; --rot: 4deg; text-align: right; transition: opacity var(--dur); }
+.stage-hint svg { width: 46px; height: 30px; margin: 2px 0 0 auto; }
+.stage-hint path { fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
+.stage.poked .stage-hint { opacity: 0; }
+@media (max-width: 560px) { .stage-hint { display: none; } }
+
+/* ---------- sections ---------- */
+.section { padding-top: var(--space-9); }
+
+/* ---------- about ---------- */
+.about { max-width: 760px; }
+.about .terminal__body { display: grid; gap: var(--space-4); font: 400 var(--text-base) / var(--leading-normal) var(--font-sans); color: var(--text-muted); }
+.about strong { color: var(--text); font-weight: 650; }
+.about .hand { justify-self: end; --rot: -4deg; }
+
+/* ---------- footer ---------- */
+.site-footer {
+  margin-top: var(--space-9); border-top: var(--outline);
+  font: 500 11px / 1.6 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint);
+}
+.site-footer .titleblock { border-top: 0; grid-auto-flow: row; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
+.site-footer .titleblock > * { padding-block: var(--space-4); }
+@media (max-width: 640px) { .site-footer .titleblock > * { border-left: 0; } }

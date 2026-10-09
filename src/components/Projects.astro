@@ -1,0 +1,16 @@
+---
+import { getShowcase } from "../lib/showcase";
+import { renderSpotlight } from "../../showcase/render.mjs";
+
+const data = await getShowcase();
+---
+
+<section id="projects" class="section container">
+  <header class="section-head">
+    <p class="eyebrow">Sheet 02 · Projects</p>
+    <h2>The projects</h2>
+    <p class="sub">The good stuff. Click around, they all work (mostly).</p>
+  </header>
+
+  <Fragment set:html={renderSpotlight(data)} />
+</section>

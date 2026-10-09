@@ -1,0 +1,36 @@
+---
+// "Live" GitHub status: when Charles last pushed, and where. Built from the showcase data, so it's as
+// fresh as the last deploy; src/scripts/showcase.js turns the date into "3 days ago" in the browser.
+import type { Showcase } from "../lib/showcase";
+
+interface Props {
+  user: Showcase["user"];
+}
+
+const { user } = Astro.props;
+const DAY = 86_400_000;
+const pushed = user.lastPushAt ? new Date(user.lastPushAt) : null;
+const fresh = pushed !== null && Date.now() - pushed.getTime() < 14 * DAY;
+const date = pushed?.toLocaleDateString("en-AU", { day: "numeric", month: "short", year: "numeric", timeZone: "UTC" });
+---
+
+{
+  pushed && (
+    <a class:list={["badge hero-status", fresh ? "badge--live" : "badge--info"]} href={user.url}>
+      <span class="hero-status__label">{fresh ? "building" : "last seen"} on GitHub</span>
+      <span class="hero-status__sep" aria-hidden="true">·</span>
+      <span class="hero-status__detail">
+        pushed{user.lastPushRepo && <> to <b>{user.lastPushRepo}</b></>}{" "}
+        <time datetime={pushed.toISOString()} data-relative>{date}</time>
+      </span>
+    </a>
+  )
+}
+
+<style>
+  .hero-status { --rot: -2deg; text-decoration: none; margin-bottom: var(--space-5); flex-wrap: wrap; row-gap: 2px; }
+  .hero-status b { font-weight: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  @media (max-width: 480px) {
+    .hero-status__label, .hero-status__sep { display: none; }
+  }
+</style>
