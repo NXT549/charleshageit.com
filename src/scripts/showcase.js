@@ -2,7 +2,7 @@
 // rendered at build time by showcase/build.mjs). Load with <script src="./js/showcase.js" defer>.
 (function () {
   // ---------- "3 days ago" for every <time data-relative> ----------
-  var rtf = window.Intl && Intl.RelativeTimeFormat ? new Intl.RelativeTimeFormat("en-AU", { numeric: "auto" }) : null;
+  var rtf = window.Intl && Intl.RelativeTimeFormat ? new Intl.RelativeTimeFormat("en-GB", { numeric: "auto" }) : null;
   var UNITS = [
     ["year", 31536000], ["month", 2592000], ["week", 604800],
     ["day", 86400], ["hour", 3600], ["minute", 60]

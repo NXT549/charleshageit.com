@@ -24,8 +24,8 @@ for (const repo of data.repos as (typeof data.repos[number] & { commits?: Commit
 entries.sort((a, b) => b.date.localeCompare(a.date));
 const shown = entries.slice(0, 120);
 
-const month = new Intl.DateTimeFormat("en-AU", { month: "long", year: "numeric", timeZone: "UTC" });
-const day = new Intl.DateTimeFormat("en-AU", { day: "numeric", month: "short", timeZone: "UTC" });
+const month = new Intl.DateTimeFormat("en-GB", { month: "long", year: "numeric", timeZone: "UTC" });
+const day = new Intl.DateTimeFormat("en-GB", { day: "numeric", month: "short", timeZone: "UTC" });
 const groups: { label: string; items: Entry[] }[] = [];
 for (const e of shown) {
   const label = month.format(new Date(e.date));

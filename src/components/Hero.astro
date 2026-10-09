@@ -59,7 +59,7 @@ const shellJson = JSON.stringify(shell).replace(/</g, "\\u003c");
     </div>
     <div class="terminal__body" data-shell>
       <p class="terminal__line"><span class="prompt">charles@workshop<span class="prompt__path">:~</span><span class="prompt__sym">$</span></span><span class="type" style="--chars: 6; --delay: 0.3s">whoami</span></p>
-      <p class="terminal__line terminal__out reveal" style="--delay: 0.75s">charles · vibe-coder · Redlands, Brisbane</p>
+      <p class="terminal__line terminal__out reveal" style="--delay: 0.75s">charles · vibe-coder · makes things for fun</p>
       <p class="terminal__line reveal" style="--delay: 1.1s"><span class="prompt">charles@workshop<span class="prompt__path">:~</span><span class="prompt__sym">$</span></span><span class="type" style="--chars: 13; --delay: 1.3s">ls ~/projects</span></p>
       <p class="terminal__line terminal__out reveal" style="--delay: 2.15s">{top.map((repo, i) => <Fragment>{i > 0 && "\u00a0 "}<a href={`#project-${repo.name}`}>{repo.name}/</a></Fragment>)}</p>
       <div class="terminal__line reveal" style="--delay: 2.45s" data-shell-prompt><span class="prompt">you@workshop<span class="prompt__path">:~</span><span class="prompt__sym">$</span></span><span class="cursor" aria-hidden="true"></span></div>

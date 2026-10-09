@@ -171,7 +171,7 @@ export async function renderOgPng(card: OgCard): Promise<Uint8Array> {
     stamp = "Vibe-coded",
     titleblock = [
       ["Drawn by", "Charles"],
-      ["Location", "Redlands, Brisbane"],
+      ["Scale", "1:1, mostly"],
       ["See it at", "charleshageit.com"],
     ],
   } = card;
