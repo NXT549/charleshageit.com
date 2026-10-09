@@ -12,8 +12,11 @@ const top = data.featured.map((name) => byName.get(name)).filter((r) => r !== un
 <section class="hero container">
   <div>
     <StatusBadge user={data.user} />
-    <p class="eyebrow">hi! welcome to my workshop</p>
-    <h1>I make little things <span class="text-pop wiggle">for fun.</span></h1>
+    <p class="eyebrow">Sheet 01 · Things I've vibe-coded</p>
+    <h1>
+      I make little things{" "}
+      <span class="circled">for fun.<svg viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M22 58 C 22 16, 268 6, 288 40 C 302 76, 128 98, 44 84 C 2 76, 4 40, 64 24" /></svg></span>
+    </h1>
     <p class="lede">
       Hi, I'm <strong>Charles</strong>. These are the projects I've <strong>vibe-coded</strong>: a slot machine
       run by a hamster, a jellybean who lives on your desktop, and whatever I'm tinkering with next.
@@ -21,20 +24,20 @@ const top = data.featured.map((name) => byName.get(name)).filter((r) => r !== un
     </p>
     <nav class="hero-jump" aria-label="Jump to a project">
       <a class="btn btn--primary" href="#projects">See the projects</a>
-      {top.map((repo) => <a class="btn btn--ghost" href={`#project-${repo.name}`}>{repo.title}</a>)}
-      <a class="btn btn--ghost" href="#workbench">Everything else</a>
+      {top.map((repo) => <a class="btn btn--ghost btn--sm" href={`#project-${repo.name}`}>{repo.title}</a>)}
+      <a class="btn btn--ghost btn--sm" href="#workbench">Everything else</a>
     </nav>
     <div class="hero-tags">
-      <span class="tag">🐹 idle games</span>
-      <span class="tag">🫘 desktop pets</span>
-      <span class="tag">🤖 built with AI</span>
+      <span class="tag tag--accent">Idle games</span>
+      <span class="tag">Desktop pets</span>
+      <span class="tag">Built with AI</span>
     </div>
   </div>
 
-  <div class="terminal glass">
+  <div class="terminal glass sheet">
     <div class="terminal__bar">
       <span class="terminal__dots" aria-hidden="true"><i></i><i></i><i></i></span>
-      <span class="terminal__title">charles@workshop: ~</span>
+      <span class="terminal__title">Fig. 1 · charles@workshop: ~</span>
     </div>
     <div class="terminal__body">
       <p class="terminal__line"><span class="prompt">charles@workshop<span class="prompt__path">:~</span><span class="prompt__sym">$</span></span><span class="type" style="--chars: 6; --delay: 0.3s">whoami</span></p>
@@ -44,9 +47,14 @@ const top = data.featured.map((name) => byName.get(name)).filter((r) => r !== un
       <p class="terminal__line reveal" style="--delay: 2.45s"><span class="prompt">charles@workshop<span class="prompt__path">:~</span><span class="prompt__sym">$</span></span><span class="cursor" aria-hidden="true"></span></p>
     </div>
     <Pip />
+    <div class="titleblock">
+      <div><small>Drawing</small>Pip, jellybean</div>
+      <div><small>Drawn by</small>Charles</div>
+      <div><small>Rev</small>2026.10</div>
+    </div>
   </div>
 </section>
 
 <style>
-  .hero-jump { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-5); }
+  .hero-jump { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin-top: var(--space-5); }
 </style>

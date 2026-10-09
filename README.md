@@ -55,17 +55,17 @@ Each card carries `data-language`, `data-frameworks`, `data-topics` and `data-ta
 
 ## Theme
 
-The site is a dark toy box: an inky purple night with cream text, candy colours from Pip's flavours
-(plus emerald `#10B981` and cyan `#06B6D4` as the main accents), chunky outlines and hard shadows.
-Headings use Pixelify Sans, body text Geist, and code and labels Geist Mono.
+The site is drawn like a blueprint for the workshop: navy grid paper, chalk-white linework, a yellow
+highlighter, cyan dimension lines, handwritten notes and rubber stamps. Headings and body text use Geist,
+labels and code use Geist Mono, and the handwritten notes use Caveat.
 
-- Colours, fonts, spacing and effects are CSS variables in `src/styles/tokens.css`. Use those instead of hard-coding values.
-- Reusable pieces live in `src/styles/theme.css`: `.panel` / `.glass` (chunky card), `.glow` (hops up on hover with a
-  candy shadow; set `--pop` to pick the colour), `.terminal` (retro window with prompt lines, typed commands and a
-  cursor), `.btn--primary` / `--secondary` / `--ghost`, `.tag`, `.badge--live` / `--wip` / `--info` (stickers),
-  `.eyebrow` (tilted sticker label; set `--sticker`), `.text-pop` and `.wiggle`. The comment at the top of the file lists them all.
-- Clicking Pip changes `--flavour`, so hover shadows and the hero's "for fun." turn his colour.
-- `src/scripts/fx.js` adds pixel sparkles when you press a button (or anything with `data-sparkle`).
+- Colours, fonts, spacing and linework are CSS variables in `src/styles/tokens.css`. Use those instead of hard-coding values.
+- Reusable pieces live in `src/styles/theme.css`: `.panel` / `.glass` (drawing frame), `.glow` (lifts on hover and leaves an
+  offset outline; set `--pop` for its colour), `.sheet` and `.titleblock` (crop marks and the drawing's title block),
+  `.terminal`, `.btn--primary` / `--secondary` / `--ghost`, `.tag`, `.badge--live` / `--wip` / `--info` (rubber stamps),
+  `.hand` (handwritten note), `.circled` (hand-drawn loop around a word), `.text-pop` (highlighter), `.dim` (dimension line)
+  and `.eyebrow`. The comment at the top of the file lists them all.
+- `src/scripts/fx.js` makes the stamps thunk down as they scroll into view.
 
 ## Files
 
@@ -80,6 +80,6 @@ Headings use Pixelify Sans, body text Geist, and code and labels Geist Mono.
 - `src/pages/og.png.ts` and `src/lib/og.ts`: draw the 1200×630 social preview card at build time.
 - `showcase/`: the GitHub fetch and card rendering (`config.json` to tweak, tests in `test/`). No dependencies.
 - `data/github.json`: the last saved copy of the repo data.
-- `src/styles/`, `src/scripts/`, `src/fonts/`: the theme, the showcase card styles, and the fonts (Pixelify Sans, Geist, Geist Mono; SIL OFL).
+- `src/styles/`, `src/scripts/`, `src/fonts/`: the theme, the showcase card styles, and the fonts (Geist, Geist Mono and Caveat; SIL OFL).
 - `src/components/pip-sprites.js`: Pip's sprites and flavours, copied from [NXT549/pip](https://github.com/NXT549/pip).
 - `public/`: files served as they are: `img/`, `robots.txt` and `CNAME` (the custom domain; don't delete it).

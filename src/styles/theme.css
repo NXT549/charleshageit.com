@@ -1,18 +1,22 @@
 /* ==========================================================================
    Base styles and reusable components. Needs tokens.css loaded first.
 
-   Components (class names are stable; the look is chunky and toy-like):
+   Components (class names are stable across theme versions):
      .container            centred page column
-     .glass / .panel       solid card with a chunky outline and hard shadow
-     .glow                 hops up on hover with a candy shadow (set --pop to pick the colour)
-     .terminal             retro window: title bar, prompt lines, typed commands, cursor
-     .eyebrow              tilted sticker label above a heading (set --sticker for its colour)
+     .glass / .panel       a drawing frame: navy paper with a chalk outline
+     .glow                 lifts on hover and leaves an offset outline behind (--pop sets its colour)
+     .sheet / .titleblock  frame with crop marks, and the engineering title block under a drawing
+     .terminal             window drawn on the blueprint: prompt lines, typed commands, cursor
+     .eyebrow              small uppercase label above a heading ("Sheet 02 · Projects")
      .section-head         eyebrow + h2 + subtitle block
-     .btn                  --primary, --secondary, --ghost; --sm. Presses down when clicked.
-     .tag                  mono pill for languages, topics, versions; --accent, --accent-2
-     .badge                sticker with a status pixel: --live, --wip, --info
-     .text-pop             text in Pip's current flavour (.text-gradient is the old name)
-     .wiggle               gives a word a little wiggle every few seconds
+     .btn                  --primary, --secondary, --ghost; --sm
+     .tag                  outlined label for languages, topics, versions; --accent, --accent-2
+     .badge                rubber stamp: --live (shipped), --wip (in progress), --info
+     .hand                 handwritten note in highlighter (set --rot to tilt it)
+     .circled              hand-drawn loop around a word (needs the inline SVG, see index.html)
+     .text-pop             highlighter swipe behind text (.text-gradient is the old name)
+     .dim                  dimension line with a label ("128 px")
+     .wiggle               gives something a little wiggle every few seconds
      .kbd, code, pre       inline and block code
    ========================================================================== */
 
@@ -28,8 +32,13 @@ body {
   margin: 0;
   min-height: 100vh;
   background-color: var(--bg);
-  background-image: radial-gradient(var(--bg-dots) 1.5px, transparent 1.5px);
-  background-size: 22px 22px;
+  background-image:
+    linear-gradient(var(--grid-major) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid-major) 1px, transparent 1px),
+    linear-gradient(var(--grid) 1px, transparent 1px),
+    linear-gradient(90deg, var(--grid) 1px, transparent 1px);
+  background-size: 120px 120px, 120px 120px, 24px 24px, 24px 24px;
+  background-position: -1px -1px;
   color: var(--text);
   font: 400 var(--text-base) / var(--leading-normal) var(--font-sans);
   -webkit-font-smoothing: antialiased;
@@ -39,7 +48,7 @@ img, svg, canvas, video { display: block; max-width: 100%; }
 h1, h2, h3, h4 {
   margin: 0;
   font-family: var(--font-display);
-  font-weight: 700;
+  font-weight: 800;
   line-height: var(--leading-snug);
   letter-spacing: var(--tracking-snug);
   text-wrap: balance;
@@ -49,10 +58,10 @@ h2 { font-size: var(--text-3xl); }
 h3 { font-size: var(--text-2xl); }
 p { margin: 0; text-wrap: pretty; }
 
-a { color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: 3px; transition: color var(--dur-fast); }
-a:hover { color: var(--lemon); }
-:focus-visible { outline: 3px solid var(--lemon); outline-offset: 3px; }
-::selection { background: var(--lemon); color: var(--line); }
+a { color: var(--accent-2); text-decoration-thickness: 1.5px; text-underline-offset: 3px; transition: color var(--dur-fast); }
+a:hover { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+::selection { background: var(--accent); color: var(--accent-fg); }
 
 html { scrollbar-color: var(--border-strong) var(--bg); }
 
@@ -64,90 +73,140 @@ html { scrollbar-color: var(--border-strong) var(--bg); }
   overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; border: 0;
 }
 
-/* ---------- Text helpers ---------- */
-.text-pop, .text-gradient {
-  color: var(--flavour-text);
-  text-shadow: 3px 3px 0 var(--line);
-  transition: color var(--dur-slow);
-}
-.wiggle { display: inline-block; animation: wiggle 3.2s ease-in-out infinite; transform-origin: 50% 70%; }
-@keyframes wiggle {
-  0%, 78%, 100% { transform: rotate(0); }
-  83% { transform: rotate(-7deg); }
-  88% { transform: rotate(6deg); }
-  93% { transform: rotate(-3deg); }
-}
+/* ---------- Labels & notes ---------- */
 .mono { font-family: var(--font-mono); }
 .muted { color: var(--text-muted); }
 
 .eyebrow {
-  --sticker: var(--lemon);
-  display: inline-flex; align-items: center; gap: var(--space-2);
-  justify-self: start; align-self: start;
-  padding: 5px 10px;
-  font: 700 var(--text-sm) / 1 var(--font-display);
-  color: var(--line);
-  background: var(--sticker);
-  border: var(--outline);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-sm);
-  transform: rotate(-2deg);
+  font: 500 var(--text-xs) / 1.2 var(--font-mono);
+  letter-spacing: var(--tracking-mono);
+  text-transform: uppercase;
+  color: var(--accent-2);
 }
 
 .section-head { display: grid; gap: var(--space-3); margin-bottom: var(--space-6); }
 .section-head .sub { color: var(--text-muted); max-width: 60ch; }
 
-/* ---------- Panels ---------- */
-.panel, .glass {
-  background: var(--surface);
-  border: var(--outline);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lg);
+.hand {
+  display: inline-block;
+  font: 600 var(--text-hand) / 1.05 var(--font-hand);
+  color: var(--accent);
+  transform: rotate(var(--rot, -3deg));
 }
 
-/* ---------- Glow (hop on hover) ----------
-   Add .glow to any card-like element. Set --pop on it to choose the shadow
-   colour; it defaults to Pip's current flavour. */
+/* Highlighter swipe */
+.text-pop, .text-gradient {
+  background: linear-gradient(transparent 58%, rgb(255 210 63 / 0.38) 58% 90%, transparent 90%);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  padding-inline: 0.06em;
+}
+
+/* Hand-drawn loop: <span class="circled">for fun.<svg viewBox="0 0 300 100" preserveAspectRatio="none"
+   aria-hidden="true"><path pathLength="1" d="…"/></svg></span>. It draws itself in on load. */
+.circled { position: relative; white-space: nowrap; }
+.circled svg {
+  position: absolute; left: -0.2em; top: -0.12em;
+  width: calc(100% + 0.4em); height: calc(100% + 0.28em);
+  overflow: visible; pointer-events: none;
+}
+.circled path {
+  fill: none; stroke: var(--accent); stroke-width: 4px; stroke-linecap: round;
+  vector-effect: non-scaling-stroke;
+  stroke-dasharray: 1; stroke-dashoffset: 1;
+  animation: draw 1.1s var(--ease-out) var(--delay, 0.5s) forwards;
+}
+@keyframes draw { to { stroke-dashoffset: 0; } }
+
+.wiggle { display: inline-block; animation: wiggle 3.2s ease-in-out infinite; }
+@keyframes wiggle {
+  0%, 78%, 100% { rotate: 0deg; }
+  83% { rotate: -5deg; }
+  88% { rotate: 4deg; }
+  93% { rotate: -2deg; }
+}
+
+/* Dimension line: <div class="dim">128 px</div> */
+.dim {
+  display: flex; align-items: center; gap: var(--space-2);
+  font: 500 11px / 1 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--accent-2);
+}
+.dim::before, .dim::after {
+  content: ""; flex: 1; height: 7px;
+  border-top: 1px solid currentColor;
+  transform: translateY(3px);
+}
+.dim::before { border-left: 1px solid currentColor; }
+.dim::after { border-right: 1px solid currentColor; }
+
+/* ---------- Panels ---------- */
+.panel, .glass {
+  background: var(--glass-bg);
+  border: var(--outline);
+  border-radius: var(--radius-lg);
+}
+
+/* Drawing frame with crop marks in two corners */
+.sheet { position: relative; border: var(--outline); }
+.sheet::before, .sheet::after {
+  content: ""; position: absolute; width: 14px; height: 14px; pointer-events: none;
+  border: var(--outline);
+}
+.sheet::before { top: -8px; left: -8px; border-right: 0; border-bottom: 0; }
+.sheet::after { bottom: -8px; right: -8px; border-left: 0; border-top: 0; }
+
+.titleblock {
+  display: grid; grid-auto-flow: column; grid-auto-columns: minmax(0, auto);
+  border-top: var(--outline);
+  font: 500 11px / 1.3 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase;
+}
+.titleblock > * { padding: 7px 10px; border-left: var(--outline); min-width: 0; }
+.titleblock > :first-child { border-left: 0; }
+.titleblock small { display: block; font-size: 9px; color: var(--text-faint); margin-bottom: 2px; }
+
+/* ---------- Glow (lift on hover) ----------
+   Add .glow to any card-like element. On hover it lifts and leaves an offset
+   outline behind, like a sheet pulled off the pile. --pop sets the colour. */
 .glow {
   position: relative;
   transition: transform var(--dur) var(--ease-bounce), box-shadow var(--dur) var(--ease-bounce);
 }
 .glow:hover,
 .glow:focus-within {
-  transform: translate(-3px, -3px) rotate(var(--tilt, -0.4deg));
-  box-shadow: 9px 9px 0 var(--pop, var(--flavour));
+  transform: translate(-4px, -4px);
+  box-shadow: 8px 8px 0 calc(var(--stroke) * -1) var(--bg), 8px 8px 0 0 var(--pop, var(--accent));
 }
-.glow:active { transform: translate(1px, 1px); box-shadow: 3px 3px 0 var(--pop, var(--flavour)); transition-duration: var(--dur-fast); }
+.glow:active { transform: translate(-1px, -1px); box-shadow: 2px 2px 0 calc(var(--stroke) * -1) var(--bg), 2px 2px 0 0 var(--pop, var(--accent)); transition-duration: var(--dur-fast); }
 
-/* ---------- Terminal (a retro window) ---------- */
+/* ---------- Terminal ---------- */
 .terminal {
   overflow: hidden;
   font: 400 var(--text-sm) / 1.75 var(--font-mono);
   color: var(--text);
-  background: #100d16;
+  background: rgb(8 26 51 / 0.92);
 }
 .terminal__bar {
   display: flex; align-items: center; gap: var(--space-3);
-  padding: 9px 12px;
-  background: var(--bar, var(--grape));
+  padding: 8px 12px;
+  background: var(--bar, transparent);
   border-bottom: var(--outline);
-  color: var(--line);
 }
 .terminal__dots { display: inline-flex; gap: 6px; }
-.terminal__dots i { width: 13px; height: 13px; border: 2px solid var(--line); border-radius: 4px; background: var(--cherry); }
-.terminal__dots i:nth-child(2) { background: var(--lemon); }
-.terminal__dots i:nth-child(3) { background: var(--lime); }
-.terminal__title { flex: 1; text-align: center; font: 700 var(--text-sm) / 1 var(--font-display); margin-right: 51px; }
-.terminal__body {
-  padding: var(--space-4) var(--space-5) var(--space-5);
-  /* faint CRT scanlines */
-  background-image: repeating-linear-gradient(180deg, rgb(255 255 255 / 0.025) 0 1px, transparent 1px 3px);
+.terminal__dots i { width: 10px; height: 10px; border-radius: 50%; border: var(--outline); }
+.terminal__dots i:nth-child(1) { background: var(--accent); border-color: var(--accent); }
+.terminal__title {
+  flex: 1; text-align: center; margin-right: 42px;
+  font: 500 11px / 1 var(--font-mono); letter-spacing: var(--tracking-mono); text-transform: uppercase;
+  color: var(--text-muted);
 }
+.terminal__body { padding: var(--space-4) var(--space-5) var(--space-5); }
+.terminal.sheet { overflow: visible; }  /* let the crop marks show */
 .terminal__line { margin: 0; white-space: pre-wrap; overflow-wrap: anywhere; }
 .terminal__out { color: var(--text-muted); }
 
 /* charles@workshop:~$ */
-.prompt { color: var(--accent); white-space: nowrap; }
+.prompt { color: var(--success); white-space: nowrap; }
 .prompt__path { color: var(--accent-2); }
 .prompt__sym { color: var(--text-faint); margin-right: 1ch; }
 
@@ -172,85 +231,88 @@ html { scrollbar-color: var(--border-strong) var(--bg); }
 
 /* ---------- Buttons ---------- */
 .btn {
-  --btn-bg: var(--surface-2);
+  --btn-bg: transparent;
   --btn-fg: var(--text);
+  --btn-line: var(--line);
   display: inline-flex; align-items: center; justify-content: center; gap: var(--space-2);
-  min-height: 44px; padding: 0 var(--space-4);
-  font: 700 var(--text-sm) / 1 var(--font-sans);
+  min-height: 44px; padding: 0 18px;
+  font: 600 var(--text-xs) / 1 var(--font-mono);
+  letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--btn-fg); background: var(--btn-bg);
-  border: var(--outline); border-radius: var(--radius);
-  box-shadow: var(--shadow);
+  border: var(--stroke) solid var(--btn-line); border-radius: var(--radius);
   text-decoration: none; white-space: nowrap; cursor: pointer;
   transition: transform var(--dur-fast) var(--ease-out), box-shadow var(--dur-fast) var(--ease-out), background-color var(--dur);
 }
-.btn:hover { color: var(--btn-fg); transform: translate(-1px, -1px); box-shadow: 5px 5px 0 var(--line); }
-.btn:active { transform: translate(3px, 3px); box-shadow: 1px 1px 0 var(--line); }
-.btn svg { width: 16px; height: 16px; flex: none; }
+.btn:hover {
+  color: var(--btn-fg);
+  transform: translate(-3px, -3px);
+  box-shadow: 5px 5px 0 calc(var(--stroke) * -1) var(--bg), 5px 5px 0 0 var(--btn-line);
+}
+.btn:active { transform: none; box-shadow: none; }
+.btn svg { width: 15px; height: 15px; flex: none; }
 
-.btn--primary { --btn-bg: var(--accent); --btn-fg: var(--accent-fg); }
-.btn--secondary { --btn-bg: var(--accent-2); --btn-fg: var(--accent-fg); }
-.btn--ghost { --btn-bg: var(--surface-2); --btn-fg: var(--text); }
-.btn--ghost:hover { --btn-bg: var(--surface-3); }
+.btn--primary { --btn-bg: var(--accent); --btn-fg: var(--accent-fg); --btn-line: var(--accent); font-weight: 700; }
+.btn--secondary { --btn-bg: var(--accent-2-soft); --btn-fg: var(--accent-2); --btn-line: var(--accent-2); }
+.btn--ghost { --btn-bg: transparent; --btn-fg: var(--text); --btn-line: var(--line); }
 
-.btn--sm { min-height: 34px; padding: 0 var(--space-3); font-size: var(--text-xs); border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); }
-.btn--sm:hover { box-shadow: 3px 3px 0 var(--line); }
+.btn--sm { min-height: 34px; padding: 0 12px; font-size: 11px; }
 
-/* ---------- Tags & badges ---------- */
+/* ---------- Tags & stamps ---------- */
 .tag {
   display: inline-flex; align-items: center; gap: 6px;
-  padding: 3px 9px;
-  font: 500 var(--text-xs) / 1.4 var(--font-mono);
+  padding: 5px 9px;
+  font: 500 11px / 1.3 var(--font-mono);
+  letter-spacing: 0.08em; text-transform: uppercase;
   color: var(--text-muted);
-  background: var(--surface-2);
-  border: 1.5px solid var(--border-strong);
-  border-radius: var(--radius-full);
+  border: var(--stroke) solid var(--border-strong);
+  border-radius: var(--radius-sm);
   white-space: nowrap;
 }
-.tag--accent { color: var(--emerald); border-color: var(--emerald); background: var(--accent-soft); }
-.tag--accent-2 { color: var(--cyan); border-color: var(--cyan); background: var(--accent-2-soft); }
+.tag--accent { color: var(--accent); border-color: var(--accent); }
+.tag--accent-2 { color: var(--accent-2); border-color: var(--accent-2); }
 a.tag { text-decoration: none; transition: color var(--dur-fast), border-color var(--dur-fast); }
-a.tag:hover { color: var(--text); border-color: var(--text-muted); }
+a.tag:hover { color: var(--text); border-color: var(--text); }
 
-/* A sticker. The square "pixel" in front of the label blinks on --live. */
+/* A rubber stamp. js/fx.js thunks it down when it scrolls into view. */
 .badge {
   --badge: var(--text-muted);
   display: inline-flex; align-items: center; gap: 7px;
-  padding: 6px 10px;
-  font: 700 var(--text-sm) / 1 var(--font-display);
-  color: var(--line);
-  background: var(--badge);
-  border: var(--outline);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-sm);
-  transform: rotate(-3deg);
+  padding: 6px 10px 5px;
+  font: 800 var(--text-xs) / 1 var(--font-mono);
+  letter-spacing: 0.16em; text-transform: uppercase;
+  color: var(--badge);
+  background: rgb(11 34 64 / 0.88);
+  border: 2.5px solid var(--badge);
+  border-radius: 4px;
+  transform: rotate(var(--rot, -6deg));
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.85' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 -1.5 1.3'/%3E%3C/filter%3E%3Crect width='80' height='80' filter='url(%23n)'/%3E%3C/svg%3E");
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='80' height='80'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.85' seed='3'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 -1.5 1.3'/%3E%3C/filter%3E%3Crect width='80' height='80' filter='url(%23n)'/%3E%3C/svg%3E");
 }
-.badge::before { content: ""; width: 7px; height: 7px; background: var(--line); }
-.badge--live { --badge: var(--lime); }
-.badge--live::before { animation: cursor-blink 1.4s steps(1) infinite; }
-.badge--wip { --badge: var(--lemon); }
-.badge--info { --badge: var(--cyan); }
+.badge--live { --badge: var(--success); }
+.badge--wip { --badge: var(--warn); }
+.badge--info { --badge: var(--accent-2); }
+.badge.is-waiting { opacity: 0; }
+.badge.is-stamped { animation: stamp 0.38s var(--ease-bounce) both; }
+@keyframes stamp {
+  from { opacity: 0; transform: rotate(calc(var(--rot, -6deg) - 10deg)) scale(1.9); }
+  60% { opacity: 1; }
+}
 
 /* ---------- Code ---------- */
 code, kbd, pre, samp { font-family: var(--font-mono); font-size: 0.9em; }
 :not(pre) > code {
   padding: 0.1em 0.4em; border-radius: var(--radius-sm);
-  background: var(--surface-2); border: 1.5px solid var(--border-strong); color: var(--lemon);
+  border: 1px solid var(--border-strong); color: var(--accent-2);
 }
 pre {
   margin: 0; padding: var(--space-4); overflow-x: auto;
-  background: #100d16; border: var(--outline); border-radius: var(--radius); box-shadow: var(--shadow);
+  background: rgb(8 26 51 / 0.92); border: var(--outline); border-radius: var(--radius);
   line-height: 1.6;
 }
 .kbd, kbd {
   display: inline-block; padding: 1px 6px; font-size: var(--text-xs);
-  border: 1.5px solid var(--border-strong); border-bottom-width: 3px; border-radius: 5px;
-  background: var(--surface-2); color: var(--text);
-}
-
-/* ---------- Pixel sparkles (js/fx.js) ---------- */
-.sparkle {
-  position: fixed; z-index: 1000; width: 6px; height: 6px; pointer-events: none;
-  box-shadow: 0 0 0 1px var(--line);
+  border: 1px solid var(--border-strong); border-bottom-width: 3px; border-radius: 3px;
+  color: var(--text);
 }
 
 /* ---------- Motion preferences ---------- */
@@ -262,6 +324,6 @@ pre {
     animation-delay: 0s !important;
     transition-duration: 0.01ms !important;
   }
-  .glow:hover, .glow:focus-within, .btn:hover, .btn:active { transform: none; }
+  .glow:hover, .glow:focus-within, .btn:hover { transform: none; }
   .cursor { animation: none; }
 }

@@ -57,14 +57,14 @@ const total = groups.reduce((n, g) => n + g.items.length, 0);
   .filters { display: grid; gap: var(--space-2); margin-bottom: var(--space-5); }
   .filters__groups { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2) var(--space-4); }
   .filters__group { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); }
-  .filters__label { font: 400 var(--text-xs) / 1 var(--font-mono); color: var(--text-faint); }
-  .filters__chip { cursor: pointer; min-height: 32px; transition: color var(--dur-fast), border-color var(--dur-fast), background-color var(--dur-fast); }
+  .filters__label { font: 500 11px / 1 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint); }
+  .filters__chip { cursor: pointer; min-height: 32px; background: transparent; transition: color var(--dur-fast), border-color var(--dur-fast), background-color var(--dur-fast); }
   .filters__chip:hover { color: var(--text); border-color: var(--border-strong); }
-  .filters__chip[aria-pressed="true"] { color: var(--accent-fg); background: var(--accent); border-color: var(--line); box-shadow: var(--shadow-sm, none); }
+  .filters__chip[aria-pressed="true"] { color: var(--accent-fg); background: var(--accent); border-color: var(--accent); }
   .filters__count { opacity: 0.7; }
   /* Cards set their own display, which would beat the hidden attribute. */
   :global([data-filter-hidden]) { display: none !important; }
-  .filters__status { min-height: 1.4em; font: 400 var(--text-xs) / 1.4 var(--font-mono); color: var(--text-faint); }
+  .filters__status { min-height: 1.4em; font: 500 11px / 1.4 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); }
 </style>
 
 <script>

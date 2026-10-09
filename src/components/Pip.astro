@@ -1,7 +1,7 @@
 <div class="stage" aria-label="Pip, a pixel-art jellybean, walking around. Click him to change his flavour.">
   <canvas id="pip" width="32" height="19" tabindex="0" role="button" aria-label="Pip. Click to change his flavour."></canvas>
   <div class="bubble" id="bubble">hi!</div>
-  <div class="stage-hint">psst, click Pip ↓</div>
+  <div class="stage-hint hand" aria-hidden="true">this is Pip! click him<svg viewBox="0 0 46 30"><path d="M42 3 C 32 8, 22 20, 6 26 M6 26 l9 -1 M6 26 l4 -8" /></svg></div>
   <div class="ground"></div>
 </div>
 
@@ -11,13 +11,6 @@
   type Frame = keyof typeof SPRITES.frames;
   type Flavour = keyof typeof SPRITES.flavors;
   type Palette = Record<string, string>;
-
-  declare global {
-    interface Window {
-      /** Pixel sparkles from src/scripts/fx.js. */
-      sparkle?: (x: number, y: number, count?: number) => void;
-    }
-  }
 
   // Pip walks around the hero.
   const canvas = document.getElementById("pip") as HTMLCanvasElement | null;
@@ -56,21 +49,9 @@
       bubbleTimer = setTimeout(() => bubble.classList.remove("show"), 1600);
     };
 
-    // Pip's flavour paints the page: hover shadows and the hero's "for fun." follow him.
-    const paint = () => {
-      const name = flavours[flavour], f = SPRITES.flavors[name], root = document.documentElement;
-      root.style.setProperty("--flavour", f.B);
-      root.style.setProperty("--flavour-text", name === "licorice" ? "#b3adc6" : f.L);
-    };
-
     const poke = () => {
       flavour = (flavour + 1) % flavours.length;
-      paint();
       stage.classList.add("poked");
-      if (window.sparkle) {
-        const r = canvas.getBoundingClientRect();
-        window.sparkle(r.left + r.width / 2, r.top + 16, 12);
-      }
       mode = "happy";
       modeUntil = t + 900;
       const s = sayings[(Math.random() * sayings.length) | 0];
