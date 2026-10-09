@@ -16,15 +16,41 @@
 .brand img { width: 30px; height: 30px; image-rendering: pixelated; transition: transform var(--dur) var(--ease-bounce); }
 .brand:hover img { transform: translateY(-3px) rotate(-8deg); }
 .nav { display: flex; align-items: center; gap: 4px; }
-.nav a:not(.btn) {
+.nav ul { list-style: none; margin: 0; padding: 0; }
+.nav__links { display: flex; gap: 4px; }
+.nav__links a, .nav__drawer a {
+  display: block;
   font: 500 var(--text-xs) / 1 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase;
   color: var(--text); text-decoration: none; padding: 10px 10px;
   background: linear-gradient(var(--accent), var(--accent)) 10px calc(100% - 4px) / 0 2px no-repeat;
   transition: background-size var(--dur) var(--ease-out);
 }
-.nav a:not(.btn):hover { background-size: calc(100% - 20px) 2px; }
-.nav .btn { margin-left: var(--space-2); }
-@media (max-width: 600px) { .nav a:not(.btn) { display: none; } }
+.nav__links a:hover, .nav__links a[aria-current="page"] { background-size: calc(100% - 20px) 2px; }
+.nav__links a[aria-current="page"] { color: var(--accent); }
+.nav > .btn { margin-left: var(--space-2); }
+
+/* Phones: the links fold into a "Sheets" menu, drawn as the drawing index. */
+.nav__menu { display: none; position: relative; }
+.nav__menu summary { list-style: none; }
+.nav__menu summary::-webkit-details-marker { display: none; }
+.nav__menu summary svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2; transition: transform var(--dur); }
+.nav__menu[open] summary svg { transform: rotate(180deg); }
+.nav__drawer {
+  position: absolute; right: 0; top: calc(100% + 12px); z-index: 60; min-width: 200px;
+  background: var(--bg); border: var(--outline); padding: var(--space-2) 0;
+  box-shadow: 6px 6px 0 calc(var(--stroke) * -1) var(--bg), 6px 6px 0 0 var(--accent);
+}
+.nav__drawer a { display: flex; gap: var(--space-3); padding: 12px 16px; background: none; }
+.nav__drawer a:hover, .nav__drawer a[aria-current="page"] { color: var(--accent); }
+.nav__num { color: var(--accent-2); }
+@media (max-width: 760px) {
+  .nav__links { display: none; }
+  .nav__menu { display: block; }
+}
+/* Small phones: the GitHub button keeps its icon and says its name to screen readers only. */
+@media (max-width: 440px) {
+  .nav__gh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+}
 
 /* ---------- hero ---------- */
 .hero { display: grid; gap: var(--space-7); align-items: center; padding-block: var(--space-8) var(--space-4); }

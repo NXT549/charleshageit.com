@@ -1,0 +1,138 @@
+---
+// The workshop log: every recent commit, release and new project across the workbench, newest first,
+// grouped by month like pages in a notebook. Built from the GitHub data at every deploy.
+import Page from "../layouts/Page.astro";
+import { getShowcase } from "../lib/showcase";
+import { esc, icon, iconSprite, projectPath, safeUrl } from "../../showcase/render.mjs";
+import { SITE } from "../lib/site";
+
+interface Commit { sha: string; shortSha?: string; message: string; date: string; url: string }
+interface Release { tag: string; name: string; date: string | null; url: string; prerelease?: boolean }
+type Entry =
+  | { kind: "commit"; date: string; repo: string; title: string; href: string; c: Commit }
+  | { kind: "release"; date: string; repo: string; title: string; href: string; r: Release }
+  | { kind: "start"; date: string; repo: string; title: string; href: string };
+
+const data = await getShowcase();
+const entries: Entry[] = [];
+for (const repo of data.repos as (typeof data.repos[number] & { commits?: Commit[]; releases?: Release[]; createdAt?: string })[]) {
+  const base = { repo: repo.name, title: repo.title, href: projectPath(repo) };
+  for (const c of repo.commits ?? []) if (c.date) entries.push({ kind: "commit", date: c.date, c, ...base });
+  for (const r of repo.releases ?? []) if (r.date) entries.push({ kind: "release", date: r.date, r, ...base });
+  if (repo.createdAt) entries.push({ kind: "start", date: repo.createdAt, ...base });
+}
+entries.sort((a, b) => b.date.localeCompare(a.date));
+const shown = entries.slice(0, 120);
+
+const month = new Intl.DateTimeFormat("en-AU", { month: "long", year: "numeric", timeZone: "UTC" });
+const day = new Intl.DateTimeFormat("en-AU", { day: "numeric", month: "short", timeZone: "UTC" });
+const groups: { label: string; items: Entry[] }[] = [];
+for (const e of shown) {
+  const label = month.format(new Date(e.date));
+  if (groups.at(-1)?.label !== label) groups.push({ label, items: [] });
+  groups.at(-1)!.items.push(e);
+}
+
+const count = (k: Entry["kind"]) => shown.filter((e) => e.kind === k).length;
+const tally = [
+  [count("commit"), "change", "changes"],
+  [count("release"), "release", "releases"],
+  [count("start"), "new project", "new projects"],
+].filter(([n]) => n) as [number, string, string][];
+---
+
+<Page title={`Workshop log · ${SITE.name}`} description="Everything Charles has changed lately across his projects: commits, releases and new things, newest first." current="log" sheet="06">
+  <Fragment set:html={iconSprite()} />
+  <section class="container log-top">
+    <p class="eyebrow">Sheet 06 · Workshop log</p>
+    <h1>Workshop log</h1>
+    <p class="lede">
+      What I've been changing lately, across every project, newest first. It's pulled from GitHub every time the
+      site rebuilds, so it writes itself.
+    </p>
+    {tally.length > 0 && <p class="log-tally">{tally.map(([n, one, many]) => `${n} ${n === 1 ? one : many}`).join(" · ")}</p>}
+  </section>
+
+  <section class="container log">
+    {groups.length === 0 && <p class="log-empty">Nothing in the log yet. Check back after the next build.</p>}
+    {
+      groups.map((g) => (
+        <section class="log-month" aria-label={g.label}>
+          <h2 class="hand log-month__title">{g.label}</h2>
+          <ol class="log-list">
+            {g.items.map((e) => (
+              <li class:list={["log-entry", `log-entry--${e.kind}`]}>
+                <time class="log-entry__day" datetime={e.date}>{day.format(new Date(e.date))}</time>
+                <span class="log-entry__mark" aria-hidden="true" />
+                <div class="log-entry__body">
+                  <a class="tag log-entry__repo" href={e.href}>{e.repo}</a>
+                  {e.kind === "commit" && (
+                    <p class="log-entry__text">
+                      <a class="log-entry__sha" href={safeUrl(e.c.url) ?? undefined}><code>{e.c.shortSha ?? e.c.sha.slice(0, 7)}</code></a>
+                      {e.c.message}
+                    </p>
+                  )}
+                  {e.kind === "release" && (
+                    <p class="log-entry__text">
+                      <span class="badge badge--info log-entry__stamp">Released</span>
+                      <a href={safeUrl(e.r.url) ?? undefined} set:html={`${icon("tag")}${esc(e.r.tag)}`} />
+                      {e.r.name && e.r.name.replace(/^v/i, "") !== e.r.tag.replace(/^v/i, "") && <span class="log-entry__name">“{e.r.name}”</span>}
+                    </p>
+                  )}
+                  {e.kind === "start" && (
+                    <p class="log-entry__text">
+                      <span class="badge badge--live log-entry__stamp">New</span>
+                      Started <a href={e.href}>{e.title}</a>
+                    </p>
+                  )}
+                </div>
+              </li>
+            ))}
+          </ol>
+        </section>
+      ))
+    }
+    <p class="log-foot">
+      <span class="hand">that's as far back as the log goes</span>
+      <a href={`${SITE.githubUrl}?tab=repositories`}>the full history is on GitHub</a>
+    </p>
+  </section>
+</Page>
+
+<style>
+  .log-top { display: grid; gap: var(--space-4); padding-top: var(--space-8); }
+  .log-tally { font: 500 var(--text-xs) / 1 var(--font-mono); letter-spacing: var(--tracking-mono); text-transform: uppercase; color: var(--accent-2); }
+
+  .log { display: grid; gap: var(--space-7); padding-top: var(--space-7); max-width: 900px; }
+  .log-month { display: grid; gap: var(--space-4); }
+  .log-month__title { font-size: 2.1rem; --rot: -2deg; justify-self: start; }
+
+  /* The timeline: a chalk line down the page, a mark per entry, the day written beside it. */
+  .log-list { list-style: none; margin: 0; padding: 0; position: relative; display: grid; gap: var(--space-4); }
+  .log-list::before { content: ""; position: absolute; top: 6px; bottom: 6px; left: calc(64px + var(--space-3) + 7px); border-left: var(--outline); }
+  .log-entry { display: grid; grid-template-columns: 64px 16px minmax(0, 1fr); gap: var(--space-3); align-items: start; }
+  .log-entry__day { padding-top: 4px; font: 500 var(--text-xs) / 1.2 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-faint); text-align: right; }
+  .log-entry__mark { position: relative; z-index: 1; width: 16px; height: 16px; margin-top: 3px; border: var(--outline); border-radius: 50%; background: var(--bg); }
+  .log-entry--release .log-entry__mark { border-radius: 2px; background: var(--accent-2); border-color: var(--accent-2); transform: rotate(45deg) scale(0.85); }
+  .log-entry--start .log-entry__mark { background: var(--success); border-color: var(--success); }
+  .log-entry__body { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2) var(--space-3); min-width: 0; }
+  .log-entry__repo { padding: 3px 7px; }
+  .log-entry__text { flex: 1 1 280px; min-width: 0; color: var(--text-muted); overflow-wrap: anywhere; }
+  .log-entry__text a { text-decoration: none; }
+  .log-entry__text a:hover { text-decoration: underline; }
+  .log-entry__text :global(.icon) { display: inline; vertical-align: -2px; margin-right: 4px; }
+  .log-entry__sha { margin-right: var(--space-2); }
+  .log-entry__sha code { color: var(--accent-2); border: 0; padding: 0; }
+  .log-entry__stamp { --rot: -4deg; font-size: 10px; padding: 4px 7px 3px; margin-right: var(--space-2); }
+  .log-entry__name { margin-left: var(--space-2); color: var(--text); }
+  .log-entry--release .log-entry__text, .log-entry--start .log-entry__text { color: var(--text); }
+
+  .log-empty { color: var(--text-muted); }
+  .log-foot { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-3); padding-left: calc(64px + 16px + 2 * var(--space-3)); }
+  .log-foot .hand { font-size: 1.4rem; }
+  @media (max-width: 520px) {
+    .log-list::before { left: calc(48px + var(--space-2) + 7px); }
+    .log-entry { grid-template-columns: 48px 16px minmax(0, 1fr); gap: var(--space-2); }
+    .log-foot { padding-left: 0; }
+  }
+</style>

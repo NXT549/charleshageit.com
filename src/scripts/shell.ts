@@ -20,13 +20,14 @@ export interface ShellData {
 
 type Out = string | Node | (string | Node)[];
 
-const COMMANDS = ["help", "ls", "open", "cd", "play", "cat", "pip", "github", "whoami", "clear", "history", "date", "echo", "pwd"];
+const COMMANDS = ["help", "ls", "open", "cd", "play", "cat", "log", "about", "pip", "github", "whoami", "clear", "history", "date", "echo", "pwd"];
 const PIP_ACTIONS = ["say", "wave", "jump", "spin", "flavours"];
 const HELP: [string, string][] = [
   ["ls", "list the projects"],
-  ["open <project>", "jump to a project (cd works too)"],
+  ["open <project>", "open its page (cd works too)"],
   ["play <project>", "play it in your browser"],
-  ["cat about.md", "a bit about me"],
+  ["log", "what I've been changing lately"],
+  ["cat about.md", "a bit about me (or: about)"],
   ["pip [flavour]", "poke Pip, or pick his flavour"],
   ["pip say <words>", "make Pip say something"],
   ["github", "my GitHub"],
@@ -102,9 +103,6 @@ export function mountShell(body: HTMLElement, data: ShellData) {
     );
   };
 
-  const cardFor = (p: ShellProject) =>
-    document.getElementById(`project-${p.name}`) ?? document.querySelector<HTMLElement>(`[data-repo="${CSS.escape(p.name)}"]`);
-
   const pointAt = (el: HTMLElement) => {
     el.scrollIntoView({ behavior: reduced ? "auto" : "smooth", block: "center" });
     el.classList.add("is-pointed");
@@ -112,6 +110,14 @@ export function mountShell(body: HTMLElement, data: ShellData) {
     // The terminal is off screen now; let go of the keyboard on phones.
     input.blur();
   };
+
+  const go = (href: string, label: string) => {
+    print(`→ ${label}`);
+    body.scrollTop = body.scrollHeight;
+    setTimeout(() => location.assign(href), reduced ? 0 : 350);
+  };
+
+  const pagePath = (p: ShellProject) => `/projects/${encodeURIComponent(p.name)}/`;
 
   const pip = (detail: { do: string; value?: string }) => window.dispatchEvent(new CustomEvent("pip", { detail }));
 
@@ -122,7 +128,7 @@ export function mountShell(body: HTMLElement, data: ShellData) {
       items.push(node);
     };
     if (all) ["./", "../", ".snacks/"].forEach(add);
-    data.projects.forEach((p) => add(link(`${p.name}/`, `#project-${p.name}`)));
+    data.projects.forEach((p) => add(link(`${p.name}/`, pagePath(p))));
     return items;
   };
 
@@ -157,17 +163,18 @@ export function mountShell(body: HTMLElement, data: ShellData) {
       case "cd": {
         if (!arg || arg === "~" || arg === "..") return print(name === "cd" ? "you're already home." : ["open what? try ", strong("open pip")]);
         if (arg === "/") return print("nope, Pip guards the root directory.");
-        if (/^(about|about\.md)$/i.test(arg)) {
-          const about = document.getElementById("about");
-          if (about) pointAt(about);
-          return print("→ about me");
-        }
+        if (/^(about|about\.md)$/i.test(arg)) return go("/about/", "about me");
+        if (/^log\/?$/i.test(arg)) return go("/log/", "the workshop log");
         const p = find(arg);
         if (!p) return notFound(name, arg);
-        const card = cardFor(p);
-        if (card) pointAt(card);
-        return print(`→ ${p.title}`);
+        return go(pagePath(p), `opening ${p.title}`);
       }
+      case "log":
+      case "git":
+        if (name === "git" && !/^log/.test(arg)) return print(["git: try ", strong("git log"), " (or just ", strong("log"), ")"]);
+        return go("/log/", "the workshop log");
+      case "about":
+        return go("/about/", "about me");
       case "play":
       case "run":
       case "start": {
@@ -298,7 +305,8 @@ export function mountShell(body: HTMLElement, data: ShellData) {
     const first = words[0].toLowerCase();
     let options: string[];
     if (words.length === 1) options = COMMANDS;
-    else if (["open", "cd", "play", "run", "cat"].includes(first) && words.length === 2) options = data.projects.map((p) => p.name).concat(first === "cat" ? ["about.md"] : []);
+    else if (["open", "cd", "play", "run", "cat"].includes(first) && words.length === 2)
+      options = data.projects.map((p) => p.name).concat(first === "cat" ? ["about.md"] : first === "open" || first === "cd" ? ["about", "log"] : []);
     else if (first === "pip" && words.length === 2) options = PIP_ACTIONS.concat(flavours);
     else return;
     const hits = options.filter((o) => o.startsWith(last));
