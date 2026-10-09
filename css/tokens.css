@@ -117,7 +117,6 @@
   --glow-text: 0 0 18px rgb(16 185 129 / 0.45);
   --spotlight: rgb(16 185 129 / 0.1);
   --shadow-lg: 0 24px 60px -24px rgb(0 0 0 / 0.85);
-  --focus-ring: 0 0 0 2px var(--bg), 0 0 0 4px var(--cyan-400);
 
   /* ---------- Motion ---------- */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);

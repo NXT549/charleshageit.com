@@ -57,7 +57,7 @@ p { margin: 0; text-wrap: pretty; }
 
 a { color: var(--accent); text-decoration-thickness: 1px; text-underline-offset: 3px; transition: color var(--dur-fast); }
 a:hover { color: var(--emerald-300); }
-:focus-visible { outline: none; box-shadow: var(--focus-ring); border-radius: var(--radius-sm); }
+:focus-visible { outline: 2px solid var(--cyan-400); outline-offset: 3px; }
 ::selection { background: rgb(16 185 129 / 0.35); color: #fff; }
 
 html { scrollbar-color: var(--zinc-700) transparent; scrollbar-width: thin; }
@@ -144,7 +144,6 @@ html { scrollbar-color: var(--zinc-700) transparent; scrollbar-width: thin; }
 .glow:focus-within { border-color: transparent; box-shadow: var(--glass-highlight), var(--glow-accent); transform: translateY(-2px); }
 .glow:hover::before, .glow:hover::after,
 .glow:focus-within::before, .glow:focus-within::after { opacity: 1; }
-a.glow:focus-visible { box-shadow: var(--focus-ring), var(--glow-accent); border-radius: var(--radius-lg); }
 
 /* ---------- Terminal ---------- */
 .terminal {

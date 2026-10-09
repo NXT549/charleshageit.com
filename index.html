@@ -8,8 +8,8 @@
       name="description"
       content="Charles's workshop: a hamster slot machine, a jellybean desktop pet and other little things I've vibe-coded, finished and in progress."
     />
-    <meta name="theme-color" content="#fff6e9" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#1d1626" media="(prefers-color-scheme: dark)" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#09090b" />
     <link rel="canonical" href="https://charleshageit.com/" />
     <link rel="icon" href="./img/pip-icon.png" />
     <link rel="apple-touch-icon" href="./img/pip-icon.png" />
@@ -21,247 +21,215 @@
     <meta property="og:image" content="https://charleshageit.com/img/hamster-slots.webp" />
     <meta name="twitter:card" content="summary_large_image" />
 
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;800&family=Pixelify+Sans:wght@500;700&display=swap"
-      rel="stylesheet"
-    />
+    <link rel="preload" href="./fonts/Geist-Variable.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href="./fonts/GeistMono-Variable.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="stylesheet" href="./css/tokens.css" />
+    <link rel="stylesheet" href="./css/theme.css" />
+    <script src="./js/fx.js" defer></script>
 
     <style>
-      :root {
-        --bg: #fff6e9;
-        --bg-dots: #f1e2cc;
-        --card: #ffffff;
-        --ink: #2a1a2d;
-        --ink-soft: #6b5869;
-        --line: #2a1a2d;
-        --cherry: #e2415a;
-        --lemon: #f2cc3d;
-        --lime: #68c445;
-        --blueberry: #4a7fe0;
-        --grape: #9b5cd6;
-        --bubblegum: #f06ec0;
-        --shadow: 4px 4px 0 var(--line);
-        --radius: 14px;
-        --pixel: "Pixelify Sans", ui-monospace, monospace;
-        --body: "Nunito", system-ui, sans-serif;
-      }
-      @media (prefers-color-scheme: dark) {
-        :root {
-          --bg: #1d1626;
-          --bg-dots: #2a2236;
-          --card: #2a2236;
-          --ink: #fbefe3;
-          --ink-soft: #c2b3c6;
-          --line: #a48fbd;
-        }
-      }
-
-      * { box-sizing: border-box; }
-      html { scroll-behavior: smooth; }
-      @media (prefers-reduced-motion: reduce) { html { scroll-behavior: auto; } }
-      body {
-        margin: 0;
-        background-color: var(--bg);
-        background-image: radial-gradient(var(--bg-dots) 2px, transparent 2px);
-        background-size: 22px 22px;
-        color: var(--ink);
-        font: 400 17px/1.6 var(--body);
-        -webkit-font-smoothing: antialiased;
-      }
-      a { color: inherit; }
-      img { max-width: 100%; display: block; }
-      .wrap { max-width: 1080px; margin: 0 auto; padding: 0 16px; }
+      /* Page layout. Colours, type and components come from css/tokens.css and css/theme.css. */
 
       /* ---------- header ---------- */
-      header.top {
-        display: flex; align-items: center; justify-content: space-between; gap: 12px;
-        padding: 18px 0;
+      .site-header {
+        position: sticky; top: 0; z-index: 50;
+        background: rgb(9 9 11 / 0.72);
+        -webkit-backdrop-filter: blur(12px) saturate(140%);
+        backdrop-filter: blur(12px) saturate(140%);
+        border-bottom: 1px solid var(--border);
       }
+      .site-header .container { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); height: 60px; }
       .brand {
-        font: 700 22px/1 var(--pixel); text-decoration: none; display: flex; align-items: center; gap: 10px;
+        display: flex; align-items: center; gap: 10px;
+        font: 500 var(--text-sm) / 1 var(--font-mono); color: var(--text); text-decoration: none;
       }
-      .brand img { width: 34px; height: 34px; image-rendering: pixelated; }
-      nav.links { display: flex; gap: 6px; flex-wrap: wrap; }
-      nav.links a {
-        font: 600 15px/1 var(--body); text-decoration: none; padding: 9px 12px; border-radius: 999px;
+      .brand:hover { color: var(--text); }
+      .brand img { width: 26px; height: 26px; image-rendering: pixelated; }
+      .brand b { font-weight: inherit; color: var(--accent); }
+      .nav { display: flex; align-items: center; gap: 2px; }
+      .nav a:not(.btn) {
+        font: 450 var(--text-sm) / 1 var(--font-mono); color: var(--text-muted); text-decoration: none;
+        padding: 9px 10px; border-radius: var(--radius-sm); transition: color var(--dur-fast), background-color var(--dur-fast);
       }
-      nav.links a:hover { background: var(--card); }
-      nav.links a.gh {
-        background: var(--ink); color: var(--bg); display: inline-flex; gap: 6px; align-items: center;
-      }
-      @media (max-width: 560px) { nav.links a:not(.gh) { display: none; } }
+      .nav a:not(.btn)::before { content: "./"; color: var(--text-faint); }
+      .nav a:not(.btn):hover { color: var(--text); background: rgb(255 255 255 / 0.05); }
+      .nav .btn { margin-left: var(--space-2); }
+      @media (max-width: 600px) { .nav a:not(.btn) { display: none; } }
 
       /* ---------- hero ---------- */
-      .hero { padding: 40px 0 0; position: relative; }
-      .hero h1 {
-        font: 700 clamp(40px, 8vw, 84px)/1.02 var(--pixel); margin: 0 0 18px; letter-spacing: -0.5px;
-      }
-      .hero h1 .wiggle { display: inline-block; color: var(--cherry); animation: wiggle 3s ease-in-out infinite; }
-      @keyframes wiggle { 0%, 80%, 100% { transform: rotate(0); } 85% { transform: rotate(-8deg); } 90% { transform: rotate(8deg); } 95% { transform: rotate(-4deg); } }
-      .hero p.lede { font-size: clamp(18px, 2.4vw, 22px); max-width: 640px; color: var(--ink-soft); margin: 0 0 26px; }
-      .hero p.lede strong { color: var(--ink); }
-      .chips { display: flex; flex-wrap: wrap; gap: 10px; margin-bottom: 8px; }
-      .chip {
-        font: 700 14px/1 var(--body); padding: 9px 13px; border: 2px solid var(--line); border-radius: 999px;
-        background: var(--card); box-shadow: 2px 2px 0 var(--line);
-      }
-      .chip i { font-style: normal; margin-right: 4px; }
+      .hero { display: grid; gap: var(--space-7); align-items: center; padding-block: var(--space-8) var(--space-4); }
+      @media (min-width: 940px) { .hero { grid-template-columns: 1fr 1fr; padding-top: var(--space-9); } }
+      .hero h1 { margin: var(--space-4) 0 var(--space-5); }
+      .lede { font-size: var(--text-lg); color: var(--text-muted); max-width: 54ch; }
+      .lede strong { color: var(--text); font-weight: 600; }
+      .hero-tags { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-5); }
+      .hero .terminal { min-width: 0; }
 
-      /* Pip's little stage */
-      .stage { position: relative; height: 120px; margin-top: 18px; }
+      /* Pip walks along the bottom of the terminal */
+      .stage { position: relative; height: 118px; margin: 0 var(--space-5) var(--space-3); }
       .stage .ground {
-        position: absolute; left: 0; right: 0; bottom: 0; height: 14px;
-        background: repeating-linear-gradient(90deg, var(--lime) 0 12px, #4fa632 12px 24px);
-        border: 3px solid var(--line); border-radius: 6px;
+        position: absolute; left: 0; right: 0; bottom: 12px; height: 1px;
+        background: linear-gradient(90deg, transparent, rgb(16 185 129 / 0.6) 15%, rgb(6 182 212 / 0.6) 85%, transparent);
       }
       #pip {
-        position: absolute; bottom: 11px; left: 0; width: 128px; height: 76px;
-        image-rendering: pixelated; cursor: pointer; touch-action: manipulation;
+        position: absolute; bottom: 12px; left: 0; width: 128px; height: 76px;
+        image-rendering: pixelated; cursor: pointer; touch-action: manipulation; border-radius: var(--radius-sm);
       }
       .bubble {
         position: absolute; bottom: 92px; transform: translateX(-50%);
-        background: var(--card); border: 2px solid var(--line); border-radius: 10px; padding: 6px 10px;
-        font: 600 14px/1.2 var(--body); white-space: nowrap; box-shadow: 2px 2px 0 var(--line);
-        opacity: 0; transition: opacity .2s; pointer-events: none;
+        padding: 5px 9px; border-radius: var(--radius-sm);
+        font: 500 var(--text-xs) / 1.2 var(--font-mono); color: var(--emerald-300); white-space: nowrap;
+        background: var(--surface-2); border: 1px solid rgb(16 185 129 / 0.35);
+        opacity: 0; transition: opacity var(--dur); pointer-events: none;
       }
       .bubble.show { opacity: 1; }
-      .stage-hint { position: absolute; right: 0; bottom: 22px; font-size: 13px; color: var(--ink-soft); }
+      .stage-hint { position: absolute; right: 0; top: 4px; font: 400 var(--text-xs) / 1 var(--font-mono); color: var(--text-faint); }
       @media (max-width: 560px) { .stage-hint { display: none; } }
 
       /* ---------- sections ---------- */
-      section { padding: 64px 0 8px; }
-      h2 { font: 700 clamp(30px, 5vw, 44px)/1.1 var(--pixel); margin: 0 0 8px; }
-      .sub { color: var(--ink-soft); margin: 0 0 28px; }
+      .section { padding-top: var(--space-9); }
 
       /* ---------- project cards ---------- */
-      .projects { display: grid; gap: 28px; }
-      .card {
-        background: var(--card); border: 3px solid var(--line); border-radius: var(--radius);
-        box-shadow: var(--shadow); overflow: hidden; display: grid; grid-template-columns: 1fr;
-        transition: transform .15s ease, box-shadow .15s ease;
-      }
-      .card:hover { transform: translate(-2px, -2px); box-shadow: 6px 6px 0 var(--line); }
-      @media (min-width: 820px) {
+      .projects { display: grid; gap: var(--space-6); }
+      .card { display: grid; grid-template-columns: 1fr; overflow: hidden; }
+      @media (min-width: 840px) {
         .card { grid-template-columns: 1.15fr 1fr; }
         .card.flip { grid-template-columns: 1fr 1.15fr; }
-        .card.flip .shot { order: 2; border-right: 0; border-left: 3px solid var(--line); }
+        .card.flip .shot { order: 2; border-right: 0; border-left: 1px solid var(--border); }
       }
       .shot {
-        position: relative; min-height: 240px; border-bottom: 3px solid var(--line);
-        display: grid; place-items: center; overflow: hidden;
+        position: relative; min-height: 240px; border-bottom: 1px solid var(--border);
+        display: grid; place-items: center; overflow: hidden; background: var(--zinc-900);
       }
-      @media (min-width: 820px) { .shot { border-bottom: 0; border-right: 3px solid var(--line); } }
-      .shot img.cover { width: 100%; height: 100%; object-fit: cover; }
-      .shot.pip-shot { background: linear-gradient(180deg, #bfe3ff 0%, #e8f5ff 70%); }
+      @media (min-width: 840px) { .shot { border-bottom: 0; border-right: 1px solid var(--border); } }
+      .shot img.cover { width: 100%; height: 100%; object-fit: cover; transition: transform var(--dur-slow) var(--ease-out); }
+      .card:hover .shot img.cover { transform: scale(1.02); }
+      .shot.pip-shot {
+        background:
+          radial-gradient(circle at 50% 55%, rgb(16 185 129 / 0.2), transparent 55%),
+          linear-gradient(rgb(255 255 255 / 0.03) 1px, transparent 1px) 0 0 / 24px 24px,
+          linear-gradient(90deg, rgb(255 255 255 / 0.03) 1px, transparent 1px) 0 0 / 24px 24px,
+          var(--zinc-900);
+      }
       .shot.pip-shot .desk {
         position: absolute; left: 0; right: 0; bottom: 0; height: 30%;
-        background: #c58b5a; border-top: 3px solid var(--line);
+        background: linear-gradient(rgb(16 185 129 / 0.08), transparent 70%);
+        border-top: 1px solid rgb(16 185 129 / 0.5); box-shadow: 0 -1px 18px rgb(16 185 129 / 0.25);
       }
-      .shot.pip-shot img { position: absolute; left: 50%; bottom: calc(30% - 52px); transform: translateX(-50%); width: 168px; height: 168px; image-rendering: pixelated; z-index: 1; }
+      .shot.pip-shot img {
+        position: absolute; left: 50%; bottom: calc(30% - 52px); transform: translateX(-50%);
+        width: 168px; height: 168px; image-rendering: pixelated; z-index: 1;
+      }
+      .shot .badge { position: absolute; top: 14px; left: 14px; z-index: 2; }
 
-      .sticker {
-        position: absolute; top: 14px; left: 14px; z-index: 2;
-        font: 700 14px/1 var(--pixel); padding: 8px 11px; border: 2px solid var(--line); border-radius: 8px;
-        box-shadow: 2px 2px 0 var(--line); transform: rotate(-4deg); color: #2a1a2d;
-      }
-      .sticker.done { background: var(--lime); }
-      .sticker.wip { background: var(--lemon); }
-
-      .info { padding: 24px 24px 26px; display: flex; flex-direction: column; gap: 12px; }
-      .info h3 { font: 700 30px/1.1 var(--pixel); margin: 0; }
-      .info .tagline { font-weight: 800; margin: 0; }
-      .info p { margin: 0; color: var(--ink-soft); }
-      .info ul.bits { margin: 0; padding-left: 20px; color: var(--ink-soft); }
-      .info ul.bits li { margin: 2px 0; }
-      .meta { display: flex; flex-wrap: wrap; gap: 8px; font-size: 13px; }
-      .meta span {
-        padding: 4px 9px; border-radius: 999px; background: var(--bg); border: 1.5px solid var(--line); font-weight: 600;
-      }
-      .meta .fresh { border-style: dashed; }
-      .buttons { display: flex; flex-wrap: wrap; gap: 10px; margin-top: auto; padding-top: 6px; }
-      .btn {
-        font: 800 15px/1 var(--body); text-decoration: none; padding: 12px 16px; border-radius: 10px;
-        border: 2.5px solid var(--line); box-shadow: 3px 3px 0 var(--line); color: #2a1a2d;
-        background: var(--lemon); transition: transform .1s, box-shadow .1s;
-      }
-      .btn:hover { transform: translate(-1px, -1px); box-shadow: 4px 4px 0 var(--line); }
-      .btn:active { transform: translate(2px, 2px); box-shadow: 1px 1px 0 var(--line); }
-      .btn.go { background: var(--cherry); color: #fff; }
-      .btn.blue { background: var(--blueberry); color: #fff; }
-      .btn.plain { background: var(--card); color: var(--ink); }
-      .btn:focus-visible, nav.links a:focus-visible, #pip:focus-visible { outline: 3px solid var(--blueberry); outline-offset: 3px; }
+      .info { padding: var(--space-5); display: flex; flex-direction: column; gap: var(--space-3); }
+      @media (min-width: 840px) { .info { padding: var(--space-6); } }
+      .info h3 { font-size: clamp(1.5rem, 1.2rem + 1vw, 1.875rem); letter-spacing: -0.025em; }
+      .info .tagline { color: var(--text); font-weight: 500; }
+      .info p { color: var(--text-muted); }
+      .bits { margin: 0; padding: 0; list-style: none; color: var(--text-muted); display: grid; gap: 4px; }
+      .bits li { display: flex; gap: 10px; }
+      .bits li::before { content: "→"; font-family: var(--font-mono); color: var(--accent); }
+      .meta { display: flex; flex-wrap: wrap; gap: var(--space-2); }
+      .buttons { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: auto; padding-top: var(--space-3); }
 
       /* ---------- workbench (live from GitHub) ---------- */
-      .bench { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(240px, 1fr)); }
-      .mini {
-        display: block; text-decoration: none; background: var(--card); border: 2.5px solid var(--line);
-        border-radius: 12px; padding: 16px; box-shadow: 3px 3px 0 var(--line); transition: transform .12s;
+      .bench { display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); }
+      .mini { display: flex; flex-direction: column; gap: 6px; padding: var(--space-4) var(--space-5); text-decoration: none; color: var(--text); border-radius: var(--radius); }
+      .mini:hover { color: var(--text); }
+      .mini strong { font: 550 var(--text-base) / 1.3 var(--font-mono); letter-spacing: -0.01em; }
+      .mini strong::before { content: "~/"; color: var(--text-faint); }
+      .mini span { font-size: var(--text-sm); color: var(--text-muted); }
+      .mini small { margin-top: auto; padding-top: var(--space-2); font: 400 var(--text-xs) / 1.4 var(--font-mono); color: var(--text-faint); }
+      .mini.add {
+        align-items: center; justify-content: center; text-align: center; min-height: 112px;
+        border: 1px dashed var(--border-strong); color: var(--text-muted);
+        transition: border-color var(--dur), color var(--dur);
       }
-      .mini:hover { transform: rotate(-1deg) translateY(-2px); }
-      .mini strong { font: 700 19px/1.2 var(--pixel); display: block; margin-bottom: 4px; }
-      .mini span { font-size: 14px; color: var(--ink-soft); display: block; }
-      .mini small { display: block; margin-top: 10px; font-size: 12px; color: var(--ink-soft); }
-      .mini.add { border-style: dashed; box-shadow: none; display: grid; place-items: center; text-align: center; min-height: 110px; }
+      .mini.add:hover { border-color: var(--accent); color: var(--text); }
+      .mini.add strong { display: block; color: var(--accent); }
+      .mini.add strong::before { content: none; }
 
       /* ---------- about ---------- */
-      .about {
-        background: var(--card); border: 3px solid var(--line); border-radius: var(--radius); box-shadow: var(--shadow);
-        padding: 28px; display: grid; gap: 14px; max-width: 760px;
-      }
-      .about p { margin: 0; }
+      .about { max-width: 760px; }
+      .about .terminal__body { display: grid; gap: var(--space-4); font: 400 var(--text-base) / var(--leading-normal) var(--font-sans); color: var(--text-muted); }
+      .about strong { color: var(--text); font-weight: 600; }
 
-      footer { padding: 56px 0 40px; text-align: center; color: var(--ink-soft); font-size: 14px; }
-      footer a { font-weight: 700; }
+      /* ---------- footer ---------- */
+      .site-footer {
+        margin-top: var(--space-9); padding-block: var(--space-6) var(--space-7); border-top: 1px solid var(--border);
+        font: 400 var(--text-xs) / 1.6 var(--font-mono); color: var(--text-faint);
+      }
+      .site-footer .container { display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-3); }
     </style>
   </head>
   <body>
-    <div class="wrap">
-      <header class="top">
-        <a class="brand" href="#top" id="top"><img src="./img/pip-icon.png" alt="" />charles's workshop</a>
-        <nav class="links" aria-label="Main">
-          <a href="#projects">Projects</a>
-          <a href="#workbench">Workbench</a>
-          <a href="#about">About</a>
-          <a class="gh" href="https://github.com/NXT549">
-            <svg width="16" height="16" viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+    <header class="site-header">
+      <div class="container">
+        <a class="brand" href="#top"><img src="./img/pip-icon.png" alt="" width="26" height="26" /><span>charles<b>@</b>workshop</span></a>
+        <nav class="nav" aria-label="Main">
+          <a href="#projects">projects</a>
+          <a href="#workbench">workbench</a>
+          <a href="#about">about</a>
+          <a class="btn btn--ghost btn--sm" href="https://github.com/NXT549">
+            <svg viewBox="0 0 16 16" aria-hidden="true" fill="currentColor"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
             GitHub
           </a>
         </nav>
-      </header>
-
-      <div class="hero">
-        <h1>I make little things <span class="wiggle">for fun.</span></h1>
-        <p class="lede">
-          Hi, I'm <strong>Charles</strong>. These are the projects I've <strong>vibe-coded</strong>: a slot machine
-          run by a hamster, a jellybean who lives on your desktop, and whatever I'm tinkering with next.
-          Some are finished, some are very much not.
-        </p>
-        <div class="chips">
-          <span class="chip"><i>🐹</i>idle games</span>
-          <span class="chip"><i>🫘</i>desktop pets</span>
-          <span class="chip"><i>🤖</i>built with AI</span>
-        </div>
-
-        <div class="stage" aria-label="Pip, a pixel-art jellybean, walking around. Click him to change his flavour.">
-          <canvas id="pip" width="32" height="19" tabindex="0" role="button" aria-label="Pip. Click to change his flavour."></canvas>
-          <div class="bubble" id="bubble">hi!</div>
-          <div class="stage-hint">psst, click Pip ↑</div>
-          <div class="ground"></div>
-        </div>
       </div>
+    </header>
 
-      <section id="projects">
-        <h2>The projects</h2>
-        <p class="sub">The good stuff. Click around, they all work (mostly).</p>
+    <main>
+      <section class="hero container">
+        <div>
+          <p class="eyebrow">vibe-coded, finished &amp; in progress</p>
+          <h1>I make little things <span class="text-gradient">for fun.</span></h1>
+          <p class="lede">
+            Hi, I'm <strong>Charles</strong>. These are the projects I've <strong>vibe-coded</strong>: a slot machine
+            run by a hamster, a jellybean who lives on your desktop, and whatever I'm tinkering with next.
+            Some are finished, some are very much not.
+          </p>
+          <div class="hero-tags">
+            <span class="tag tag--accent">#idle-games</span>
+            <span class="tag tag--accent-2">#desktop-pets</span>
+            <span class="tag">#built-with-ai</span>
+          </div>
+        </div>
+
+        <div class="terminal glass">
+          <div class="terminal__bar">
+            <span class="terminal__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="terminal__title">charles@workshop: ~</span>
+          </div>
+          <div class="terminal__body">
+            <p class="terminal__line"><span class="prompt">charles@workshop<span class="prompt__path">:~</span><span class="prompt__sym">$</span></span><span class="type" style="--chars: 6; --delay: 0.3s">whoami</span></p>
+            <p class="terminal__line terminal__out reveal" style="--delay: 0.75s">charles · vibe-coder · Redlands, Brisbane</p>
+            <p class="terminal__line reveal" style="--delay: 1.1s"><span class="prompt">charles@workshop<span class="prompt__path">:~</span><span class="prompt__sym">$</span></span><span class="type" style="--chars: 13; --delay: 1.3s">ls ~/projects</span></p>
+            <p class="terminal__line terminal__out reveal" style="--delay: 2.15s"><a href="#project-hamster-slots">hamster-slots/</a>  <a href="#project-pip">pip/</a></p>
+            <p class="terminal__line reveal" style="--delay: 2.45s"><span class="prompt">charles@workshop<span class="prompt__path">:~</span><span class="prompt__sym">$</span></span><span class="cursor" aria-hidden="true"></span></p>
+          </div>
+          <div class="stage" aria-label="Pip, a pixel-art jellybean, walking around. Click him to change his flavour.">
+            <canvas id="pip" width="32" height="19" tabindex="0" role="button" aria-label="Pip. Click to change his flavour."></canvas>
+            <div class="bubble" id="bubble">hi!</div>
+            <div class="stage-hint">// psst, click pip</div>
+            <div class="ground"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="projects" class="section container">
+        <header class="section-head">
+          <p class="eyebrow">01 · projects</p>
+          <h2>The projects</h2>
+          <p class="sub">The good stuff. Click around, they all work (mostly).</p>
+        </header>
 
         <div class="projects">
           <!-- To add a project, copy one <article class="card"> block and change the words and links. -->
 
-          <article class="card" data-repo="hamster-slots">
+          <article class="card glass glow" id="project-hamster-slots" data-repo="hamster-slots">
             <div class="shot">
-              <span class="sticker wip">Playable &amp; growing</span>
+              <span class="badge badge--wip">playable &amp; growing</span>
               <img class="cover" src="./img/hamster-slots.webp" alt="Hamster Slots: a BIG WIN on the Snack Stacker, with coins flying everywhere" width="1200" height="630" />
             </div>
             <div class="info">
@@ -276,20 +244,20 @@
                 <li>Every sprite and sound is made in code, no game engine</li>
               </ul>
               <div class="meta">
-                <span>v1.9.1 "Welcome Mat"</span>
-                <span>TypeScript + Vite</span>
-                <span class="fresh" data-pushed>in active development</span>
+                <span class="tag tag--accent-2">v1.9.1 "Welcome Mat"</span>
+                <span class="tag">TypeScript + Vite</span>
+                <span class="tag" data-pushed>in active development</span>
               </div>
               <div class="buttons">
-                <a class="btn go" href="https://nxt549.github.io/hamster-slots/">▶ Play in your browser</a>
-                <a class="btn plain" href="https://github.com/NXT549/hamster-slots">See the code</a>
+                <a class="btn btn--primary" href="https://nxt549.github.io/hamster-slots/">▶ Play in your browser</a>
+                <a class="btn btn--ghost" href="https://github.com/NXT549/hamster-slots">See the code</a>
               </div>
             </div>
           </article>
 
-          <article class="card flip" data-repo="pip">
+          <article class="card flip glass glow" id="project-pip" data-repo="pip">
             <div class="shot pip-shot">
-              <span class="sticker done">Released!</span>
+              <span class="badge badge--live">released</span>
               <div class="desk"></div>
               <img src="./img/pip-icon.png" alt="Pip, a cherry-red pixel jellybean with four stubby legs" width="256" height="256" />
             </div>
@@ -306,15 +274,15 @@
                 <li>Never steals focus or blocks your screen</li>
               </ul>
               <div class="meta">
-                <span>v1.2.0</span>
-                <span>Windows &amp; Mac</span>
-                <span>Electron</span>
-                <span class="fresh" data-pushed>recently updated</span>
+                <span class="tag tag--accent-2">v1.2.0</span>
+                <span class="tag">Windows &amp; Mac</span>
+                <span class="tag">Electron</span>
+                <span class="tag" data-pushed>recently updated</span>
               </div>
               <div class="buttons">
-                <a class="btn blue" href="https://github.com/NXT549/pip/releases/download/v1.2.0/Pip-Setup-1.2.0.exe">⬇ Windows</a>
-                <a class="btn blue" href="https://github.com/NXT549/pip/releases/tag/v1.2.0">⬇ Mac</a>
-                <a class="btn plain" href="https://github.com/NXT549/pip">See the code</a>
+                <a class="btn btn--secondary" href="https://github.com/NXT549/pip/releases/download/v1.2.0/Pip-Setup-1.2.0.exe">⬇ Windows</a>
+                <a class="btn btn--secondary" href="https://github.com/NXT549/pip/releases/tag/v1.2.0">⬇ Mac</a>
+                <a class="btn btn--ghost" href="https://github.com/NXT549/pip">See the code</a>
               </div>
             </div>
           </article>
@@ -322,34 +290,49 @@
         </div>
       </section>
 
-      <section id="workbench">
-        <h2>On the workbench</h2>
-        <p class="sub">Everything on my GitHub, most recently touched first. This list updates by itself.</p>
+      <section id="workbench" class="section container">
+        <header class="section-head">
+          <p class="eyebrow">02 · workbench</p>
+          <h2>On the workbench</h2>
+          <p class="sub">Everything on my GitHub, most recently touched first. This list updates by itself.</p>
+        </header>
         <div class="bench" id="bench">
-          <a class="mini" href="https://github.com/NXT549/hamster-slots"><strong>hamster-slots</strong><span>A cute pixel-art idle slot machine.</span></a>
-          <a class="mini" href="https://github.com/NXT549/pip"><strong>pip</strong><span>A jellybean who lives on your desktop.</span></a>
+          <a class="mini glass glow" href="https://github.com/NXT549/hamster-slots"><strong>hamster-slots</strong><span>A cute pixel-art idle slot machine.</span></a>
+          <a class="mini glass glow" href="https://github.com/NXT549/pip"><strong>pip</strong><span>A jellybean who lives on your desktop.</span></a>
         </div>
       </section>
 
-      <section id="about">
-        <h2>About me</h2>
-        <div class="about">
-          <p>
-            I'm Charles, from the Redlands in Brisbane. This site used to be home to <strong>Charles IT</strong>, my
-            local tech-help business. Now it's my workshop: the place I put the things I build for fun.
-          </p>
-          <p>
-            I build most of these by <strong>vibe coding</strong>: I describe what I want, an AI helps write the code,
-            and we go back and forth until it feels right. It's how a hamster ended up with a family tree.
-          </p>
-          <p>Got an idea, found a bug, or just want to say hi? Find me on <a href="https://github.com/NXT549">GitHub</a>.</p>
+      <section id="about" class="section container">
+        <header class="section-head">
+          <p class="eyebrow">03 · about</p>
+          <h2>About me</h2>
+        </header>
+        <div class="about terminal glass">
+          <div class="terminal__bar">
+            <span class="terminal__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+            <span class="terminal__title">about.md</span>
+          </div>
+          <div class="terminal__body">
+            <p>
+              I'm Charles, from the Redlands in Brisbane. This site used to be home to <strong>Charles IT</strong>, my
+              local tech-help business. Now it's my workshop: the place I put the things I build for fun.
+            </p>
+            <p>
+              I build most of these by <strong>vibe coding</strong>: I describe what I want, an AI helps write the code,
+              and we go back and forth until it feels right. It's how a hamster ended up with a family tree.
+            </p>
+            <p>Got an idea, found a bug, or just want to say hi? Find me on <a href="https://github.com/NXT549">GitHub</a>.</p>
+          </div>
         </div>
       </section>
+    </main>
 
-      <footer>
-        Made with too many snacks by Charles · <a href="https://github.com/NXT549/charleshageit.com">this site's code</a>
-      </footer>
-    </div>
+    <footer class="site-footer">
+      <div class="container">
+        <span>made with too many snacks by charles</span>
+        <a href="https://github.com/NXT549/charleshageit.com">./this-site's-code</a>
+      </div>
+    </footer>
 
     <script src="./pip-sprites.js"></script>
     <script>
@@ -468,7 +451,7 @@
               .filter(function (r) { return !r.fork && !r.archived && !HIDE[r.name]; })
               .forEach(function (repo) {
                 var a = document.createElement("a");
-                a.className = "mini";
+                a.className = "mini glass glow";
                 a.href = repo.html_url;
                 var name = document.createElement("strong");
                 name.textContent = repo.name;
