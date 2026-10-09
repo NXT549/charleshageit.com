@@ -35,6 +35,28 @@
 .hero-tags { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-5); }
 .hero .terminal { min-width: 0; }
 
+/* The hero terminal turns into a shell you can type in (src/scripts/shell.ts). It keeps a fixed
+   height, eight lines, and scrolls, so typing never shoves the rest of the hero around. */
+.shell { height: calc(8 * 1.75em + var(--space-4) + var(--space-5)); overflow-y: auto; scrollbar-width: thin; cursor: text; }
+.shell a { cursor: pointer; }
+.shell [data-shell-prompt] { display: flex; align-items: baseline; }
+.shell__form { flex: 1; min-width: 0; display: flex; position: relative; }
+.shell__input {
+  flex: 1; min-width: 0; padding: 0; margin: 0; border: 0; outline: 0; background: transparent;
+  font: inherit; color: var(--text); caret-color: var(--accent); caret-shape: block;
+}
+.shell__input::placeholder { color: var(--text-faint); opacity: 1; }
+.shell__input:placeholder-shown:not(:focus) { text-indent: 1.4ch; }
+.shell__form .cursor { position: absolute; left: 0; top: 0.3em; pointer-events: none; }
+.shell__input:focus ~ .cursor, .shell__input:not(:placeholder-shown) ~ .cursor { display: none; }
+.shell__form:focus-within { box-shadow: 0 2px 0 -0.5px var(--accent); }
+.shell__em { font-weight: 600; color: var(--accent); }
+.shell__dim { color: var(--text-faint); }
+.shell__err { color: var(--danger); }
+.shell__err .shell__em { color: var(--text); }
+/* Phones zoom into inputs smaller than 16px. */
+@media (pointer: coarse) { .shell__input { font-size: 16px; } }
+
 /* Pip, drawn as figure 1 at the bottom of the terminal */
 .stage { position: relative; height: 150px; margin: 0 var(--space-5) var(--space-4); border: var(--outline-dashed); }
 .stage .dim { position: absolute; left: 0; right: 0; top: -22px; }
