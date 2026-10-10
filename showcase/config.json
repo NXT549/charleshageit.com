@@ -1,7 +1,7 @@
 {
   "user": "NXT549",
   "featuredTopic": "featured",
-  "featured": ["hamster-slots", "pip"],
+  "featured": ["hamster-slots", "pip", "stock-review"],
   "hide": ["charleshageit.com", "python-scripts"],
   "includeForks": false,
   "includeArchived": false,
@@ -33,6 +33,9 @@
       "pixelArt": true,
       "platforms": ["windows", "macos"],
       "frameworks": ["electron"]
+    },
+    "stock-review": {
+      "pop": "stamp-green"
     }
   }
 }
