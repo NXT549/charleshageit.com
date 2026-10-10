@@ -17,6 +17,7 @@
      .text-pop             highlighter swipe behind text (.text-gradient is the old name)
      .dim                  dimension line with a label ("128 px")
      .wiggle               gives something a little wiggle every few seconds
+     .is-waiting / .is-in  scroll-in: js/fx.js deals sheets onto the page as they scroll into view
      .kbd, code, pre       inline and block code
    ========================================================================== */
 
@@ -30,6 +31,7 @@ html {
 }
 body {
   margin: 0;
+  overflow-x: clip;  /* sheets tilt a little as they scroll in; never let that widen the page */
   min-height: 100vh;
   background-color: var(--bg);
   background-image:
@@ -96,7 +98,7 @@ html { scrollbar-color: var(--border-strong) var(--bg); }
 
 /* Highlighter swipe */
 .text-pop, .text-gradient {
-  background: linear-gradient(transparent 58%, rgb(255 210 63 / 0.38) 58% 90%, transparent 90%);
+  background: linear-gradient(transparent 58%, var(--highlighter-ink) 58% 90%, transparent 90%) no-repeat 0 0 / 100% 100%;
   -webkit-box-decoration-break: clone;
   box-decoration-break: clone;
   padding-inline: 0.06em;
@@ -302,6 +304,24 @@ a.tag:hover { color: var(--text); border-color: var(--text); }
   from { opacity: 0; transform: rotate(calc(var(--rot, -6deg) - 10deg)) scale(1.9); }
   60% { opacity: 1; }
 }
+
+/* ---------- Scroll-in ----------
+   js/fx.js marks sheets that start below the fold .is-waiting, then .is-in once they scroll into
+   view: they drop onto the page at a slight angle and settle, a highlighter swipes across their
+   .text-pop and any .hand note writes itself in. Uses translate/rotate rather than transform, so
+   hover lifts (.glow) keep working. fx.js numbers sheets that arrive together (--in-i) to deal them
+   out one after another. */
+.is-waiting { opacity: 0; }
+.is-in { --in-delay: calc(var(--in-i, 0) * var(--stagger)); }
+.is-in { animation: sheet-in var(--dur-sheet) var(--ease-bounce) var(--in-delay, 0s) backwards; }
+@keyframes sheet-in {
+  from { opacity: 0; translate: 0 40px; rotate: var(--in-rot, -1.2deg); }
+  45% { opacity: 1; }
+}
+.is-in .text-pop { animation: swipe 0.6s var(--ease-out) calc(var(--in-delay, 0s) + 0.3s) backwards; }
+@keyframes swipe { from { background-size: 0% 100%; } }
+.is-in .hand { animation: write 0.8s steps(12) calc(var(--in-delay, 0s) + 0.45s) backwards; }
+@keyframes write { from { clip-path: inset(-30% 100% -30% -5%); } to { clip-path: inset(-30% -5% -30% -5%); } }
 
 /* ---------- Code ---------- */
 code, kbd, pre, samp { font-family: var(--font-mono); font-size: 0.9em; }

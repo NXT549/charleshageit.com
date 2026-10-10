@@ -80,6 +80,20 @@
   transition: transform var(--dur-slow) var(--ease-out), filter var(--dur-slow) var(--ease-out);
 }
 .spotlight:hover .spotlight__shot { transform: scale(1.03); }
+/* Screenshots drift a little against their frame as the card scrolls past. Pure CSS, skipped where unsupported.
+   (var() keeps the minifier from folding the timeline into the shorthand, see .site-header::after.) */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .spotlight__shot:not(.spotlight__shot--pixel) {
+      scale: 1.1;
+      animation: shot-drift linear both; animation-timeline: var(--timeline, view());
+    }
+  }
+}
+@keyframes shot-drift { from { translate: 0 -4%; } to { translate: 0 4%; } }
+/* pixel-art sprites hop onto their drawing when the card scrolls in */
+.spotlight.is-in .spotlight__shot--pixel { animation: sprite-hop 0.7s var(--ease-bounce) calc(var(--in-delay, 0s) + 0.35s) backwards; }
+@keyframes sprite-hop { from { opacity: 0; transform: translateY(-40px) rotate(-10deg); } }
 .spotlight__shot--pixel {
   position: static; width: min(55%, 200px); height: auto;
   object-fit: contain; image-rendering: pixelated;
@@ -180,6 +194,11 @@
 .repo-card:nth-child(4n + 2) { --pop: var(--accent-2); }
 .repo-card:nth-child(4n + 3) { --pop: var(--success); }
 .repo-card:nth-child(4n + 4) { --pop: var(--warn); }
+/* cards land at slightly different angles as they scroll in, like sheets dropped on a pile */
+.repo-card:nth-child(even) { --in-rot: 1.4deg; }
+.repo-card:nth-child(3n) { --in-rot: -2deg; }
+.spotlight { --in-rot: -0.6deg; }
+.spotlight--flip { --in-rot: 0.6deg; }
 
 .repo-card__desc {
   flex: 1;

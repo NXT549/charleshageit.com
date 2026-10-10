@@ -15,6 +15,21 @@
 .brand:hover { color: var(--text); }
 .brand img { width: 30px; height: 30px; image-rendering: pixelated; transition: transform var(--dur) var(--ease-bounce); }
 .brand:hover img { transform: translateY(-3px) rotate(-8deg); }
+/* How far down the drawing you are: a highlighter line along the bottom of the header that
+   fills as you scroll. Pure CSS; browsers without scroll timelines just don't draw it.
+   The timeline goes through var() so the minifier can't fold it into the animation shorthand,
+   which browsers reject. */
+@supports (animation-timeline: scroll()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .site-header::after {
+      content: ""; position: absolute; left: 0; right: 0; bottom: calc(var(--stroke) * -1);
+      height: 3px; background: var(--accent);
+      transform-origin: 0 50%; transform: scaleX(0);
+      animation: scroll-progress linear both; animation-timeline: var(--timeline, scroll(root));
+    }
+  }
+}
+@keyframes scroll-progress { to { transform: scaleX(1); } }
 .nav { display: flex; align-items: center; gap: 4px; }
 .nav ul { list-style: none; margin: 0; padding: 0; }
 .nav__links { display: flex; gap: 4px; }
@@ -117,6 +132,23 @@
 .about .hand { justify-self: end; --rot: -4deg; }
 
 /* ---------- footer ---------- */
+/* Pip stands on the footer's top line, waiting to take you back up. */
+.footer-pip {
+  display: flex; align-items: flex-end; justify-content: center; gap: var(--space-3);
+  width: fit-content; height: 72px; margin: -72px auto 0; padding-inline: var(--space-2);
+  text-decoration: none; text-transform: none; letter-spacing: normal;
+}
+.footer-pip img { width: 48px; height: 48px; image-rendering: pixelated; transition: transform var(--dur) var(--ease-bounce); }
+.footer-pip .hand { --rot: -4deg; font-size: 1.5rem; }
+.footer-pip:hover img, .footer-pip:focus-visible img { transform: translateY(-8px) rotate(-8deg); }
+.footer-pip.is-in img { animation: pip-hop 0.9s var(--ease-out) calc(var(--in-delay, 0s) + 0.2s) backwards; }
+@keyframes pip-hop {
+  0% { transform: translateY(24px) scale(1, 0.6); opacity: 0; }
+  35% { transform: translateY(-18px) scale(0.9, 1.1); opacity: 1; }
+  60% { transform: translateY(0) scale(1.15, 0.85); }
+  80% { transform: translateY(-5px) scale(1); }
+}
+
 .site-footer {
   margin-top: var(--space-9); border-top: var(--outline);
   font: 500 11px / 1.6 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint);

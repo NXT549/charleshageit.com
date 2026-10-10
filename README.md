@@ -68,7 +68,12 @@ labels and code use Geist Mono, and the handwritten notes use Caveat.
   `.terminal`, `.btn--primary` / `--secondary` / `--ghost`, `.tag`, `.badge--live` / `--wip` / `--info` (rubber stamps),
   `.hand` (handwritten note), `.circled` (hand-drawn loop around a word), `.text-pop` (highlighter), `.dim` (dimension line)
   and `.eyebrow`. The comment at the top of the file lists them all.
-- `src/scripts/fx.js` makes the stamps thunk down as they scroll into view.
+- Scroll motion: `src/scripts/fx.js` makes the stamps thunk down, and deals sheets (section headings, project cards,
+  about panels, log entries, the footer's Pip) onto the page as they scroll into view: they drop in at a slight angle,
+  the heading's highlighter swipes across and handwritten notes write themselves in. Add a selector to its `SHEETS`
+  list to give something else the same entrance. Anything on screen at load stays put. Pure CSS adds a highlighter
+  progress line under the header and a little drift on project screenshots (scroll timelines; skipped where
+  unsupported). All of it is off for people who prefer reduced motion.
 
 ## Pages
 

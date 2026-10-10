@@ -42,7 +42,7 @@ GitHub data only shows up in CI.
 - `src/layouts/`: `Base.astro` (head, SEO, structured data), `Page.astro` (non-home pages).
 - `src/components/`: Hero, Workbench, Projects, FilterBar, About, StatusBadge, Pip, Header, Footer.
 - `src/lib/`: `site.ts` (name, links), `showcase.ts` (build-time fetch), `readme.ts`, `og.ts`.
-- `src/scripts/`: `fx.js` (stamps), `shell.ts` (hero terminal), `showcase.js` (filters).
+- `src/scripts/`: `fx.js` (stamps, scroll-in), `shell.ts` (hero terminal), `showcase.js` (filters).
 - `src/styles/`: `tokens.css`, `theme.css`, plus `page`, `prose`, `showcase` CSS.
 - `showcase/`: dependency-free `fetch.mjs`, `detect.mjs` (pure helpers), `render.mjs` (cards),
   `build.mjs`, `config.json`, `test/`.
