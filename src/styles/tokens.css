@@ -60,6 +60,7 @@
   --accent-fg: var(--navy);         /* text on a filled accent (9:1 or better) */
   --accent-soft: rgb(255 210 63 / 0.14);
   --accent-2-soft: rgb(95 212 255 / 0.12);
+  --highlighter-ink: rgb(255 210 63 / 0.38);  /* the see-through swipe behind .text-pop */
   --warn: var(--stamp-red);
   --danger: var(--stamp-red);
   --success: var(--stamp-green);
@@ -162,4 +163,6 @@
   --dur-fast: 120ms;
   --dur: 220ms;
   --dur-slow: 420ms;
+  --dur-sheet: 650ms;   /* a sheet sliding onto the page as it scrolls in */
+  --stagger: 90ms;      /* gap between sheets dealt out together */
 }
