@@ -1,72 +1,63 @@
 # CLAUDE.md
 
-Guidance for Claude (or any contributor) working on charleshageit.com, Charles's workshop site.
-Live at https://charleshageit.com/. Owner: Charles, GitHub `NXT549`. Read this first, then `README.md`
-(commands, config options, file map) and `docs/` for the deeper notes.
-
-## What this is
-
-A fun, minimalist developer showcase. Astro 7 static site, deployed to GitHub Pages by
-`.github/workflows/deploy.yml`. Project cards, `/projects/<repo>/` spec sheets, `/about/` and `/log/`
-are generated at build time from NXT549's public GitHub repos. Nothing calls GitHub when a visitor loads a page.
+charleshageit.com: Charles's (GitHub `NXT549`) fun, minimalist developer showcase. Astro 7 static site,
+deployed to GitHub Pages by `.github/workflows/deploy.yml`. Project cards, `/projects/<repo>/`, `/about/`
+and `/log/` are built from NXT549's public repos at build time; visitors never hit the GitHub API.
+`README.md` has commands, config options and the file map; `docs/` has the deeper notes.
 
 ## Hard rules
 
-1. **Privacy: never mention where Charles lives.** No city, suburb, region, country, timezone, coordinates
-   or GitHub-profile location anywhere: page copy, meta tags, Open Graph, structured data, the social card,
-   `data/*.json`, README, docs, commit messages. Check `dist/` before pushing if unsure.
-2. **Blueprint look only.** Navy grid paper, chalk linework, yellow highlighter, blue pencil, Caveat notes,
-   rubber stamps, Pip the mascot. Never generic "AI" styling (dark glass, neon gradients, glow orbs).
-   It should feel fun and have personality. For visual changes, show screenshots before committing to a new direction.
-3. **Use tokens.** Colours, fonts and spacing come from `src/styles/tokens.css`; reusable pieces from
-   `src/styles/theme.css`. Don't hard-code values.
-4. **Keep Lighthouse high.** Every page must stay at Lighthouse performance >= 95 and 100 for accessibility,
-   best practices and SEO (`lighthouserc.json`). Minimal JS, lazy images, no render-blocking requests.
-5. **Pages Source stays on "GitHub Actions".** `main` holds Astro source, not a built site. Keep `public/CNAME`.
-6. **Never hand-edit generated output** (`dist/`, `data/github.json`). Change `showcase/config.json`,
-   `showcase/render.mjs` or the Astro components instead.
+1. **Never reveal where Charles lives.** No city, suburb, region, country, timezone, coordinates or GitHub
+   profile location in page copy, meta/OG tags, structured data, the social card, `data/*.json`, docs or
+   commit messages. Grep `dist/` before pushing if unsure.
+2. **Blueprint look only**: navy grid paper, chalk lines, yellow highlighter, blue pencil, Caveat notes,
+   rubber stamps, Pip the mascot. Fun, with personality. No generic "AI" styling (dark glass, neon
+   gradients, glow orbs). Show screenshots before committing to a new visual direction.
+3. **Use tokens.** Colours, fonts and spacing come from `src/styles/tokens.css`, shared pieces from
+   `theme.css`. No hard-coded values. Exception: `src/lib/og.ts` (satori can't read CSS variables) keeps
+   its own copy, so update it by hand when the theme changes.
+4. **Lighthouse**: performance >= 95, 100 for accessibility, best practices and SEO on every page
+   (`lighthouserc.json`, blocking on PRs). Minimal JS, lazy images, no render-blocking requests.
+5. **Deploy setup stays put**: Pages source is "GitHub Actions", `main` holds source (never a built site),
+   keep `public/CNAME`.
+6. **Never hand-edit generated output** (`dist/`, `data/github.json`, `data/github-raw.json`). Change
+   `showcase/config.json`, `showcase/*.mjs` or the Astro components instead.
 
-## Commands
+## Before every push
 
 ```sh
 npm ci
-npm run dev      # http://localhost:4321
-npm run check    # astro check (types)
-node --test "showcase/test/*.test.mjs"   # the glob matters on Node 22
-npm run build    # SHOWCASE_OFFLINE=1 skips GitHub and uses the cached data
-npx lhci autorun # needs Chrome
+npm run check                            # astro check
+node --test "showcase/test/*.test.mjs"   # keep the quotes (Node 22 glob)
+SHOWCASE_OFFLINE=1 npm run build         # offline: uses the cached data/
 ```
 
-Run `check`, the tests and `build` before every push. CI runs the same plus Lighthouse (blocking on PRs).
+`npm run dev` serves on :4321. `npx lhci autorun` runs Lighthouse locally (needs Chrome).
+This sandbox can't reach api.github.com user endpoints or charleshageit.com, so build offline; real
+GitHub data only shows up in CI.
 
-## Where things live
+## Map
 
 - `src/pages/`: `index`, `about`, `log`, `404`, `projects/[name]`, `og.png.ts` (social card).
 - `src/layouts/`: `Base.astro` (head, SEO, structured data), `Page.astro` (non-home pages).
-- `src/components/`: Hero, Projects, Workbench, FilterBar, About, Pip, header/footer.
+- `src/components/`: Hero, Workbench, Projects, FilterBar, About, StatusBadge, Pip, Header, Footer.
 - `src/lib/`: `site.ts` (name, links), `showcase.ts` (build-time fetch), `readme.ts`, `og.ts`.
-  `og.ts` hard-codes a copy of the theme colours and fonts (satori can't read CSS variables), so redraw it by hand when the theme changes.
-- `src/scripts/`: `fx.js` (stamps), `shell.ts` (typeable hero terminal), `showcase.js` (filters).
-- `showcase/`: dependency-free fetch (`fetch.mjs`), card rendering (`render.mjs`), `config.json`, tests.
-- `data/github-raw.json` and `github.json`: cached snapshot used when GitHub is unreachable.
+- `src/scripts/`: `fx.js` (stamps), `shell.ts` (hero terminal), `showcase.js` (filters).
+- `src/styles/`: `tokens.css`, `theme.css`, plus `page`, `prose`, `showcase` CSS.
+- `showcase/`: dependency-free `fetch.mjs`, `detect.mjs` (pure helpers), `render.mjs` (cards),
+  `build.mjs`, `config.json`, `test/`.
+- `data/`: cached GitHub snapshot used when the API is unreachable.
 
-## How content updates itself
+## Content
 
-- Pushing to `main` rebuilds and deploys. So does a 6-hourly cron, a manual run, and a `repository_dispatch`
-  event of type `repo-updated` (so Charles's other repos can trigger an immediate rebuild).
-- New public repos appear on the workbench automatically. Forks, archived repos and entries in `hide` are skipped.
-- To change a card, edit `repos.<name>` in `showcase/config.json` (options are in README.md). To feature a
-  repo, add it to `featured` or give it the `featured` topic on GitHub.
-- Details and setup steps for other repos: `docs/keeping-it-fresh.md`.
-
-## Docs upkeep
-
-When you add a page, config option, workflow or rule, update `README.md` (user-facing how-to), this file
-(rules and map) and `docs/` in the same PR. Keep this file short and accurate; delete stale lines.
+- Rebuilds on push to `main`, every 6 hours, manual runs, and `repository_dispatch` type `repo-updated`.
+- New public repos appear automatically; forks, archived repos and `hide` entries are skipped.
+- Per-card tweaks go in `repos.<name>` in `showcase/config.json`. Feature a repo via `featured` there or
+  the `featured` GitHub topic. More in `docs/keeping-it-fresh.md`.
+- Sheet numbers on the drawings: home 01-04, about 05, log 06, projects P-01 onward.
 
 ## Working style
 
-- Branch from `main`, one PR per batch of work, base `main`. Don't reuse a merged PR's branch without resetting it onto `main`.
-- Sandboxes can't reach api.github.com user endpoints or charleshageit.com (proxy). Real GitHub data shows
-  up in CI logs; locally the build uses the cache.
-- Sheet numbering on the drawings: home 01-04, about 05, log 06, projects P-01 onward.
+- Branch from `main`, one PR per batch of work. Reset a merged PR's branch onto `main` before reusing it.
+- Adding a page, config option, workflow or rule? Update `README.md`, this file and `docs/` in the same PR.
+  Keep this file short; delete stale lines.
