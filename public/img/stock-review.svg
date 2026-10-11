@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630" role="img" aria-labelledby="t"><title id="t">A sketch of the Stock Review live board: a watchlist sidebar, a table filling in ticker by ticker, and Run and Copy for AI buttons.</title>
+<rect width="1200" height="630" fill="#163663"/>
+<path d="M0 0V630M24 0V630M48 0V630M72 0V630M96 0V630M120 0V630M144 0V630M168 0V630M192 0V630M216 0V630M240 0V630M264 0V630M288 0V630M312 0V630M336 0V630M360 0V630M384 0V630M408 0V630M432 0V630M456 0V630M480 0V630M504 0V630M528 0V630M552 0V630M576 0V630M600 0V630M624 0V630M648 0V630M672 0V630M696 0V630M720 0V630M744 0V630M768 0V630M792 0V630M816 0V630M840 0V630M864 0V630M888 0V630M912 0V630M936 0V630M960 0V630M984 0V630M1008 0V630M1032 0V630M1056 0V630M1080 0V630M1104 0V630M1128 0V630M1152 0V630M1176 0V630M1200 0V630M0 0H1200M0 24H1200M0 48H1200M0 72H1200M0 96H1200M0 120H1200M0 144H1200M0 168H1200M0 192H1200M0 216H1200M0 240H1200M0 264H1200M0 288H1200M0 312H1200M0 336H1200M0 360H1200M0 384H1200M0 408H1200M0 432H1200M0 456H1200M0 480H1200M0 504H1200M0 528H1200M0 552H1200M0 576H1200M0 600H1200M0 624H1200" stroke="#aacdff" stroke-opacity=".10" stroke-width="1" fill="none"/>
+<path d="M0 0V630M120 0V630M240 0V630M360 0V630M480 0V630M600 0V630M720 0V630M840 0V630M960 0V630M1080 0V630M1200 0V630M0 0H1200M0 120H1200M0 240H1200M0 360H1200M0 480H1200M0 600H1200" stroke="#aacdff" stroke-opacity=".2" stroke-width="1" fill="none"/>
+<rect x="210" y="102" width="800" height="446" fill="#5fd4ff" fill-opacity=".25"/>
+<rect x="200" y="92" width="800" height="446" fill="#0b2240" stroke="#e6f0ff" stroke-width="3"/>
+<rect x="200" y="92" width="800" height="38" fill="#1c4174" stroke="#e6f0ff" stroke-width="3"/>
+<circle cx="224" cy="111" r="6" fill="#ffd23f" stroke="#ffd23f" stroke-width="2"/>
+<circle cx="246" cy="111" r="6" fill="none" stroke="#e6f0ff" stroke-width="2"/>
+<circle cx="268" cy="111" r="6" fill="none" stroke="#e6f0ff" stroke-width="2"/>
+<text x="600.0" y="117" text-anchor="middle" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="16" font-weight="700" letter-spacing="2" fill="#e6f0ff">STOCK REVIEW · LIVE BOARD</text>
+<path d="M390 130V538" stroke="#e6f0ff" stroke-opacity=".5" stroke-width="2"/>
+<text x="218" y="162" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="12" letter-spacing="2" fill="#5fd4ff">LISTS</text>
+<text x="224" y="197" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="15" fill="#a9c2e6">Watchlist</text>
+<rect x="210" y="216" width="170" height="32" fill="#ffd23f"/>
+<text x="224" y="237" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="15" font-weight="700" fill="#0b2240">S&amp;P 500</text>
+<text x="224" y="277" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="15" fill="#a9c2e6">Japan</text>
+<text x="224" y="317" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="15" fill="#a9c2e6">UK + Germany</text>
+<text x="224" y="357" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="15" fill="#a9c2e6">Everything</text>
+<text x="414" y="162" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="12" letter-spacing="2" fill="#5fd4ff">TICKER</text>
+<text x="584" y="162" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="12" letter-spacing="2" fill="#5fd4ff">1 MONTH</text>
+<text x="876" y="162" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="12" letter-spacing="2" fill="#5fd4ff">STATUS</text>
+<path d="M414 172H976" stroke="#e6f0ff" stroke-opacity=".5" stroke-width="2"/>
+<rect x="406" y="184" width="578" height="30" fill="#e6f0ff" fill-opacity=".05"/>
+<text x="414" y="205" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="15" font-weight="700" fill="#e6f0ff">AAPL</text>
+<rect x="584" y="193" width="117" height="12" fill="#5fd4ff" fill-opacity="1"/>
+<text x="876" y="205" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="14" font-weight="700" fill="#34d399">✓ fetched</text>
+<text x="414" y="238" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="15" font-weight="700" fill="#e6f0ff">MSFT</text>
+<rect x="584" y="226" width="91" height="12" fill="#5fd4ff" fill-opacity="1"/>
+<text x="876" y="238" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="14" font-weight="700" fill="#34d399">✓ fetched</text>
+<rect x="406" y="250" width="578" height="30" fill="#e6f0ff" fill-opacity=".05"/>
+<text x="414" y="271" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="15" font-weight="700" fill="#e6f0ff">NVDA</text>
+<rect x="584" y="259" width="163" height="12" fill="#5fd4ff" fill-opacity="1"/>
+<text x="876" y="271" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="14" font-weight="700" fill="#34d399">✓ fetched</text>
+<text x="414" y="304" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="15" font-weight="700" fill="#e6f0ff">7203.T</text>
+<rect x="584" y="292" width="57" height="12" fill="#5fd4ff" fill-opacity="1"/>
+<text x="876" y="304" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="14" font-weight="700" fill="#34d399">✓ fetched</text>
+<rect x="406" y="316" width="578" height="30" fill="#e6f0ff" fill-opacity=".05"/>
+<text x="414" y="337" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="15" font-weight="700" fill="#e6f0ff">SHEL.L</text>
+<rect x="584" y="325" width="76" height="12" fill="#5fd4ff" fill-opacity="1"/>
+<text x="876" y="337" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="14" font-weight="700" fill="#34d399">✓ fetched</text>
+<text x="414" y="370" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="15" font-weight="700" fill="#e6f0ff">SAP.DE</text>
+<rect x="584" y="358" width="104" height="12" fill="#5fd4ff" fill-opacity="0.45"/>
+<text x="876" y="370" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="14" font-weight="700" fill="#ffd23f">retrying</text>
+<rect x="406" y="382" width="578" height="30" fill="#e6f0ff" fill-opacity=".05"/>
+<text x="414" y="403" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="15" font-weight="700" fill="#e6f0ff">0700.HK</text>
+<rect x="584" y="391" width="38" height="12" fill="#a9c2e6" fill-opacity="0.45"/>
+<text x="876" y="403" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="14" font-weight="700" fill="#ff7a5c">failed</text>
+<text x="414" y="436" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="15" font-weight="700" fill="#e6f0ff">RY.TO</text>
+<text x="876" y="436" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="14" font-weight="700" fill="#a9c2e6">waiting</text>
+<path d="M390 476H1000" stroke="#e6f0ff" stroke-opacity=".5" stroke-width="2"/>
+<rect x="414" y="494" width="262" height="14" fill="none" stroke="#e6f0ff" stroke-width="2"/>
+<rect x="414" y="494" width="183" height="14" fill="#34d399"/>
+<rect x="698" y="486" width="86" height="32" fill="#34d399" stroke="#e6f0ff" stroke-width="2"/>
+<text x="741" y="508" text-anchor="middle" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="15" font-weight="800" fill="#0b2240">RUN</text>
+<rect x="796" y="486" width="180" height="32" fill="#ffd23f" stroke="#e6f0ff" stroke-width="2"/>
+<text x="886" y="508" text-anchor="middle" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="15" font-weight="800" fill="#0b2240">COPY FOR AI</text>
+<path d="M200 58H1000M200 50V66M1000 50V66" stroke="#5fd4ff" stroke-width="2" fill="none"/>
+<rect x="410" y="46" width="380" height="24" fill="#163663"/>
+<text x="600.0" y="63" text-anchor="middle" font-family="ui-monospace,Menlo,Consolas,monospace" font-size="14" fill="#5fd4ff">a sketch of the window, not a screenshot</text>
+</svg>
