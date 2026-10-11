@@ -50,6 +50,8 @@ const r = repo as Repo & {
   image: { src: string; alt: string; width: number | null; height: number | null; pixelArt: boolean } | null;
   scene: string | null;
   note: string | null;
+  does: { title: string; text: string }[];
+  how: { title: string; text: string; note: string | null }[];
   status: string | null;
   forks: number;
   createdAt: string | null;
@@ -165,6 +167,59 @@ const description = tagline || `${r.title}, one of the little things in Charles'
     </figure>
   </section>
 
+  {
+    r.does.length > 0 && (
+      <section class="container proj-does" aria-labelledby="does-title">
+        <header class="section-head">
+          <p class="eyebrow">Sheet {sheet} · Preview</p>
+          <h2 id="does-title">What it <span class="text-pop">does</span></h2>
+        </header>
+        <ul class="does-grid">
+          {r.does.map((d, i) => (
+            <li class="panel does-card" style={`--n: "${i + 1}"`}>
+              <h3>{d.title}</h3>
+              <p set:html={richText(d.text)} />
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  {
+    r.how.length > 0 && (
+      <section class="container proj-how" aria-labelledby="how-title">
+        <header class="section-head">
+          <p class="eyebrow">Sheet {sheet} · Working drawing</p>
+          <h2 id="how-title">How it <span class="text-pop">works</span></h2>
+        </header>
+        <ol class="how">
+          {r.how.map((h, i) => (
+            <li class="how__step">
+              <span class="how__dot" aria-hidden="true">{i + 1}</span>
+              <div class="panel how__card">
+                <h3>{h.title}</h3>
+                <p set:html={richText(h.text)} />
+                {h.note && <span class="hand how__note">{h.note}</span>}
+              </div>
+            </li>
+          ))}
+        </ol>
+      </section>
+    )
+  }
+
+  {
+    r.does.length === 0 && r.how.length === 0 && (
+      <section class="container proj-draft" aria-label="Still being drawn">
+        <div class="panel proj-draft__box">
+          <span class="badge badge--wip" style="--rot: -3deg">On the drafting board</span>
+          <p>The "what it does" and "how it works" drawings for {r.title} aren't finished yet. The whole README is below in the meantime.</p>
+        </div>
+      </section>
+    )
+  }
+
   <section class="container proj-body">
     <aside class="proj-aside" aria-label="Project details">
       <div class="panel proj-panel">
@@ -246,7 +301,7 @@ const description = tagline || `${r.title}, one of the little things in Charles'
 </Page>
 
 <style>
-  .proj-top { display: grid; gap: var(--space-7); align-items: start; padding-top: var(--space-8); }
+  .proj-top { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-7); align-items: start; padding-top: var(--space-8); }
   @media (min-width: 940px) { .proj-top { grid-template-columns: 1fr 1.05fr; align-items: center; } }
   .proj-intro { display: grid; gap: var(--space-4); justify-items: start; min-width: 0; }
   .proj-intro h1 { font-size: clamp(2.5rem, 1.5rem + 4vw, 4.25rem); }
@@ -260,15 +315,17 @@ const description = tagline || `${r.title}, one of the little things in Charles'
   .proj-highlights { margin: 0; }
   .proj-intro :global(.repo-actions) { margin-top: var(--space-2); }
 
+  .proj-top > *, .proj-body > * { min-width: 0; }
   .proj-fig { margin: 0; min-width: 0; background: var(--surface); }
-  .proj-media { min-height: 300px; aspect-ratio: 1200 / 630; border: 0; }
+  .proj-media { aspect-ratio: 1200 / 630; min-height: 0; border: 0; }
+  @media (min-width: 940px) { .proj-media { min-height: 300px; } }
   .proj-media.spotlight__media--desk { aspect-ratio: auto; min-height: 340px; }
   .proj-media.is-playing { aspect-ratio: auto; min-height: min(70vh, 560px); }
   .proj-fig .titleblock { border-top: var(--outline); }
   .proj-fig :global(.stage) { height: 260px; margin: var(--space-7) var(--space-5) var(--space-5); }
   .proj-fig .titleblock a { color: inherit; }
 
-  .proj-body { display: grid; gap: var(--space-6); align-items: start; padding-top: var(--space-8); }
+  .proj-body { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-6); align-items: start; padding-top: var(--space-8); }
   @media (min-width: 940px) {
     .proj-body { grid-template-columns: minmax(0, 1fr) 320px; }
     .proj-aside { order: 2; position: sticky; top: 88px; max-height: calc(100vh - 104px); overflow-y: auto; scrollbar-width: thin; }
@@ -302,6 +359,44 @@ const description = tagline || `${r.title}, one of the little things in Charles'
 
   .proj-readme { min-width: 0; }
   .proj-readme .terminal__title { margin-right: 42px; }
+
+
+  .proj-does, .proj-how, .proj-draft { padding-top: var(--space-8); }
+  .proj-draft__box { display: grid; gap: var(--space-3); justify-items: start; padding: var(--space-5); color: var(--text-muted); max-width: 60ch; }
+  .does-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); }
+  .does-card { position: relative; display: grid; gap: var(--space-2); align-content: start; padding: var(--space-5) var(--space-4) var(--space-4); }
+  .does-card::before {
+    content: var(--n); position: absolute; top: -14px; left: var(--space-4);
+    display: grid; place-items: center; width: 28px; height: 28px;
+    font: 700 var(--text-xs) / 1 var(--font-mono); color: var(--accent-fg); background: var(--accent);
+    border: var(--outline); border-radius: 50%; rotate: -6deg;
+  }
+  .does-card h3, .how__card h3 { font-size: var(--text-lg); }
+  .does-card p, .how__card p { margin: 0; color: var(--text-muted); }
+
+  .how { --rail: 36px; list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-5); position: relative; max-width: 780px; }
+  .how::before {
+    content: ""; position: absolute; left: calc(var(--rail) / 2 - 1px); top: 18px; bottom: 18px; width: 2px;
+    background: repeating-linear-gradient(var(--line) 0 8px, transparent 8px 14px);
+    transform-origin: 50% 0;
+  }
+  .how__step { position: relative; display: grid; grid-template-columns: var(--rail) minmax(0, 1fr); gap: var(--space-4); align-items: start; }
+  .how__dot {
+    position: relative; z-index: 1; display: grid; place-items: center; width: var(--rail); height: var(--rail);
+    font: 700 var(--text-sm) / 1 var(--font-mono); color: var(--text); background: var(--bg);
+    border: 2.5px solid var(--accent); border-radius: 50%;
+  }
+  .how__card { display: grid; gap: var(--space-2); padding: var(--space-4); }
+  .how__note { color: var(--accent); rotate: -2deg; justify-self: end; }
+  @media (prefers-reduced-motion: no-preference) {
+    @supports (animation-timeline: view()) {
+      /* The dashed rail is drawn down the page as you scroll through the steps. */
+      .how::before { animation: rail-draw linear both; animation-timeline: var(--view, view()); animation-range: entry 15% cover 60%; }
+      .how__step.is-in .how__dot { animation: dot-pop 0.5s var(--ease-bounce) calc(var(--in-delay, 0s) + 0.15s) backwards; }
+    }
+  }
+  @keyframes rail-draw { from { transform: scaleY(0); } }
+  @keyframes dot-pop { from { scale: 0; } }
 
   .proj-pager { display: flex; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; padding-top: var(--space-7); }
 </style>

@@ -329,3 +329,18 @@ test("injection replaces only the marked regions and is repeatable", async () =>
   assert.ok(once.startsWith("<main>\n    <section id=\"spotlight\">"));
   assert.throws(() => inject("<p>no markers</p>", "repos", "x"), /missing the <!-- showcase:repos:start -->/);
 });
+
+test("does and how steps are cleaned up and capped", async () => {
+  const raw = await fetchViaGraphQL({ login: "NXT549", token: "t", fetchImpl: graphqlFetch() });
+  const many = Array.from({ length: 12 }, (_, i) => ({ title: ` T${i} `, text: "t" }));
+  const out = normalize(
+    raw,
+    { ...config, repos: { pip: { does: [...many, "nope", { title: 1 }], how: [{ title: "a", text: "b", note: "n" }, { text: "no title" }] } } },
+    { generatedAt: NOW }
+  );
+  const pip = out.repos.find((r) => r.name === "pip");
+  assert.equal(pip.does.length, 8);
+  assert.equal(pip.does[0].title, "T0");
+  assert.deepEqual(pip.how, [{ title: "a", text: "b", note: "n" }]);
+  assert.deepEqual(out.repos.find((r) => r.name !== "pip").how, []);
+});

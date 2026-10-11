@@ -329,6 +329,14 @@ function facet(repos, pick, label) {
 }
 
 /** Turn raw repos (from either API) plus the config into the data the page is built from. */
+// "does" and "how" in config.json: short {title, text} entries for the project page. Anything else is dropped.
+function steps(list) {
+  return (Array.isArray(list) ? list : [])
+    .filter((x) => x && typeof x.title === "string" && typeof x.text === "string")
+    .map((x) => ({ title: x.title.trim(), text: x.text.trim(), note: typeof x.note === "string" ? x.note.trim() : null }))
+    .slice(0, 8);
+}
+
 export function normalize({ user, repos }, config, { generatedAt = new Date().toISOString() } = {}) {
   const login = config.user;
   const overrides = config.repos || {};
@@ -364,6 +372,8 @@ export function normalize({ user, repos }, config, { generatedAt = new Date().to
         description: description || (excerpt ? readmeExcerpt(r.readme, 140) : null),
         blurb: o.blurb || null,
         highlights: o.highlights || [],
+        does: steps(o.does),
+        how: steps(o.how),
         homepage,
         embed: o.embed ? (typeof o.embed === "string" ? o.embed : homepage) : null,
         image: o.image

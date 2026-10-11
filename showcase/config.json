@@ -17,7 +17,19 @@
       "imageAlt": "Hamster Slots: a BIG WIN on the Snack Stacker, with coins flying everywhere",
       "imageWidth": 1200,
       "imageHeight": 630,
-      "frameworks": ["vite"]
+      "frameworks": ["vite"],
+      "does": [
+        {"title": "Spin the reels", "text": "Eight slot machines, from Old Clunky to the Hamster Maze, with wilds, free spins, a jackpot wheel and a card gamble. All the coins are pretend."},
+        {"title": "Upgrade everything", "text": "Payouts, auto-spin, Luck and new symbols for the hamster and every machine. The Hamster Helper buys the cheap ones for you."},
+        {"title": "Retire and start again", "text": "Retire to the Big Cage, plant Heirloom Seeds in the Family Tree and, one day, move the whole family to a new colony for perks that last forever."},
+        {"title": "Open a casino", "text": "Roulette, blackjack and a hamster derby for pretend chips, then your own Family Casino that earns Takings while you're away."}
+      ],
+      "how": [
+        {"title": "You spin", "text": "Each spin picks the reels from a seeded random roll and pays by the machine's rules: paylines, ways or hold & spin.", "note": "no real money, ever"},
+        {"title": "The rules decide", "text": "All the game's maths lives in `src/logic/` and never touches the page, so the tests and the balance simulator run it without a browser."},
+        {"title": "The view draws it", "text": "Sprites are drawn as text in `src/view/art.ts`. The bigger scenes are painted pixel by pixel in code and every sound is made in the browser. No game engine."},
+        {"title": "It saves itself", "text": "Progress is kept in your browser and keeps earning a little while you're away. Menu, then Save backup, gives you a code to move it elsewhere."}
+      ]
     },
     "pip": {
       "status": "done",
@@ -32,7 +44,19 @@
       "imageHeight": 256,
       "pixelArt": true,
       "platforms": ["windows", "macos"],
-      "frameworks": ["electron"]
+      "frameworks": ["electron"],
+      "does": [
+        {"title": "Lives on your desktop", "text": "Pip trots along the bottom of your screen, climbs the edges, naps when you wander off and greets you when you're back."},
+        {"title": "Reacts to you", "text": "Hover and hearts pop, click for a remark, double-click for a snack, drag him about. Click him five times fast and he huffs off."},
+        {"title": "Looks after you", "text": "A gentle Pomodoro timer, break reminders and a nudge to drink water, with a four-week calendar of how you did. Never a nag."},
+        {"title": "Dresses for the season", "text": "Nine flavours, from cherry to candy cane, and he wears bubblegum in February, pumpkin in October and candy cane in December."}
+      ],
+      "how": [
+        {"title": "The main process decides", "text": "Everything in `src/main/` is plain code with no Electron in it: the clock and the randomness are passed in, so Pip's brain is easy to test.", "note": "tested without a window"},
+        {"title": "The renderer draws", "text": "One transparent, always-on-top window covers your work area. It ignores the mouse everywhere except Pip himself, found by checking the alpha of his current sprite frame."},
+        {"title": "A bridge in between", "text": "`preload.js` is the only way across, with an explicit list of allowed channels. Every timer comes from a stored start time, so closing your laptop mid-Pomodoro can't corrupt it."},
+        {"title": "He notices you", "text": "Activity is read from the system's idle time every ten seconds. Five quiet minutes and he curls up to sleep; any movement wakes him within a second."}
+      ]
     },
     "stock-review": {
       "pop": "stamp-green"
