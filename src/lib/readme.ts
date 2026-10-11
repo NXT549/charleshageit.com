@@ -33,6 +33,9 @@ export function renderReadme(markdown: string, repo: ReadmeRepo): string {
   const blob = `https://github.com/${repo.fullName}/blob/HEAD/`;
   const raw = `https://raw.githubusercontent.com/${repo.fullName}/HEAD/`;
   const slug = slugger();
+  // The README sits under the page's h2, so its headings start at h3 and never skip a level
+  // (a README that jumps from "##" to "####" would otherwise break the heading order).
+  let prev = 2;
 
   const resolve = (href: string, base: string): string | null => {
     const h = href.trim();
@@ -47,7 +50,8 @@ export function renderReadme(markdown: string, repo: ReadmeRepo): string {
     renderer: {
       heading({ tokens, depth }) {
         const html = this.parser.parseInline(tokens);
-        const level = Math.min(depth + 1, 6);
+        const level = Math.min(depth + 1, prev + 1, 6);
+        prev = level;
         const id = slug(unesc(html.replace(/<[^>]+>/g, "")));
         return `<h${level} id="${esc(id)}">${html}</h${level}>\n`;
       },
@@ -55,7 +59,10 @@ export function renderReadme(markdown: string, repo: ReadmeRepo): string {
         const text = this.parser.parseInline(tokens);
         const url = resolve(href, blob);
         if (!url) return text;
-        return `<a href="${esc(url)}"${title ? ` title="${esc(title)}"` : ""}>${text}</a>`;
+        // A badge with no alt text would leave the link with no name at all, so name it by where it goes.
+        const named = /[^\s<>]/.test(text.replace(/<img\b[^>]*\balt="[^"]+"[^>]*>/g, "x").replace(/<[^>]+>/g, ""));
+        const label = named ? "" : ` aria-label="${esc(title || url.replace(/^https?:\/\/(www\.)?/i, "").replace(/\/$/, ""))}"`;
+        return `<a href="${esc(url)}"${title ? ` title="${esc(title)}"` : ""}${label}>${text}</a>`;
       },
       image({ href, title, text }) {
         const url = resolve(href, raw);

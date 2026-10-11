@@ -41,6 +41,8 @@
 }
 
 .readme img { max-width: 100%; height: auto; border: var(--outline); }
+/* Badge links are small; give them room so each one is an easy target. */
+.readme a:has(> img) { display: inline-block; padding: var(--space-1) 0; margin-right: var(--space-2); }
 
 .readme pre { font-size: var(--text-sm); color: var(--text); }
 .readme pre code { border: 0; padding: 0; color: inherit; font-size: 1em; }

@@ -97,7 +97,14 @@ const title = `${r.title} · ${SITE.name}`;
 const description = tagline || `${r.title}, one of the little things in Charles's workshop.`;
 ---
 
-<Page title={title} description={description} current="projects" sheet={sheet}>
+<Page
+  title={title}
+  description={description}
+  current="projects"
+  sheet={sheet}
+  image={`/og/projects/${r.name}.png`}
+  imageAlt={`${r.title}: a blueprint spec sheet with Pip pointing at the title.`}
+>
   <Fragment set:html={iconSprite()} />
 
   <section class="container proj-top">
