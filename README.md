@@ -40,7 +40,10 @@ with the current `showcase/config.json` applied.
   card), `pop` (the colour the card leaves behind on hover, a theme colour name like `highlighter` or
   `blue-pencil`), `scene: "desk"` (Pip's spec drawing behind a pixel-art image), `note` (a handwritten note on
   the picture, `\n` for a new line), `platforms` (download buttons to always show, linking to the release page
-  when there's no installer for one) and `frameworks` (extra framework tags if they aren't detected).
+  when there's no installer for one), `frameworks` (extra framework tags if they aren't detected),
+  `does` (up to 8 `{title, text}` cards under "What it does" on the project's page) and `how` (up to 8
+  `{title, text, note?}` steps under "How it works", with an optional handwritten `note`). Projects with
+  neither show an "On the drafting board" stamp instead.
 - **Download buttons** come from the latest GitHub release: an `.exe`/`.msi` becomes Windows, a `.dmg`
   becomes Mac, an `.AppImage`/`.deb` becomes Linux.
 - **Frameworks** (Vite, Electron, React, Flask, ...) are detected from each repo's `package.json`,
