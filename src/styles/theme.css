@@ -352,6 +352,20 @@ a.tag:hover { color: var(--text); border-color: var(--text); }
 }
 @keyframes grid-drift { from { translate: 0 0; } to { translate: 0 -360px; } }
 
+
+/* ---------- CAD cursor ----------
+   js/fx.js drops this into the page for mouse users: a square that snaps to the grid paper's
+   intersections, with its coordinates written next to it. */
+.cad { position: fixed; left: 0; top: 0; z-index: 45; pointer-events: none; opacity: 0; transition: opacity var(--dur); will-change: transform; }
+.cad.is-on { opacity: 1; }
+.cad__mark { position: absolute; left: -5px; top: -5px; width: 9px; height: 9px; border: 2px solid var(--accent); }
+.cad__tag {
+  position: absolute; left: 12px; top: 10px; padding: 3px 6px; white-space: nowrap;
+  font: 500 var(--text-xs) / 1 var(--font-mono); letter-spacing: 0.1em; color: var(--accent-2);
+  background: var(--bg); border: 1px solid var(--border-strong);
+}
+.cad--flip .cad__tag { left: auto; right: 12px; }
+
 /* ---------- Code ---------- */
 code, kbd, pre, samp { font-family: var(--font-mono); font-size: 0.9em; }
 :not(pre) > code {
