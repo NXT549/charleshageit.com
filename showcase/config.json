@@ -59,7 +59,23 @@
       ]
     },
     "stock-review": {
-      "pop": "stamp-green"
+      "pop": "stamp-green",
+      "image": "./img/stock-review.svg",
+      "imageAlt": "A sketch of the Stock Review live board: a list of watchlists on the left, a table filling in ticker by ticker, and Run and Copy for AI buttons",
+      "imageWidth": 1200,
+      "imageHeight": 630,
+      "does": [
+        {"title": "Ranks a whole market", "text": "Point it at a watchlist, an index or about a thousand names across the world and it scores every stock from 0 to 100."},
+        {"title": "No AI, no guessing", "text": "Scoring is plain Python: the same data in always gives the same ranks out. Missing numbers stay blank, they are never made up."},
+        {"title": "Writes one tidy file", "text": "The whole ranked universe lands in a single compact Markdown file, built to hand to an AI of your choice for a second opinion."},
+        {"title": "Checks itself", "text": "Every run is stored by date and a backtest asks whether higher scores ever really came before higher returns."}
+      ],
+      "how": [
+        {"title": "Collect", "text": "It pulls prices and fundamentals for your list from yfinance, caching per ticker per day and retrying politely when Yahoo pushes back.", "note": "just run it again to fill gaps"},
+        {"title": "Rank", "text": "Each metric becomes a 0 to 100 percentile against the rest of the universe. Fundamentals are ranked within their sector, so banks are not judged against software."},
+        {"title": "Score", "text": "Category scores (fundamentals, technicals, momentum, analyst) are weighted into one number. If a stock is missing something, its weight is shared out over what it does have."},
+        {"title": "Report and backtest", "text": "Everything goes into one Markdown file and a date-stamped database, and `run_backtest.py` tests whether the score predicted anything."}
+      ]
     }
   }
 }
