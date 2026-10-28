@@ -9,8 +9,8 @@ and `/log/` are built from NXT549's public repos at build time; visitors never h
 
 1. **Never reveal where Charles lives.** No city, suburb, region, country, timezone, coordinates or GitHub
    profile location in page copy, meta/OG tags, structured data, the social card, `data/*.json`, docs or
-   commit messages. Art and sample data count too: exchange names and ticker suffixes give it away
-   (`make-scenes.py` scrubs the Stock Review scenes). Grep `dist/` before pushing if unsure.
+   commit messages. Art and sample data count too (exchange names, ticker suffixes, real symbols), so the
+   sketchbook's charts use made-up tickers. Grep `dist/` before pushing if unsure.
 2. **Blueprint look only**: navy grid paper, chalk lines, yellow highlighter, blue pencil, Caveat notes,
    rubber stamps, Pip the mascot. Fun, with personality. No generic "AI" styling (dark glass, neon
    gradients, glow orbs). Show screenshots before committing to a new visual direction.
@@ -43,11 +43,12 @@ GitHub data only shows up in CI.
 - `src/layouts/`: `Base.astro` (head, SEO, structured data), `Page.astro` (non-home pages).
 - `src/components/`: Hero, Projects, Sketchbook (Fig. 3), Workbench, FilterBar, About, StatusBadge, Pip, AsciiFigure, Header, Footer.
 - `src/lib/`: `site.ts` (name, links), `showcase.ts` (build-time fetch), `readme.ts`, `og.ts`, `ascii.ts` (the sketchbook's pieces).
-- `src/ascii/`: generated sketchbook data: `stock-review.json` (from `showcase/make-scenes.py`), `standard.flf` (FIGlet font).
+- `src/ascii/`: sketchbook sources: `art/*.txt` (hand-drawn, frames split by `~~~`) and `fonts/*.flf` (FIGlet fonts).
 - `src/scripts/`: `fx.js` (stamps, scroll-in), `shell.ts` (hero terminal), `showcase.js` (filters), `ascii.ts` (frames, copy, banner maker). The scroll progress line, drifting grid, drawn rules and the "how it works" rail are pure CSS (`theme.css`, `projects/[name].astro`) and skip reduced motion.
 - `src/styles/`: `tokens.css`, `theme.css`, plus `page`, `prose`, `showcase`, `ascii` CSS.
 - `showcase/`: dependency-free `fetch.mjs`, `detect.mjs` (pure helpers), `render.mjs` (cards), `ascii.mjs`
-  (sprites to characters, FIGlet), `make-scenes.py`, `build.mjs`, `config.json`, `test/`.
+  (sprites to characters, FIGlet), `cyber.mjs` (the sketchbook's generators and catalogue), `build.mjs`,
+  `config.json`, `test/`.
 - `data/`: cached GitHub snapshot used when the API is unreachable.
 
 ## Content
@@ -58,7 +59,7 @@ GitHub data only shows up in CI.
   the `featured` GitHub topic. More in `docs/keeping-it-fresh.md`.
 - Sheet numbers on the drawings: home 01-04 (Fig. 3 is the sketchbook teaser), about 05, log 06, sketchbook 07,
   projects P-01 onward.
-- A repo's `ascii` config names a sketchbook piece (ids in `src/lib/ascii.ts` and `src/ascii/stock-review.json`).
+- A repo's `ascii` config names a sketchbook piece (the ids are `PIECES` in `showcase/cyber.mjs`).
 
 ## Working style
 

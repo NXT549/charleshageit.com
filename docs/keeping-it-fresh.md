@@ -28,11 +28,11 @@ Repos without it are still picked up by the schedule. Nothing is added to other 
 Add a repo secret `SHOWCASE_TOKEN` (a personal token) to this repo. The build uses it in place of the default
 `GITHUB_TOKEN`. Without it the build still works with public data.
 
-## The sketchbook's market scenes
+## The sketchbook
 
-Stock Review's scenes are a snapshot of its loading animations, not fetched. When its ASCII art changes, regenerate
-them with `showcase/make-scenes.py` (README → The sketchbook has the two commands). Pip's pictures are built from
-his sprites on every rebuild, so they're always current.
+Nothing in the sketchbook needs refreshing by hand. Pip's pictures are built from his sprites, and the boot log and
+the process table are drawn from the live project list, so every rebuild brings them up to date. The slot machine,
+chart, chip and the rest are generated, and the robot is hand-drawn (`src/ascii/art/robot.txt`).
 
 ## When a rebuild shows nothing new
 

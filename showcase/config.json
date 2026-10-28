@@ -8,6 +8,7 @@
   "repos": {
     "hamster-slots": {
       "status": "wip",
+      "ascii": "slots",
       "pop": "highlighter",
       "blurb": "A cute pixel-art idle slot machine, powered by a hamster on a wheel. Spin the reels, win (pretend) coins, buy upgrades and teach your hamster to run the wheel by itself. Then retire to the Big Cage, grow the Family Tree and eventually open a whole hamster casino.",
       "highlights": ["Eight slot machines, a jackpot wheel and a card gamble", "Every sprite and sound is made in code, no game engine"],
@@ -34,7 +35,7 @@
     },
     "pip": {
       "status": "done",
-      "ascii": "pip-walk",
+      "ascii": "pip-boot",
       "pop": "blue-pencil",
       "scene": "desk",
       "note": "that's him\nup the top too!",
@@ -62,7 +63,7 @@
     },
     "stock-review": {
       "pop": "stamp-green",
-      "ascii": "candles",
+      "ascii": "market",
       "highlights": ["A dark Live board that fills in ticker by ticker", "Missing numbers stay blank, never made up"],
       "image": "./img/stock-review.svg",
       "imageAlt": "A sketch of the Stock Review live board: a list of watchlists on the left, a table filling in ticker by ticker, and Run and Copy for AI buttons",

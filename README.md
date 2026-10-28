@@ -15,7 +15,6 @@ npm run build    # writes the finished site to dist/ (SHOWCASE_OFFLINE=1 skips G
 npm run check    # type-checks the .astro and .ts files
 node --test "showcase/test/*.test.mjs"
 npx lhci autorun # Lighthouse on the built site (needs Chrome; set CHROME_PATH if it can't find it)
-python3 showcase/make-scenes.py <stills.txt>   # rebuild the sketchbook's market scenes (see "The sketchbook")
 ```
 
 Pull requests run all of these. Lighthouse has to score at least 95 for performance and 100 for
@@ -45,8 +44,8 @@ with the current `showcase/config.json` applied.
   `does` (up to 8 `{title, text}` cards under "What it does" on the project's page) and `how` (up to 8
   `{title, text, note?}` steps under "How it works", with an optional handwritten `note`). Projects with
   neither show an "On the drafting board" stamp instead.
-- **A picture from the sketchbook** on the project's sheet: `ascii` names a piece (`candles`, `pip-walk`, ...), shown
-  under "In characters". The ids are in `src/lib/ascii.ts` and `src/ascii/stock-review.json`.
+- **A picture from the sketchbook** on the project's sheet: `ascii` names a piece (`slots`, `market`, `pip-boot`, ...),
+  shown under "In characters". The ids are the catalogue in `showcase/cyber.mjs`.
 - **Download buttons** come from the latest GitHub release: an `.exe`/`.msi` becomes Windows, a `.dmg`
   becomes Mac, an `.AppImage`/`.deb` becomes Linux.
 - **Frameworks** (Vite, Electron, React, Flask, ...) are detected from each repo's `package.json`,
@@ -64,29 +63,38 @@ Each card carries `data-language`, `data-frameworks`, `data-topics` and `data-ta
 
 ## The sketchbook
 
-The sketchbook (`/ascii/`) draws pictures in plain text, using only letters, numbers, punctuation and spaces.
-Fig. 3 on the home page shows a taste of it, and a project's sheet shows its own piece when `ascii` is set.
+The sketchbook (`/ascii/`) is pictures drawn in plain text, using only letters, numbers, punctuation and spaces,
+each in a little terminal window with its file name on the title bar. Fig. 3 on the home page shows a taste of
+it, and a project's sheet shows its own picture when `ascii` is set. There are nine pictures, listed in
+`showcase/cyber.mjs` (`PIECES`: id, file name, title, group, tint, speed):
 
-- **Pip, one character at a time.** His frames come from `src/components/pip-sprites.js`, one character per pixel.
-  `showcase/ascii.mjs` maps each sprite key to a character (`PIP_CHARS`, the legend on the page is `PIP_PARTS`) and
-  crops every frame of an animation to one box, so it doesn't jump. `src/lib/ascii.ts` groups them into his idle,
-  walk, wave, happy and dizzy animations. This is built at build time, so there's nothing to regenerate.
-- **Stock Review's market scenes** are in `src/ascii/stock-review.json`, made from the stills of its loading
-  animations. After its art changes, dump the stills in the stock-review repo with
-  `PYTHONIOENCODING=ascii python3 src/stock_analyzer/review/ascii_art.py --stills > stills.txt` and run
-  `python3 showcase/make-scenes.py stills.txt` here. It keeps all twelve frames of Candles and four of each other
-  scene, swaps the block characters for plain ones, and swaps the sample market label and tickers for placeholders,
-  so the site never says where the sample data comes from. They're matched by shape, not by name, so new sample
-  data is scrubbed too; a test fails if an exchange-suffixed ticker gets through.
-- **The banner maker** sets words in FIGlet's Standard font (`src/ascii/standard.flf`, with its permission notice),
-  in the browser. The words go in the address bar, so a banner can be shared, and `banner <words>` in the terminal
-  opens one.
+- **Pip, in the machine** (`pip-boot`, `pip-binary`, `pip-glitch`): his frames from `src/components/pip-sprites.js`,
+  one character per pixel (`showcase/ascii.mjs` maps each sprite key to a character and crops every frame to one
+  box so nothing jumps), then booted behind a scan line, turned into ones and zeros, and glitched.
+- **The projects** (`slots`, `market`, `boot`, `procs`): a spinning slot machine for Hamster Slots, a scrolling
+  candlestick chart with silly made-up tickers for Stock Review, and a boot log and a process table that are drawn
+  from the live project list, so they update themselves on every rebuild.
+- **Hardware** (`robot`, `chip`): the hand-drawn robot lives in `src/ascii/art/robot.txt` (frames separated by a line
+  holding only `~~~`), and the chip's data pulses are generated.
+- **The banner maker** sets words in six FIGlet fonts (`src/ascii/fonts/`, each with its permission notice: the Cyber
+  fonts by Lennert Stock converted by Kent Nassen, Speed by Claude Martins, Slant and Standard by Glenn Chappell and
+  Ian Chai). The first font is inline; the others are static JSON at `/ascii/fonts/<id>.json`, fetched when picked. The
+  words and font go in the address bar, so a banner can be shared, and `banner <words>` in the terminal opens one.
+
+The generators in `showcase/cyber.mjs` are pure and seeded (same input, same frames), with tests in
+`showcase/test/ascii.test.mjs`. `src/lib/ascii.ts` builds the pieces at build time and fails the build if one has no
+frames. To add a picture: add it to `PIECES`, give `src/lib/ascii.ts` its frames, and (optionally) point a project's
+`ascii` at its id.
+
 - **Motion** (`src/scripts/ascii.ts`): frames step only while they're on screen, and not at all for reduced motion,
-  where the first frame shows. Every frame is a `<pre>` stacked in one grid cell, so the box never changes size.
-  Without the script the sketchbook is still all there, just still.
-- The files: `src/pages/ascii/index.astro` (the page), `src/components/AsciiFigure.astro` (one picture and its copy
-  button), `src/components/Sketchbook.astro` (Fig. 3), `src/lib/ascii.ts` (the pieces), `src/scripts/ascii.ts`,
-  `src/styles/ascii.css`, `showcase/ascii.mjs` (tested in `showcase/test/ascii.test.mjs`) and `showcase/make-scenes.py`.
+  where the first frame shows. Every frame is a `<pre>` stacked in one grid cell, so the box never changes size. A
+  picture wider than its box takes a tab stop so keyboard users can scroll it. Without the script the sketchbook is
+  still all there, just still.
+- **Tints** use the theme's pens: `cyan` is the blue pencil, `yellow` the highlighter, `green` the stamp and `chalk`
+  the plain linework (`data-tint` in `src/styles/ascii.css`).
+- The files: `src/pages/ascii/index.astro` (the page) and `ascii/fonts/[font].json.ts`, `src/components/AsciiFigure.astro`
+  (one window and its copy button), `src/components/Sketchbook.astro` (Fig. 3), `src/lib/ascii.ts`,
+  `src/scripts/ascii.ts`, `src/styles/ascii.css`, `showcase/ascii.mjs` and `showcase/cyber.mjs`.
 
 ## Theme
 
@@ -118,7 +126,7 @@ labels and code use Geist Mono, and the handwritten notes use Caveat.
 - `/404.html`: "This page went walkabout.", where GitHub Pages sends any address that doesn't exist.
 
 The hero's terminal takes commands once its intro has typed out: `help` lists them (`ls`, `open pip`, `play
-hamster-slots`, `log`, `pip grape`, `pip say hi`, `ascii pip`, `banner hello`, ...). Pip remembers his flavour between visits, and the tab icon matches it.
+hamster-slots`, `log`, `pip grape`, `pip say hi`, `ascii pip`, `banner hello`, `neofetch`, `hack`, ...). Pip remembers his flavour between visits, and the tab icon matches it.
 
 ## Files
 

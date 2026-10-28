@@ -4,7 +4,7 @@
 import Page from "../../layouts/Page.astro";
 import Pip from "../../components/Pip.astro";
 import AsciiFigure from "../../components/AsciiFigure.astro";
-import { pieceById } from "../../lib/ascii";
+import { getPiece } from "../../lib/ascii";
 import { getShowcase, type Repo } from "../../lib/showcase";
 import { renderReadme } from "../../lib/readme";
 import {
@@ -75,7 +75,7 @@ const src = r.image ? safeUrl(r.image.src) : null;
 const img = src && !/^https?:/i.test(src) ? src.replace(/^\.?\/?/, "/") : src;
 // Pip's own sheet gets the real Pip, walking about (his blurb says he's "up the top").
 const livePip = r.name === "pip";
-const art = pieceById(r.ascii);
+const art = await getPiece(r.ascii);
 const readme = r.readme ? renderReadme(r.readme, { fullName: r.fullName, title: r.title, name: r.name }) : null;
 
 const actions = [
@@ -180,7 +180,7 @@ const description = tagline || `${r.title}, one of the little things in Charles'
           <h2 id="ascii-title">In <span class="text-pop">characters</span></h2>
           <p class="sub">The same picture, drawn with nothing but letters and punctuation.</p>
         </header>
-        <AsciiFigure piece={art} big={art.source === "pip"} interval={480} />
+        <AsciiFigure piece={art} />
       </section>
     )
   }

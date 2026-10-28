@@ -13,6 +13,11 @@ const top = data.featured.map((name) => byName.get(name)).filter((r) => r !== un
 const firstSentence = (text: unknown) => /^(.+?[.!?])(\s|$)/.exec(String(text ?? "").trim())?.[1] ?? String(text ?? "").trim();
 const shell: ShellData = {
   github: data.user.url,
+  // What `neofetch` prints about the workshop.
+  facts: {
+    shipped: data.repos.filter((r) => r.status === "done").length,
+    languages: data.facets.languages.slice(0, 3).map((f) => f.label),
+  },
   projects: [...top, ...data.repos.filter((r) => !r.featured)].map((r) => ({
     name: r.name,
     title: r.title,

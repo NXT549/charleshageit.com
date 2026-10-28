@@ -120,3 +120,8 @@ export function figlet(font, text, { max = 40 } = {}) {
   });
   return blocks.flat().join("\n");
 }
+
+/** The frames in a hand-drawn art file (src/ascii/art/*.txt): they're separated by a line holding only `~~~`. */
+export function splitFrames(text) {
+  return String(text).split(/\n~~~\n/).map((frame) => frame.replace(/\n+$/, ""));
+}

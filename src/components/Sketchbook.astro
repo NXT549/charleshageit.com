@@ -1,10 +1,11 @@
 ---
-// Fig. 3 on the home page: a taste of the sketchbook, with the rest one click away on /ascii/.
+// Fig. 3 on the home page: a taste of the sketchbook, with the rest one click away on /ascii/. The boot log is
+// drawn from the live project list.
 import AsciiFigure from "./AsciiFigure.astro";
-import { pieceById } from "../lib/ascii";
+import { getPiece } from "../lib/ascii";
 
-const candles = pieceById("candles")!;
-const walk = pieceById("pip-walk")!;
+const boot = (await getPiece("boot"))!;
+const pip = (await getPiece("pip-boot"))!;
 ---
 
 <section id="sketchbook" class="section container">
@@ -12,22 +13,22 @@ const walk = pieceById("pip-walk")!;
     <p class="eyebrow">Fig. 3 · Sketchbook</p>
     <h2><span class="text-pop">Drawn in plain text</span></h2>
     <p class="sub">
-      These pictures are only letters and punctuation. Pip is drawn one character per pixel, and the chart is one of
-      the loading scenes from Stock Review.
+      These pictures are only letters and punctuation. The workshop boots up from the real project list, and Pip builds
+      himself one character per pixel.
     </p>
   </header>
   <div class="sketch">
-    <AsciiFigure piece={candles} interval={380} note="a market, loading" />
-    <div class="sketch__side">
-      <AsciiFigure piece={walk} big interval={300} note="on his way" />
+    <div class="sketch__main">
+      <AsciiFigure piece={boot} note="always the real list" />
       <p class="sketch__text">
-        Make a banner from your own name, or type <code>ascii</code> in the terminal at the top. Every picture in the
-        sketchbook copies as plain text.
+        There's a slot machine, a robot and a chip in there too. Make a banner from your own name, or type
+        <code>neofetch</code> or <code>ascii</code> in the terminal at the top.
       </p>
       <div class="sketch__actions">
         <a class="btn btn--primary" href="/ascii/">Open the sketchbook</a>
         <a class="btn btn--ghost" href="/ascii/#banner">Make a banner</a>
       </div>
     </div>
+    <AsciiFigure piece={pip} note="booting..." />
   </div>
 </section>
