@@ -44,7 +44,7 @@ GitHub data only shows up in CI.
 - `src/components/`: Hero, Projects, Sketchbook (Fig. 3), Workbench, FilterBar, About, StatusBadge, Pip, AsciiFigure, Header, Footer.
 - `src/lib/`: `site.ts` (name, links), `showcase.ts` (build-time fetch), `readme.ts`, `og.ts`, `ascii.ts` (the sketchbook's pieces).
 - `src/ascii/`: sketchbook sources: `art/*.txt` (hand-drawn, frames split by `~~~`) and `fonts/*.flf` (FIGlet fonts).
-- `src/scripts/`: `fx.js` (stamps, scroll-in), `shell.ts` (hero terminal), `showcase.js` (filters), `ascii.ts` (frames, copy, banner maker). The scroll progress line, drifting grid, drawn rules and the "how it works" rail are pure CSS (`theme.css`, `projects/[name].astro`) and skip reduced motion.
+- `src/scripts/`: `fx.js` (stamps, scroll-in, CAD cursor), `shell.ts` (hero terminal), `showcase.js` (filters), `ascii.ts` (frames, copy, banner maker). The scroll progress line, drifting grid, drawn rules and the "how it works" rail are pure CSS (`theme.css`, `projects/[name].astro`) and skip reduced motion.
 - `src/styles/`: `tokens.css`, `theme.css`, plus `page`, `prose`, `showcase`, `ascii` CSS.
 - `showcase/`: dependency-free `fetch.mjs`, `detect.mjs` (pure helpers), `render.mjs` (cards), `ascii.mjs`
   (sprites to characters, FIGlet), `cyber.mjs` (the sketchbook's generators and catalogue), `build.mjs`,

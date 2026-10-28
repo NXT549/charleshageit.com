@@ -86,3 +86,47 @@
 
   document.querySelectorAll(SHEETS).forEach(function (el) { io.observe(el); });
 })();
+
+// A CAD cursor: with a mouse, a little square snaps to the nearest intersection of the grid paper
+// (the page's 24px grid, which scrolls with the page) and a tag reads out its coordinates. Touch
+// screens and people who prefer less motion never see it.
+(function () {
+  if (!window.matchMedia("(hover: hover) and (pointer: fine)").matches) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+
+  var GRID = 24;
+  var cad, tag, frame = 0, x = 0, y = 0;
+
+  function pad(n) { return String(n).padStart(3, "0"); }
+
+  function build() {
+    cad = document.createElement("div");
+    cad.className = "cad";
+    cad.setAttribute("aria-hidden", "true");
+    cad.innerHTML = '<i class="cad__mark"></i><span class="cad__tag"></span>';
+    tag = cad.lastChild;
+    document.body.appendChild(cad);
+  }
+
+  function draw() {
+    frame = 0;
+    var top = window.scrollY;
+    var gx = Math.round((x + 1) / GRID);
+    var gy = Math.round((y + top + 1) / GRID);
+    cad.style.transform = "translate(" + (gx * GRID - 1) + "px," + (gy * GRID - 1 - top) + "px)";
+    cad.classList.toggle("cad--flip", x > window.innerWidth - 130);
+    tag.textContent = "X " + pad(gx) + " \u00b7 Y " + pad(gy);
+  }
+
+  function queue() { if (!frame) frame = requestAnimationFrame(draw); }
+
+  window.addEventListener("pointermove", function (e) {
+    if (e.pointerType !== "mouse") return;
+    if (!cad) build();
+    x = e.clientX; y = e.clientY;
+    cad.classList.add("is-on");
+    queue();
+  }, { passive: true });
+  window.addEventListener("scroll", function () { if (cad) queue(); }, { passive: true });
+  document.documentElement.addEventListener("pointerleave", function () { if (cad) cad.classList.remove("is-on"); });
+})();
