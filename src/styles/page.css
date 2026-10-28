@@ -95,6 +95,8 @@
 .shell__dim { color: var(--text-faint); }
 .shell__err { color: var(--danger); }
 .shell__err .shell__em { color: var(--text); }
+.shell__art { color: var(--accent-2); }  /* the little Pip that `neofetch` draws */
+.shell__ok { color: var(--success); }
 /* Phones zoom into inputs smaller than 16px. */
 @media (pointer: coarse) { .shell__input { font-size: 16px; } }
 

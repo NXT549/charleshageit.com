@@ -1,0 +1,155 @@
+---
+// The sketchbook: pictures drawn in plain text, each in its own little terminal window. Pip is built from his
+// own sprite and put through the machine; the boot log and the process table are drawn from the live project
+// list; the banner maker sets your words in FIGlet fonts, in the browser. Everything is made at build time
+// (src/lib/ascii.ts, showcase/cyber.mjs).
+import Page from "../../layouts/Page.astro";
+import AsciiFigure from "../../components/AsciiFigure.astro";
+import { FONTS, PIP_LEGEND, fontById, getPieces } from "../../lib/ascii";
+import { figlet } from "../../../showcase/ascii.mjs";
+import { SITE } from "../../lib/site";
+import { icon, iconSprite } from "../../../showcase/render.mjs";
+
+const pieces = await getPieces();
+const of = (group: string) => pieces.filter((piece) => piece.group === group);
+const frameCount = pieces.reduce((n, piece) => n + piece.frames.length, 0);
+const charCount = pieces.reduce((n, piece) => n + piece.frames.reduce((m, frame) => m + frame.length, 0), 0);
+
+// The banner maker opens on the first font, inline; the others are fetched when someone picks one.
+const first = FONTS[0];
+const firstFont = fontById(first.id);
+// JSON inside <script> must not be able to close the tag.
+const fontJson = JSON.stringify(firstFont).replace(/</g, "\\u003c");
+// The banner the page opens with, drawn here so it's there before (or without) the script.
+const firstWords = "hello";
+const firstBanner = figlet(firstFont, firstWords);
+---
+
+<Page
+  title={`Sketchbook · ${SITE.name}`}
+  description="Pictures drawn in plain text: Pip booting up and glitching, a spinning slot machine, a boot log of every project, a robot and a banner maker."
+  current="ascii"
+  sheet="07"
+  image="/og/ascii.png"
+  imageAlt="The sketchbook: a blueprint sheet with Pip pointing at the title."
+>
+  <Fragment set:html={iconSprite()} />
+  <section class="container ascii-top">
+    <p class="eyebrow">Sheet 07 · Sketchbook</p>
+    <h1>
+      Drawn in{" "}
+      <span class="circled">plain text.<svg viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M22 58 C 22 16, 268 6, 288 40 C 302 76, 128 98, 44 84 C 2 76, 4 40, 64 24" /></svg></span>
+    </h1>
+    <p class="lede">
+      A boot log, a chip, a robot and a Pip made of ones and zeros. Every picture here is made of letters, numbers,
+      punctuation and spaces, so it copies, pastes and scales with the words around it.
+    </p>
+    <p class="ascii-status">
+      &gt; boot sketchbook.sys ........... [ OK ]{"\n"}
+      &gt; pictures: {pieces.length}   frames: {frameCount}   characters: {charCount.toLocaleString("en-GB")}
+    </p>
+    <nav class="ascii-jump" aria-label="In this sketchbook">
+      <a class="btn btn--ghost btn--sm" href="#pip-art">pip.exe</a>
+      <a class="btn btn--ghost btn--sm" href="#project-art">projects.sys</a>
+      <a class="btn btn--ghost btn--sm" href="#hardware">hardware</a>
+      <a class="btn btn--ghost btn--sm" href="#banner">banner.sh</a>
+    </nav>
+  </section>
+
+  <section id="pip-art" class="container section" aria-labelledby="pip-title">
+    <header class="section-head">
+      <p class="eyebrow">Sheet 07 · Pip, in the machine</p>
+      <h2 id="pip-title"><span class="text-pop">// pip.exe</span></h2>
+      <p class="sub">
+        Pip, drawn one character per pixel from his own sprite, then put through the machine: he boots up behind a
+        scan line, turns into ones and zeros, and glitches. His outline is <code>#</code> and his eyes are <code>@</code>.
+      </p>
+    </header>
+    <div class="ascii-grid">
+      {of("pip").map((piece) => <AsciiFigure piece={piece} />)}
+    </div>
+    <ul class="ascii-legend" aria-label="What each character draws">
+      {PIP_LEGEND.map(({ char, part }) => <li><code>{char}</code>{part}</li>)}
+    </ul>
+  </section>
+
+  <section id="project-art" class="container section" aria-labelledby="projects-title">
+    <header class="section-head">
+      <p class="eyebrow">Sheet 07 · Projects</p>
+      <h2 id="projects-title"><span class="text-pop">// projects.sys</span></h2>
+      <p class="sub">
+        A picture for each project. The boot log and the process table are drawn from the live project list, so they
+        update themselves every time the site rebuilds.
+      </p>
+    </header>
+    <div class="ascii-pair">
+      {of("projects").map((piece) => <AsciiFigure piece={piece} />)}
+    </div>
+  </section>
+
+  <section id="hardware" class="container section" aria-labelledby="hardware-title">
+    <header class="section-head">
+      <p class="eyebrow">Sheet 07 · Hardware</p>
+      <h2 id="hardware-title"><span class="text-pop">// hardware</span></h2>
+      <p class="sub">Unit 01, and the chip it runs on. Watch the data pulses run along the pins.</p>
+    </header>
+    <div class="ascii-pair">
+      {of("hardware").map((piece) => <AsciiFigure piece={piece} />)}
+    </div>
+  </section>
+
+  <section id="banner" class="container section" aria-labelledby="banner-title">
+    <header class="section-head">
+      <p class="eyebrow">Sheet 07 · Banner maker</p>
+      <h2 id="banner-title"><span class="text-pop">// banner.sh</span></h2>
+      <p class="sub">
+        Type some words, pick a font and they come out as big letters. The words and the font stay in the address bar,
+        so a banner can be shared.
+      </p>
+    </header>
+    <div class="banner-tool">
+    <form class="panel banner-form" data-banner>
+      <div class="banner-fields">
+        <div class="banner-field">
+          <label class="banner-label" for="banner-words">Your words</label>
+          <input id="banner-words" class="banner-input" type="text" value={firstWords} maxlength="40" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="hello, Pip" />
+        </div>
+        <div class="banner-field">
+          <label class="banner-label" for="banner-font-pick">Font</label>
+          <select id="banner-font-pick" class="banner-input">
+            {FONTS.map((font) => <option value={font.id} selected={font.id === first.id}>{font.label}</option>)}
+          </select>
+        </div>
+      </div>
+    </form>
+    <figure class="terminal glass ascii-figure" data-tint="yellow" data-size="lg">
+      <div class="terminal__bar">
+        <span class="terminal__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+        <span class="terminal__title" aria-hidden="true">banner.sh</span>
+      </div>
+      <div class="terminal__body ascii-body">
+        <div class="ascii-stage">
+          <pre class="ascii-frame banner-out" data-banner-out>{firstBanner}</pre>
+        </div>
+        <figcaption class="ascii-caption">
+          <span class="ascii-meta">up to 40 characters</span>
+          <button class="btn btn--ghost btn--sm ascii-copy" type="button" data-copy-art data-copy-from="[data-banner-out]" aria-label="Copy the banner" hidden>
+            <Fragment set:html={icon("copy")} /><span>copy</span>
+          </button>
+        </figcaption>
+      </div>
+    </figure>
+    </div>
+    <script type="application/json" id="banner-font" data-id={first.id} set:html={fontJson} />
+  </section>
+
+  <section class="container section ascii-foot">
+    <p class="hand">end of transmission</p>
+    <p class="sub">
+      Pip is drawn from the sprites in <a href={`${SITE.githubUrl}/pip`}>the Pip project</a>, and the boot log and
+      process table come from this site's own project list. The robot, the chip, the slot machine and the chart are
+      drawn for this site. The banner fonts are FIGlet's: the Cyber fonts (by Lennert Stock, converted by Kent
+      Nassen), Speed (Claude Martins), and Slant and Standard (Glenn Chappell and Ian Chai).
+    </p>
+  </section>
+</Page>

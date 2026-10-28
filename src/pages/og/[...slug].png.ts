@@ -37,6 +37,17 @@ export async function getStaticPaths() {
         titleblock: [["Drawn by", "Charles"], ["Sheet", "06"], seeIt("/log/")],
       },
     },
+    {
+      slug: "ascii",
+      card: {
+        title: "The sketchbook",
+        subtitle: "Pictures drawn in plain text: Pip booting up, a slot machine, a robot and a banner maker.",
+        eyebrow: "Sheet 07 · Sketchbook",
+        note: "boot sequence ok!",
+        stamp: "System online",
+        titleblock: [["Drawn by", "Charles"], ["Sheet", "07"], seeIt("/ascii/")],
+      },
+    },
     ...repos.map((repo, i) => {
       const r = repo as typeof repo & { blurb?: string | null; status?: string | null };
       const sheet = `P-${String(i + 1).padStart(2, "0")}`;

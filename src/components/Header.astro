@@ -2,7 +2,7 @@
 interface Props {
   /** Prefix for the home page's in-page links: "" on the home page, "/" anywhere else. */
   home?: string;
-  /** The link to mark as the current page: "projects", "log" or "about". */
+  /** The link to mark as the current page: "projects", "workbench", "ascii", "log" or "about". */
   current?: string;
 }
 
@@ -12,6 +12,7 @@ const { home = "", current } = Astro.props;
 const links = [
   { key: "projects", label: "Projects", href: `${home}#projects` },
   { key: "workbench", label: "Workbench", href: `${home}#workbench` },
+  { key: "ascii", label: "Sketchbook", href: "/ascii/" },
   { key: "log", label: "Log", href: "/log/" },
   { key: "about", label: "About", href: "/about/" },
 ];

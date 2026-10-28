@@ -13,6 +13,11 @@ const top = data.featured.map((name) => byName.get(name)).filter((r) => r !== un
 const firstSentence = (text: unknown) => /^(.+?[.!?])(\s|$)/.exec(String(text ?? "").trim())?.[1] ?? String(text ?? "").trim();
 const shell: ShellData = {
   github: data.user.url,
+  // What `neofetch` prints about the workshop.
+  facts: {
+    shipped: data.repos.filter((r) => r.status === "done").length,
+    languages: data.facets.languages.slice(0, 3).map((f) => f.label),
+  },
   projects: [...top, ...data.repos.filter((r) => !r.featured)].map((r) => ({
     name: r.name,
     title: r.title,
@@ -37,7 +42,7 @@ const shellJson = JSON.stringify(shell).replace(/</g, "\\u003c");
     </h1>
     <p class="lede">
       Hi, I'm <strong>Charles</strong>. These are the projects I've <strong>vibe-coded</strong>: a slot machine
-      run by a hamster, a jellybean who lives on your desktop, and whatever I'm tinkering with next.
+      run by a hamster, a jellybean who lives on your desktop, a stock ranker, a lot of ASCII art and whatever I'm tinkering with next.
       Some are finished, some are very much not.
     </p>
     <nav class="hero-jump" aria-label="Jump to a project">
@@ -49,6 +54,7 @@ const shellJson = JSON.stringify(shell).replace(/</g, "\\u003c");
       <span class="tag tag--accent">Idle games</span>
       <span class="tag">Desktop pets</span>
       <span class="tag">Built with AI</span>
+      <span class="tag tag--accent-2">ASCII art</span>
     </div>
   </div>
 

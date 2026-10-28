@@ -383,6 +383,8 @@ export function normalize({ user, repos }, config, { generatedAt = new Date().to
         pop: /^[a-z-]+$/.test(o.pop || "") ? o.pop : null,
         scene: /^[a-z-]+$/.test(o.scene || "") ? o.scene : null,
         note: o.note || null,
+        // A sketchbook piece (src/lib/ascii.ts) drawn on the project's sheet, by its id.
+        ascii: /^[a-z0-9-]+$/.test(o.ascii || "") ? o.ascii : null,
         featured,
         stars: r.stars || 0,
         forks: r.forks || 0,
