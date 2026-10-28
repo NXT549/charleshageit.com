@@ -1,0 +1,38 @@
+---
+// One picture in the sketchbook: its frames stacked in one cell (src/scripts/ascii.ts steps through
+// them while it's on screen), a caption and a copy button. `piece` comes from src/lib/ascii.ts.
+import "../styles/ascii.css";
+import { icon } from "../../showcase/render.mjs";
+import type { Piece } from "../lib/ascii";
+
+interface Props {
+  piece: Piece;
+  /** Pip-sized: a bigger font for the small sprite frames. */
+  big?: boolean;
+  /** Milliseconds per frame. */
+  interval?: number;
+  /** A handwritten note on the caption. */
+  note?: string;
+}
+
+const { piece, big = false, interval = 420, note } = Astro.props;
+const frames = piece.frames.length;
+const label = `${piece.title}${frames > 1 ? `, ${frames} frames` : ""}`;
+---
+
+<figure class:list={["panel", "ascii-figure", "ascii-sheet", big && "ascii-figure--big"]} aria-labelledby={`art-${piece.id}`}>
+  <div class="ascii-stage" data-frames data-interval={interval} role="img" aria-label={label}>
+    {piece.frames.map((frame) => <pre class="ascii-frame" aria-hidden="true">{frame}</pre>)}
+  </div>
+  <figcaption class="ascii-caption">
+    <h3 id={`art-${piece.id}`}>{piece.title}</h3>
+    {note && <span class="hand">{note}</span>}
+    <button class="btn btn--ghost btn--sm ascii-copy" type="button" data-copy-art hidden>
+      <Fragment set:html={icon("copy")} /><span>copy</span>
+    </button>
+  </figcaption>
+</figure>
+
+<script>
+  import "../scripts/ascii";
+</script>

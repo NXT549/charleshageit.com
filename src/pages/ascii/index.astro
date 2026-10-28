@@ -1,0 +1,110 @@
+---
+// The sketchbook: everything on the site drawn in plain text. Pip is drawn from his own sprite frames,
+// one character per pixel; Stock Review's market scenes are its loading animations in plain ASCII; the
+// banner maker sets your words in FIGlet's Standard font, in the browser.
+import Page from "../../layouts/Page.astro";
+import AsciiFigure from "../../components/AsciiFigure.astro";
+import { BANNER_FONT, PIECES, PIP_LEGEND } from "../../lib/ascii";
+import { SITE } from "../../lib/site";
+import { icon, iconSprite } from "../../../showcase/render.mjs";
+
+const pip = PIECES.filter((p) => p.source === "pip");
+const scenes = PIECES.filter((p) => p.source === "stock-review");
+// JSON inside <script> must not be able to close the tag.
+const fontJson = JSON.stringify(BANNER_FONT).replace(/</g, "\\u003c");
+---
+
+<Page
+  title={`Sketchbook · ${SITE.name}`}
+  description="Everything on the site drawn in plain text: Pip one character at a time, Stock Review's market scenes and a banner maker."
+  current="ascii"
+  sheet="07"
+  image="/og/ascii.png"
+  imageAlt="The sketchbook: a blueprint sheet with Pip pointing at the title."
+>
+  <Fragment set:html={iconSprite()} />
+  <section class="container ascii-top">
+    <p class="eyebrow">Sheet 07 · Sketchbook</p>
+    <h1>
+      Drawn in{" "}
+      <span class="circled">plain text.<svg viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M22 58 C 22 16, 268 6, 288 40 C 302 76, 128 98, 44 84 C 2 76, 4 40, 64 24" /></svg></span>
+    </h1>
+    <p class="lede">
+      Nothing on this page is an image. Every picture is letters, numbers, punctuation and spaces, so it copies,
+      pastes and scales with the words around it.
+    </p>
+    <nav class="ascii-jump" aria-label="In this sketchbook">
+      <a class="btn btn--ghost btn--sm" href="#pip-art">Pip</a>
+      <a class="btn btn--ghost btn--sm" href="#scenes">Market scenes</a>
+      <a class="btn btn--ghost btn--sm" href="#banner">Banner maker</a>
+    </nav>
+  </section>
+
+  <section id="pip-art" class="container section" aria-labelledby="pip-title">
+    <header class="section-head">
+      <p class="eyebrow">Sheet 07 · Pip, in characters</p>
+      <h2 id="pip-title"><span class="text-pop">Pip, one character at a time</span></h2>
+      <p class="sub">
+        Each character is one pixel of his sprite, so his outline is <code>#</code> and his eyes are <code>@</code>.
+        The frames come straight from the pixel art in the Pip project.
+      </p>
+    </header>
+    <div class="ascii-grid">
+      {pip.map((piece) => <AsciiFigure piece={piece} big interval={320} />)}
+    </div>
+    <ul class="ascii-legend" aria-label="What each character draws">
+      {PIP_LEGEND.map(({ char, part }) => <li><code>{char}</code>{part}</li>)}
+    </ul>
+  </section>
+
+  <section id="scenes" class="container section" aria-labelledby="scenes-title">
+    <header class="section-head">
+      <p class="eyebrow">Sheet 07 · Market scenes</p>
+      <h2 id="scenes-title"><span class="text-pop">Stock Review's market scenes</span></h2>
+      <p class="sub">
+        Stock Review plays these while it fetches a big watchlist in a terminal: a candlestick chart, a rocket, a bull,
+        a whale and so on. The originals use block characters (█ ▒) and a triangle (▲). Here they're plain
+        <code>#</code>, <code>%</code> and <code>^</code>, so every scene is pure ASCII.
+      </p>
+    </header>
+    <div class="ascii-scenes">
+      {scenes.map((piece) => <AsciiFigure piece={piece} interval={480} />)}
+    </div>
+  </section>
+
+  <section id="banner" class="container section" aria-labelledby="banner-title">
+    <header class="section-head">
+      <p class="eyebrow">Sheet 07 · Banner maker</p>
+      <h2 id="banner-title"><span class="text-pop">Make a banner</span></h2>
+      <p class="sub">
+        Type some words and they come out as big letters, set in FIGlet's Standard font. The words stay in the address
+        bar, so a banner can be shared.
+      </p>
+    </header>
+    <form class="panel banner-form" data-banner>
+      <label class="banner-label" for="banner-words">Your words</label>
+      <input id="banner-words" class="banner-input" type="text" value="hello" maxlength="40" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="hello, Pip" />
+    </form>
+    <figure class="panel ascii-figure">
+      <div class="ascii-stage">
+        <pre class="ascii-frame banner-out" data-banner-out></pre>
+      </div>
+      <figcaption class="ascii-caption">
+        <span class="hand">up to 40 characters</span>
+        <button class="btn btn--ghost btn--sm ascii-copy" type="button" data-copy-art data-copy-from="[data-banner-out]" hidden>
+          <Fragment set:html={icon("copy")} /><span>copy</span>
+        </button>
+      </figcaption>
+    </figure>
+    <script type="application/json" id="banner-font" set:html={fontJson} />
+  </section>
+
+  <section class="container section ascii-foot">
+    <p class="hand">that's all the characters I've got</p>
+    <p class="sub">
+      Pip is drawn from the sprites in <a href={`${SITE.githubUrl}/pip`}>the Pip project</a>, the market scenes come
+      from the loading animations in <a href={`${SITE.githubUrl}/stock-review`}>Stock Review</a>, and the banner font is
+      FIGlet's Standard.
+    </p>
+  </section>
+</Page>

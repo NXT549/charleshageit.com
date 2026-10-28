@@ -22,7 +22,8 @@
         {"title": "Spin the reels", "text": "Eight slot machines, from Old Clunky to the Hamster Maze, with wilds, free spins, a jackpot wheel and a card gamble. All the coins are pretend."},
         {"title": "Upgrade everything", "text": "Payouts, auto-spin, Luck and new symbols for the hamster and every machine. The Hamster Helper buys the cheap ones for you."},
         {"title": "Retire and start again", "text": "Retire to the Big Cage, plant Heirloom Seeds in the Family Tree and, one day, move the whole family to a new colony for perks that last forever."},
-        {"title": "Open a casino", "text": "Roulette, blackjack and a hamster derby for pretend chips, then your own Family Casino that earns Takings while you're away."}
+        {"title": "Open a casino", "text": "Roulette, blackjack and a hamster derby for pretend chips, then your own Family Casino that earns Takings while you're away."},
+        {"title": "Never get lost", "text": "A little guide tells you what to try next, and every new thing gets a brass padlock that springs open."}
       ],
       "how": [
         {"title": "You spin", "text": "Each spin picks the reels from a seeded random roll and pays by the machine's rules: paylines, ways or hold & spin.", "note": "no real money, ever"},
@@ -33,6 +34,7 @@
     },
     "pip": {
       "status": "done",
+      "ascii": "pip-walk",
       "pop": "blue-pencil",
       "scene": "desk",
       "note": "that's him\nup the top too!",
@@ -60,6 +62,8 @@
     },
     "stock-review": {
       "pop": "stamp-green",
+      "ascii": "candles",
+      "highlights": ["A dark Live board that fills in ticker by ticker", "Missing numbers stay blank, never made up"],
       "image": "./img/stock-review.svg",
       "imageAlt": "A sketch of the Stock Review live board: a list of watchlists on the left, a table filling in ticker by ticker, and Run and Copy for AI buttons",
       "imageWidth": 1200,

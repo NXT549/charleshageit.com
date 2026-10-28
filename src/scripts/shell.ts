@@ -20,7 +20,7 @@ export interface ShellData {
 
 type Out = string | Node | (string | Node)[];
 
-const COMMANDS = ["help", "ls", "open", "cd", "play", "cat", "log", "about", "pip", "github", "whoami", "clear", "history", "date", "echo", "pwd"];
+const COMMANDS = ["help", "ls", "open", "cd", "play", "cat", "log", "about", "pip", "ascii", "banner", "github", "whoami", "clear", "history", "date", "echo", "pwd"];
 const PIP_ACTIONS = ["say", "wave", "jump", "spin", "flavours"];
 const HELP: [string, string][] = [
   ["ls", "list the projects"],
@@ -30,6 +30,8 @@ const HELP: [string, string][] = [
   ["cat about.md", "a bit about me (or: about)"],
   ["pip [flavour]", "poke Pip, or pick his flavour"],
   ["pip say <words>", "make Pip say something"],
+  ["ascii", "the sketchbook, drawn in plain text"],
+  ["banner <words>", "big letters from your words"],
   ["github", "my GitHub"],
   ["clear", "tidy up"],
 ];
@@ -237,6 +239,19 @@ export function mountShell(body: HTMLElement, data: ShellData) {
           return print(`Pip is ${f} flavoured now. (he'll remember)`);
         }
         return print([`Pip doesn't come in ${sub}. try `, strong("pip flavours")], "terminal__out shell__err");
+      }
+      case "ascii":
+      case "sketchbook": {
+        // The sketchbook has an anchor for each part: `ascii pip`, `ascii scenes`, `ascii banner`.
+        // (Pip's section isn't called #pip: that id is the Pip canvas on the home page.)
+        const anchors: Record<string, string> = { pip: "pip-art", scenes: "scenes", banner: "banner" };
+        const part = arg.toLowerCase().split(/\s+/)[0];
+        const anchor = anchors[part] ? `#${anchors[part]}` : "";
+        return go(`/ascii/${anchor}`, "the sketchbook");
+      }
+      case "banner": {
+        if (!arg) return print(["banner what? try ", strong("banner hello")]);
+        return go(`/ascii/?banner=${encodeURIComponent(arg)}#banner`, `big letters for "${arg.slice(0, 40)}"`);
       }
       case "github":
       case "gh":
