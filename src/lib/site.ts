@@ -3,7 +3,7 @@ export const SITE = {
   name: "Charles's Workshop",
   title: "Charles's Workshop · little things I've vibe-coded",
   description:
-    "Charles's workshop: a hamster slot machine, a jellybean desktop pet and other little things I've vibe-coded, finished and in progress.",
+    "Charles's workshop: a hamster slot machine, a jellybean desktop pet, ASCII art and other little things I've vibe-coded, finished and in progress.",
   shortDescription: "Little things I've vibe-coded, finished and in progress.",
   author: "Charles",
   lang: "en",

@@ -1,0 +1,132 @@
+/* ==========================================================================
+   The sketchbook: plain-text pictures in little terminal windows on the blueprint. Used by AsciiFigure
+   (every picture), the sketchbook page, the home page's Fig. 3 and the project pages' "In characters" sheet.
+   Frames are stacked in one grid cell, so an animation never changes the box's size. Pictures are tinted
+   with the theme's own pens: chalk (--text), blue pencil (--accent-2), highlighter (--accent), stamp green.
+   ========================================================================== */
+
+.ascii-figure {
+  margin: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  /* A long page of pictures: the browser skips the layout and paint of a picture until it nears the
+     screen. The intrinsic size keeps the scrollbar steady, about the height of a picture. */
+  content-visibility: auto;
+  contain-intrinsic-size: auto 420px;
+}
+/* Windows in a row are as tall as the tallest, with their captions along the bottom. */
+.ascii-body { flex: 1; display: grid; align-content: space-between; gap: var(--space-3); min-width: 0; }
+
+.ascii-stage {
+  display: grid;
+  justify-items: start;
+  min-width: 0;
+  max-width: 100%;
+  overflow-x: auto;          /* wide pictures scroll on a phone and never push the page */
+  scrollbar-width: thin;
+  padding-bottom: var(--space-1);
+}
+/* The script gives a stage a tab stop while it overflows, so keyboard users can scroll it. */
+.ascii-stage:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+.ascii-frame {
+  grid-area: 1 / 1;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: none;
+  font: 400 var(--text-xs) / var(--leading-tight) var(--font-mono);
+  color: var(--text);
+  white-space: pre;
+  tab-size: 4;
+}
+.ascii-figure[data-size="sm"] .ascii-frame { font-size: var(--text-sm); }
+.ascii-figure[data-size="lg"] .ascii-frame { font-size: var(--text-lg); }
+.ascii-figure[data-tint="cyan"] .ascii-frame { color: var(--accent-2); }
+.ascii-figure[data-tint="yellow"] .ascii-frame { color: var(--accent); }
+.ascii-figure[data-tint="green"] .ascii-frame { color: var(--success); }
+
+/* Without the script only the first frame shows; the script adds is-live and steps through the rest. */
+.ascii-frame + .ascii-frame { display: none; }
+.ascii-stage.is-live .ascii-frame { display: block; visibility: hidden; }
+.ascii-stage.is-live .ascii-frame.is-on { visibility: visible; }
+
+.ascii-caption {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-3);
+}
+.ascii-caption__text { display: grid; gap: var(--space-1); justify-items: start; min-width: 0; }
+.ascii-caption h3 { margin: 0; font: 650 var(--text-base) / 1.3 var(--font-sans); }
+.ascii-meta { font: 450 var(--text-xs) / 1 var(--font-mono); letter-spacing: var(--tracking-mono); text-transform: uppercase; color: var(--text-faint); }
+.ascii-caption .hand { --rot: -3deg; }
+/* .btn sets its own display, so the copy buttons need a nudge to stay hidden until the script shows them. */
+.ascii-copy[hidden] { display: none !important; }
+
+/* The page: a boot-up header, then each part in a grid of windows. */
+.ascii-top { display: grid; gap: var(--space-4); padding-top: var(--space-8); }
+.ascii-top h1 { margin-top: var(--space-2); }
+.ascii-status {
+  margin: 0;
+  font: 450 var(--text-sm) / 1.6 var(--font-mono);
+  color: var(--success);
+  white-space: pre-wrap;
+}
+.ascii-jump { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-2); }
+
+.ascii-grid {
+  display: grid;
+  gap: var(--space-5);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+}
+.ascii-pair { display: grid; gap: var(--space-5); }
+@media (min-width: 900px) { .ascii-pair { grid-template-columns: repeat(2, minmax(0, 1fr)); } }
+
+.ascii-legend {
+  list-style: none;
+  margin: var(--space-5) 0 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-2) var(--space-5);
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 150px), 1fr));
+  font: 450 var(--text-sm) / 1.3 var(--font-sans);
+  color: var(--text-muted);
+}
+.ascii-legend code {
+  display: inline-block;
+  min-width: 2ch;
+  margin-right: var(--space-2);
+  padding: 2px var(--space-1);
+  border: var(--outline);
+  color: var(--text);
+  text-align: center;
+}
+
+/* The banner maker */
+.banner-form { display: grid; gap: var(--space-3); padding: var(--space-4); }
+.banner-fields { display: grid; gap: var(--space-3); }
+@media (min-width: 700px) { .banner-fields { grid-template-columns: minmax(0, 1fr) minmax(0, 220px); } }
+.banner-field { display: grid; gap: var(--space-2); }
+.banner-label { font: 500 var(--text-xs) / 1 var(--font-mono); letter-spacing: var(--tracking-mono); text-transform: uppercase; color: var(--accent-2); }
+.banner-input {
+  width: 100%;
+  padding: var(--space-3) var(--space-4);
+  border: var(--outline);
+  background: var(--surface);
+  color: var(--text);
+  font: 500 var(--text-lg) / 1.2 var(--font-mono);
+}
+.banner-input:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+.banner-tool { display: grid; gap: var(--space-4); }
+
+/* Fig. 3 on the home page */
+.sketch { display: grid; gap: var(--space-6); align-items: start; }
+@media (min-width: 900px) { .sketch { grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr); } }
+.sketch__main { display: grid; gap: var(--space-5); justify-items: start; }
+.sketch__main .ascii-figure { width: 100%; }
+.sketch__text { color: var(--text-muted); max-width: 52ch; }
+.sketch__actions { display: flex; flex-wrap: wrap; gap: var(--space-2); }

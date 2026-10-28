@@ -1,0 +1,34 @@
+---
+// Fig. 3 on the home page: a taste of the sketchbook, with the rest one click away on /ascii/. The boot log is
+// drawn from the live project list.
+import AsciiFigure from "./AsciiFigure.astro";
+import { getPiece } from "../lib/ascii";
+
+const boot = (await getPiece("boot"))!;
+const pip = (await getPiece("pip-boot"))!;
+---
+
+<section id="sketchbook" class="section container">
+  <header class="section-head">
+    <p class="eyebrow">Fig. 3 · Sketchbook</p>
+    <h2><span class="text-pop">Drawn in plain text</span></h2>
+    <p class="sub">
+      These pictures are only letters and punctuation. The workshop boots up from the real project list, and Pip builds
+      himself one character per pixel.
+    </p>
+  </header>
+  <div class="sketch">
+    <div class="sketch__main">
+      <AsciiFigure piece={boot} note="always the real list" />
+      <p class="sketch__text">
+        There's a slot machine, a robot and a chip in there too. Make a banner from your own name, or type
+        <code>neofetch</code> or <code>ascii</code> in the terminal at the top.
+      </p>
+      <div class="sketch__actions">
+        <a class="btn btn--primary" href="/ascii/">Open the sketchbook</a>
+        <a class="btn btn--ghost" href="/ascii/#banner">Make a banner</a>
+      </div>
+    </div>
+    <AsciiFigure piece={pip} note="booting..." />
+  </div>
+</section>

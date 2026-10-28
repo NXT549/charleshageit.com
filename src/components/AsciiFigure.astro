@@ -1,0 +1,50 @@
+---
+// One picture in the sketchbook, in a little terminal window: the file name on its title bar, its frames
+// stacked in one cell (src/scripts/ascii.ts steps through them while it's on screen), a caption and a copy
+// button. `piece` comes from src/lib/ascii.ts.
+import "../styles/ascii.css";
+import { icon } from "../../showcase/render.mjs";
+import type { Piece } from "../lib/ascii";
+
+interface Props {
+  piece: Piece;
+  /** A handwritten note on the caption. */
+  note?: string;
+}
+
+const { piece, note } = Astro.props;
+const count = piece.frames.length;
+const lines = piece.frames.flatMap((frame) => frame.split("\n"));
+const cols = Math.max(...lines.map((line) => line.length));
+const rows = Math.max(...piece.frames.map((frame) => frame.split("\n").length));
+// Narrow art is drawn bigger so it stays easy to see; wide art keeps to a size that fits a column.
+const size = cols <= 32 ? "lg" : cols <= 56 ? "sm" : "xs";
+const meta = `${count} ${count === 1 ? "frame" : "frames"} · ${cols}×${rows}`;
+const label = `${piece.title}${count > 1 ? `, ${count} frames` : ""}`;
+---
+
+<figure class="terminal glass ascii-figure ascii-sheet" data-tint={piece.tint} data-size={size} aria-labelledby={`art-${piece.id}`}>
+  <div class="terminal__bar">
+    <span class="terminal__dots" aria-hidden="true"><i></i><i></i><i></i></span>
+    <span class="terminal__title" aria-hidden="true">{piece.file}</span>
+  </div>
+  <div class="terminal__body ascii-body">
+    <div class="ascii-stage" data-frames data-interval={piece.interval || undefined} role="img" aria-label={label}>
+      {piece.frames.map((frame) => <pre class="ascii-frame" aria-hidden="true">{frame}</pre>)}
+    </div>
+    <figcaption class="ascii-caption">
+      <div class="ascii-caption__text">
+        <h3 id={`art-${piece.id}`}>{piece.title}</h3>
+        <span class="ascii-meta">{meta}</span>
+        {note && <span class="hand">{note}</span>}
+      </div>
+      <button class="btn btn--ghost btn--sm ascii-copy" type="button" data-copy-art aria-label={`Copy ${piece.title}`} hidden>
+        <Fragment set:html={icon("copy")} /><span>copy</span>
+      </button>
+    </figcaption>
+  </div>
+</figure>
+
+<script>
+  import "../scripts/ascii";
+</script>

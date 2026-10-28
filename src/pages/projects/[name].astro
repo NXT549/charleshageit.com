@@ -3,6 +3,8 @@
 // lately, and its whole README. Built from the same GitHub data as the cards, so new repos get one too.
 import Page from "../../layouts/Page.astro";
 import Pip from "../../components/Pip.astro";
+import AsciiFigure from "../../components/AsciiFigure.astro";
+import { getPiece } from "../../lib/ascii";
 import { getShowcase, type Repo } from "../../lib/showcase";
 import { renderReadme } from "../../lib/readme";
 import {
@@ -60,6 +62,8 @@ const r = repo as Repo & {
   releases: Release[];
   release: { tag: string; downloads: Download[] } | null;
   readme: string | null;
+  /** A piece from the sketchbook (src/lib/ascii.ts) drawn on this sheet, by its id. */
+  ascii: string | null;
 };
 
 const [tagline, blurb] = splitBlurb(r.blurb || r.description || "");
@@ -71,6 +75,7 @@ const src = r.image ? safeUrl(r.image.src) : null;
 const img = src && !/^https?:/i.test(src) ? src.replace(/^\.?\/?/, "/") : src;
 // Pip's own sheet gets the real Pip, walking about (his blurb says he's "up the top").
 const livePip = r.name === "pip";
+const art = await getPiece(r.ascii);
 const readme = r.readme ? renderReadme(r.readme, { fullName: r.fullName, title: r.title, name: r.name }) : null;
 
 const actions = [
@@ -166,6 +171,19 @@ const description = tagline || `${r.title}, one of the little things in Charles'
       </figcaption>
     </figure>
   </section>
+
+  {
+    art && (
+      <section class="container proj-ascii" aria-labelledby="ascii-title">
+        <header class="section-head">
+          <p class="eyebrow">Sheet {sheet} · In plain text</p>
+          <h2 id="ascii-title">In <span class="text-pop">characters</span></h2>
+          <p class="sub">The same picture, drawn with nothing but letters and punctuation.</p>
+        </header>
+        <AsciiFigure piece={art} />
+      </section>
+    )
+  }
 
   {
     r.does.length > 0 && (

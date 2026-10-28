@@ -15,12 +15,13 @@ export interface ShellProject {
 
 export interface ShellData {
   github: string;
+  facts: { shipped: number; languages: string[] };
   projects: ShellProject[];
 }
 
 type Out = string | Node | (string | Node)[];
 
-const COMMANDS = ["help", "ls", "open", "cd", "play", "cat", "log", "about", "pip", "github", "whoami", "clear", "history", "date", "echo", "pwd"];
+const COMMANDS = ["help", "ls", "open", "cd", "play", "cat", "log", "about", "pip", "ascii", "banner", "neofetch", "hack", "github", "whoami", "clear", "history", "date", "echo", "pwd"];
 const PIP_ACTIONS = ["say", "wave", "jump", "spin", "flavours"];
 const HELP: [string, string][] = [
   ["ls", "list the projects"],
@@ -30,6 +31,9 @@ const HELP: [string, string][] = [
   ["cat about.md", "a bit about me (or: about)"],
   ["pip [flavour]", "poke Pip, or pick his flavour"],
   ["pip say <words>", "make Pip say something"],
+  ["ascii", "the sketchbook, drawn in plain text"],
+  ["banner <words>", "big letters from your words"],
+  ["neofetch", "system info, with a tiny Pip"],
   ["github", "my GitHub"],
   ["clear", "tidy up"],
 ];
@@ -238,6 +242,46 @@ export function mountShell(body: HTMLElement, data: ShellData) {
         }
         return print([`Pip doesn't come in ${sub}. try `, strong("pip flavours")], "terminal__out shell__err");
       }
+      case "ascii":
+      case "sketchbook": {
+        // The sketchbook has an anchor for each part: `ascii pip`, `ascii projects`, `ascii hardware`,
+        // `ascii banner`. (Pip's section isn't called #pip: that id is the Pip canvas on the home page.)
+        const anchors: Record<string, string> = { pip: "pip-art", projects: "project-art", hardware: "hardware", banner: "banner" };
+        const part = arg.toLowerCase().split(/\s+/)[0];
+        const anchor = anchors[part] ? `#${anchors[part]}` : "";
+        return go(`/ascii/${anchor}`, "the sketchbook");
+      }
+      case "banner": {
+        if (!arg) return print(["banner what? try ", strong("banner hello")]);
+        return go(`/ascii/?banner=${encodeURIComponent(arg)}#banner`, `big letters for "${arg.slice(0, 40)}"`);
+      }
+      case "neofetch":
+      case "fetch": {
+        // A tiny Pip beside some facts about the workshop, the way a terminal shows off its system.
+        const pipArt = ["  .-----.  ", " ( o   o ) ", " (   v   ) ", "  '-----'  ", "   d   b   "];
+        const user = "charles@workshop";
+        const info: (string | Node)[] = [
+          strong(user),
+          "-".repeat(user.length),
+          "OS: WorkshopOS 2026.10 (blueprint)",
+          "Host: one very tidy desk",
+          `Projects: ${data.projects.length} (${data.facts.shipped} shipped)`,
+          `Stack: ${data.facts.languages.join(", ") || "vibes"}`,
+          "Shell: vibe-sh",
+          "Fuel: too many snacks",
+        ];
+        info.forEach((line, i) => {
+          const picture = document.createElement("span");
+          picture.className = "shell__art";
+          picture.textContent = (pipArt[i] ?? "").padEnd(pipArt[0].length + 2);
+          print([picture, line]);
+        });
+        return;
+      }
+      case "hack":
+      case "hax":
+        ["> initiating hack...", "> bypassing the mainframe ........ done", "> ACCESS GRANTED"].forEach((text) => print(text, "terminal__out shell__ok"));
+        return print("(this is a static site. there's nothing to hack. Pip checked.)", "terminal__out shell__dim");
       case "github":
       case "gh":
         return print(["→ ", link(data.github.replace(/^https?:\/\//, ""), data.github)]);

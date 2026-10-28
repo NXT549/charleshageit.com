@@ -59,7 +59,7 @@
   var SHEETS = [
     ".section-head", ".spotlight", ".repo-card", ".showcase-foot", ".about",
     ".about-grid > *", ".flow > li", ".about-chips", ".about-hi__card",
-    ".log-month__title", ".log-entry", ".footer-pip", ".does-card", ".how__step", ".proj-fig", ".proj-draft__box"
+    ".log-month__title", ".log-entry", ".footer-pip", ".does-card", ".how__step", ".proj-fig", ".proj-draft__box", ".ascii-sheet"
   ].join(",");
 
   var seen = new WeakSet();
