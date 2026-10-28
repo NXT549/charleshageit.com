@@ -41,9 +41,9 @@ export async function getStaticPaths() {
       slug: "ascii",
       card: {
         title: "The sketchbook",
-        subtitle: "Everything on the site drawn in plain text: Pip one character at a time, and the market scenes.",
+        subtitle: "Pictures drawn in plain text: Pip one character at a time, and Stock Review's market scenes.",
         eyebrow: "Sheet 07 · Sketchbook",
-        note: "no pictures, just text",
+        note: "made of letters!",
         stamp: "Plain text",
         titleblock: [["Drawn by", "Charles"], ["Sheet", "07"], seeIt("/ascii/")],
       },

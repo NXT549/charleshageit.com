@@ -93,3 +93,26 @@ test("every ascii id in config names a piece the sketchbook draws", () => {
     assert.ok(known, `${name}: ascii "${repo.ascii}" is not a piece in src/lib/ascii.ts or src/ascii/stock-review.json`);
   }
 });
+
+// The market scenes: src/ascii/stock-review.json, made by showcase/make-scenes.py.
+const scenes = JSON.parse(readFileSync(resolve(here, "../../src/ascii/stock-review.json"), "utf8")).scenes;
+
+test("every market scene has frames of one height, in plain ASCII", () => {
+  assert.equal(scenes.length, 13);
+  for (const scene of scenes) {
+    const heights = new Set(scene.frames.map((frame) => frame.split("\n").length));
+    assert.equal(heights.size, 1, `${scene.id}: frames are different heights ${[...heights]}`);
+    for (const frame of scene.frames) assert.ok(/^[\x00-\x7f]*$/.test(frame), `${scene.id} has non-ASCII characters`);
+  }
+});
+
+test("the market scenes carry no exchange-suffixed tickers or market label (CLAUDE.md rule 1)", () => {
+  for (const scene of scenes) {
+    for (const frame of scene.frames) {
+      assert.doesNotMatch(frame, /\b[A-Z]{2,4}\.[A-Z]{2}\b/, `${scene.id}: a ticker has an exchange suffix`);
+      for (const label of frame.match(/LIVE FEED {2}\. {2}[A-Z]{3}/g) ?? []) {
+        assert.equal(label, "LIVE FEED  .  MKT", `${scene.id}: the monitor names a market`);
+      }
+    }
+  }
+});

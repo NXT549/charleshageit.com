@@ -10,11 +10,8 @@
   gap: var(--space-3);
   padding: var(--space-4);
   min-width: 0;
-}
-
-/* A long page of pictures: the browser skips the layout and paint of a picture until it nears the screen.
-   The intrinsic size keeps the scrollbar steady, about the height of a scene. */
-.ascii-figure {
+  /* A long page of pictures: the browser skips the layout and paint of a picture until it nears the
+     screen. The intrinsic size keeps the scrollbar steady, about the height of a scene. */
   content-visibility: auto;
   contain-intrinsic-size: auto 480px;
 }
@@ -28,6 +25,8 @@
   scrollbar-width: thin;
   padding-bottom: var(--space-1);
 }
+/* The script gives a stage a tab stop while it overflows, so keyboard users can scroll it. */
+.ascii-stage:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 
 .ascii-frame {
   grid-area: 1 / 1;

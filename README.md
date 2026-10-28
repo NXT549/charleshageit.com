@@ -64,7 +64,7 @@ Each card carries `data-language`, `data-frameworks`, `data-topics` and `data-ta
 
 ## The sketchbook
 
-The sketchbook (`/ascii/`) draws everything in plain text: letters, numbers, punctuation and spaces, no images.
+The sketchbook (`/ascii/`) draws pictures in plain text, using only letters, numbers, punctuation and spaces.
 Fig. 3 on the home page shows a taste of it, and a project's sheet shows its own piece when `ascii` is set.
 
 - **Pip, one character at a time.** His frames come from `src/components/pip-sprites.js`, one character per pixel.
@@ -76,7 +76,8 @@ Fig. 3 on the home page shows a taste of it, and a project's sheet shows its own
   `PYTHONIOENCODING=ascii python3 src/stock_analyzer/review/ascii_art.py --stills > stills.txt` and run
   `python3 showcase/make-scenes.py stills.txt` here. It keeps all twelve frames of Candles and four of each other
   scene, swaps the block characters for plain ones, and swaps the sample market label and tickers for placeholders,
-  so the site never says where the sample data comes from.
+  so the site never says where the sample data comes from. They're matched by shape, not by name, so new sample
+  data is scrubbed too; a test fails if an exchange-suffixed ticker gets through.
 - **The banner maker** sets words in FIGlet's Standard font (`src/ascii/standard.flf`, with its permission notice),
   in the browser. The words go in the address bar, so a banner can be shared, and `banner <words>` in the terminal
   opens one.
@@ -113,7 +114,7 @@ labels and code use Geist Mono, and the handwritten notes use Caveat.
   how to get it, its languages, its latest releases and commits, and its whole README (links inside the repo go to GitHub).
 - `/about/`: the longer about, how a thing gets made here, and what's on the bench right now.
 - `/log/`: the workshop log, every recent commit, release and new project across the workbench, newest first.
-- `/ascii/`: the sketchbook, everything on the site drawn in plain text (see [The sketchbook](#the-sketchbook)).
+- `/ascii/`: the sketchbook, pictures drawn in plain text (see [The sketchbook](#the-sketchbook)).
 - `/404.html`: "This page went walkabout.", where GitHub Pages sends any address that doesn't exist.
 
 The hero's terminal takes commands once its intro has typed out: `help` lists them (`ls`, `open pip`, `play

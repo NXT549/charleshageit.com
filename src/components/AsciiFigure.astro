@@ -27,7 +27,7 @@ const label = `${piece.title}${frames > 1 ? `, ${frames} frames` : ""}`;
   <figcaption class="ascii-caption">
     <h3 id={`art-${piece.id}`}>{piece.title}</h3>
     {note && <span class="hand">{note}</span>}
-    <button class="btn btn--ghost btn--sm ascii-copy" type="button" data-copy-art hidden>
+    <button class="btn btn--ghost btn--sm ascii-copy" type="button" data-copy-art aria-label={`Copy ${piece.title}`} hidden>
       <Fragment set:html={icon("copy")} /><span>copy</span>
     </button>
   </figcaption>

@@ -19,12 +19,21 @@ import sys
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 OUT = os.path.join(ROOT, "src", "ascii", "stock-review.json")
 
-# The sample data says where it comes from: the market label on the monitor, the exchange suffix on some
-# tickers, and bare tickers of companies listed on one exchange. Each distinct symbol (by its root, so
-# "CBA" and "CBA.AX" match) becomes a neutral placeholder of the same width, in the order it first appears.
+# The sample data says where it comes from: the market label on the monitor and the tickers (an exchange
+# suffix, or the names of companies listed on one exchange). Both are matched by shape, never by name, so
+# new sample data is scrubbed too:
+#   LABEL   the monitor's market label, "LIVE FEED  .  XXX"
+#   TICKER  a word of capitals with an exchange suffix ("XXX.YY"), or one beside a gauge ("XXX  [###...]")
+#           or a signed percentage ("XXX +1.2%"), which is how the monitors and the ticker tape show them
+# Each distinct symbol (by its root, so "XXX" and "XXX.YY" match) becomes a neutral placeholder of the same
+# width, in the order it first appears. The words in KEEP are market indicators, not companies.
 LABEL = re.compile(r"LIVE FEED  \.  [A-Z]{3}")
-TICKER = re.compile(r"\b[A-Z]{2,4}\.[A-Z]{2}\b|\b(?:BHP|CBA|CSL|FMG|NAB|QAN|RIO|WES|WOW)\b")
-PLACEHOLDERS = ["KIT", "FEN", "JAY", "OPA", "ZEN", "YEW", "PIX", "NUB", "GEM", "JOT"]
+TICKER = re.compile(r"\b[A-Z]{2,4}\.[A-Z]{2}\b|\b[A-Z]{2,5}(?=\s+(?:\[[#.]+\]|[+-]\d))")
+KEEP = {"GOLD", "OIL"}
+PLACEHOLDERS = [
+    "KIT", "FEN", "JAY", "OPA", "ZEN", "YEW", "PIX", "NUB", "GEM", "JOT", "ELM", "FIG",
+    "HOP", "IVY", "OAK", "REX", "SKY", "TAR", "URN", "VIM", "WAX", "YAK", "ZAP", "ASH",
+]
 SWAP = [("█", "#"), ("▒", "%"), ("▲", "^")]
 HEADER = re.compile(r"^(.+?)\s+\((\d+) frames\)$")
 FRAME = re.compile(r"^--- frame \d+ ---$")
@@ -39,9 +48,12 @@ def plain(line, names):
     def placeholder(match):
         token = match.group(0)
         root = token.split(".")[0]
+        if root in KEEP:
+            return token
         if root not in names:
             names[root] = PLACEHOLDERS[len(names) % len(PLACEHOLDERS)]
-        return names[root].ljust(len(token))
+        # Cut to the token's width too: the ticker tape shows clipped ends of words at its edges.
+        return names[root][: len(token)].ljust(len(token))
 
     return TICKER.sub(placeholder, line)
 
