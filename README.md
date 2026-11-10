@@ -52,7 +52,7 @@ with the current `showcase/config.json` applied.
   `requirements.txt` or `pyproject.toml`, and from its topics.
 
 To refresh straight away, run the **Build and deploy** workflow from the Actions tab, or have a repo ping the
-site when it changes (see [docs/keeping-it-fresh.md](docs/keeping-it-fresh.md)). Contributor and Claude guidance is in [CLAUDE.md](CLAUDE.md).
+site when it changes (see [docs/keeping-it-fresh.md](docs/keeping-it-fresh.md)). Guidance for contributors and coding agents is in [AGENTS.md](AGENTS.md), [DESIGN.md](DESIGN.md) and [WORKFLOW.md](WORKFLOW.md).
 
 The filter chips above the workbench grid come from `facets` in the data, so a new language, framework or
 GitHub topic gets its own chip automatically. Filtered views keep their choice in the URL
