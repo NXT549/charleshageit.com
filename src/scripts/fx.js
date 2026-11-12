@@ -1,7 +1,7 @@
-// Micro-interactions shared by every page. Load with <script src="./js/fx.js" defer>.
+// Micro-interactions shared by every page (imported by src/layouts/Base.astro).
 
-// Rubber stamps (.badge) thunk down onto the page as they scroll into view.
-// Stamps already on screen when the page loads are left as they are, and
+// Stickers (.badge) are slapped onto the page as they scroll into view.
+// Stickers already on screen when the page loads are left as they are, and
 // nothing moves for people who prefer less motion.
 (function () {
   if (!("IntersectionObserver" in window)) return;
@@ -13,7 +13,7 @@
       entries.forEach(function (e) {
         var el = e.target;
         if (!seen.has(el)) {
-          // First report: decide whether this stamp starts off screen.
+          // First report: decide whether this sticker starts off screen.
           seen.add(el);
           if (!e.isIntersecting) el.classList.add("is-waiting");
           else io.unobserve(el);
@@ -36,7 +36,7 @@
   }
   watch(document);
 
-  // Cards added later (e.g. from the GitHub API) get their stamps watched too.
+  // Cards added later get their stickers watched too.
   new MutationObserver(function (records) {
     records.forEach(function (r) {
       r.addedNodes.forEach(function (n) {
@@ -48,16 +48,16 @@
   }).observe(document.body, { childList: true, subtree: true });
 })();
 
-// Sheets of the drawing slide onto the table as they scroll into view: section headings, project
-// cards, the about panels, log entries. Things that arrive together are dealt out one after another.
-// Like the stamps, anything already on screen at load stays put (so nothing above the fold flickers),
-// and nothing moves for people who prefer less motion. The look lives in theme.css (.is-waiting / .is-in).
+// The pieces of a page rise into place as they scroll into view: section headings, project cards, the
+// about panels, log entries. Things that arrive together come in one after another. Like the stickers,
+// anything already on screen at load stays put (so nothing above the fold flickers), and nothing moves
+// for people who prefer less motion. The look lives in theme.css (.is-waiting / .is-in).
 (function () {
   if (!("IntersectionObserver" in window)) return;
   if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
 
   var SHEETS = [
-    ".section-head", ".spotlight", ".repo-card", ".showcase-foot", ".about",
+    ".section-head", ".spotlight", ".repo-card", ".showcase-foot", ".letter > *",
     ".about-grid > *", ".flow > li", ".about-chips", ".about-hi__card",
     ".log-month__title", ".log-entry", ".footer-pip", ".does-card", ".how__step", ".proj-fig", ".proj-draft__box", ".ascii-sheet"
   ].join(",");

@@ -3,8 +3,11 @@ import "../styles/tokens.css";
 import "../styles/theme.css";
 import "../styles/showcase.css";
 import "../styles/page.css";
+import fraunces from "../fonts/Fraunces-Display.woff2?url";
+import frauncesItalic from "../fonts/Fraunces-DisplayItalic.woff2?url";
 import geistSans from "../fonts/Geist-Variable.woff2?url";
 import geistMono from "../fonts/GeistMono-Variable.woff2?url";
+import SPRITES from "../components/pip-sprites.js";
 import { SITE } from "../lib/site";
 
 interface Props {
@@ -24,6 +27,13 @@ const {
   imageAlt = `${SITE.name}: ${SITE.shortDescription}`,
   canonical: hasCanonical = true,
 } = Astro.props;
+
+// Pip's own colours for each flavour, as CSS variables, for the little SVG Pips (src/components/PipIcon.astro).
+// Cherry is their fallback, so it needs no rule.
+const pipPalettes = Object.entries(SPRITES.flavors as Record<string, Record<string, string>>)
+  .filter(([name]) => name !== "cherry")
+  .map(([name, colours]) => `:root[data-flavour="${name}"]{${Object.entries(colours).map(([key, hex]) => `--pip-${key}:${hex}`).join(";")}}`)
+  .join("");
 
 const canonical = hasCanonical ? new URL(Astro.url.pathname, Astro.site) : null;
 const imageUrl = new URL(image, Astro.site);
@@ -52,15 +62,18 @@ const jsonLd = {
 ---
 
 <!doctype html>
-<html lang={SITE.lang}>
+<html lang={SITE.lang} data-flavour="cherry">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content={SITE.author} />
-    <meta name="color-scheme" content="dark" />
-    <meta name="theme-color" content="#0b2240" />
+    <meta name="color-scheme" content="light" />
+    {/* --paper in src/styles/tokens.css; a meta tag can't read a CSS variable. */}
+    <meta name="theme-color" content="#f7f0e1" />
+    {/* The site is printed in Pip's flavour (src/scripts/flavour.ts): put the saved one on before anything paints. */}
+    <script is:inline>try{var f=localStorage.getItem("pip-flavour");if(f)document.documentElement.dataset.flavour=f}catch(e){}</script>
     {canonical && <link rel="canonical" href={canonical} />}
     <link rel="icon" href="/img/pip-icon.png" />
     <link rel="apple-touch-icon" href="/img/pip-icon.png" />
@@ -85,8 +98,11 @@ const jsonLd = {
 
     <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
 
+    <link rel="preload" href={fraunces} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={geistSans} as="font" type="font/woff2" crossorigin />
+    <link rel="preload" href={frauncesItalic} as="font" type="font/woff2" crossorigin />
     <link rel="preload" href={geistMono} as="font" type="font/woff2" crossorigin />
+    <style set:html={pipPalettes}></style>
     <slot name="head" />
   </head>
   <body>

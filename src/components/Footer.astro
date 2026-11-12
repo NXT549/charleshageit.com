@@ -1,20 +1,80 @@
 ---
+// The colophon: what the site is printed in, the ink picker (nine jellybeans, one per flavour of Pip),
+// and the workshop's name as big as the page. Pip stands on its top edge to take you back up.
+import SPRITES from "./pip-sprites.js";
+import PipIcon from "./PipIcon.astro";
+
 interface Props {
-  /** The title block's sheet number. */
+  /** This page's number in the catalogue. */
   sheet?: string;
 }
 
 const { sheet = "01–04" } = Astro.props;
+const flavours = Object.keys(SPRITES.flavors);
 ---
 
 <footer class="site-footer">
-  <div class="container">
-    <a class="footer-pip" href="#top"><img src="/img/pip-icon.png" alt="" width="48" height="48" loading="lazy" /><span class="hand">back to the top!</span></a>
-    <div class="titleblock">
-      <div><small>Drawn by</small>Charles, with too many snacks</div>
-      <div><small>Scale</small>1:1, mostly</div>
-      <div><small>Source</small><a href="https://github.com/NXT549/charleshageit.com">This site's code</a></div>
-      <div><small>Sheet</small>{sheet}</div>
+  <a class="footer-pip" href="#top"><PipIcon size={64} /><span class="hand">back to the top!</span></a>
+  <div class="ink-block footer-ink">
+  <div class="container colophon">
+    <div class="colophon__print">
+      <h2>Colophon</h2>
+      <p>
+        Printed in licorice and <b data-ink-name>cherry</b> on vanilla stock. Set in Fraunces, Geist and Geist Mono.
+        Drawn by Charles, with too many snacks.
+      </p>
+      <div class="colour-bar" aria-hidden="true">
+        <i style="--c: var(--spot)"></i><i style="--c: var(--spot-2)"></i><i style="--c: var(--on-ink-faint)"></i>
+      </div>
+    </div>
+    <div>
+      <h2 id="inks-title">Pick an ink</h2>
+      <div class="inks" role="group" aria-labelledby="inks-title" data-inks hidden>
+        {
+          flavours.map((name) => (
+            <button class="inks__bean" type="button" data-ink={name} aria-pressed={name === "cherry" ? "true" : "false"} style={`--bean: var(--${name})`} title={name}>
+              <span class="visually-hidden">Print the site in {name}</span>
+            </button>
+          ))
+        }
+      </div>
+      <noscript><p>The ink picker needs JavaScript. This printing is cherry.</p></noscript>
+    </div>
+    <div>
+      <h2>Elsewhere</h2>
+      <ul>
+        <li><a href="https://github.com/NXT549">GitHub</a></li>
+        <li><a href="https://github.com/NXT549/charleshageit.com">This site's code</a></li>
+        <li><a href="/log/">The workshop log</a></li>
+      </ul>
     </div>
   </div>
+  <div class="container">
+    <p class="footer-base"><span>Charles's Workshop</span><span>Page {sheet}</span></p>
+  </div>
+  <p class="wordmark" aria-hidden="true">Charles's Workshop</p>
+  </div>
 </footer>
+
+<script>
+  import { centreOf, currentFlavour, setFlavour } from "../scripts/flavour";
+
+  // The ink picker, and every place the page names the ink it's printed in.
+  const picker = document.querySelector<HTMLElement>("[data-inks]");
+  const beans = picker ? [...picker.querySelectorAll<HTMLButtonElement>("[data-ink]")] : [];
+  const show = (name: string) => {
+    // An unknown flavour prints in cherry (tokens.css), so say cherry.
+    const known = beans.some((b) => b.dataset.ink === name) ? name : "cherry";
+    beans.forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.ink === known)));
+    document.querySelectorAll("[data-ink-name]").forEach((el) => { el.textContent = known === "candycane" ? "candy cane" : known; });
+  };
+  if (picker) {
+    picker.hidden = false;
+    picker.addEventListener("click", (e) => {
+      const bean = (e.target as Element).closest<HTMLButtonElement>("[data-ink]");
+      if (bean?.dataset.ink) setFlavour(bean.dataset.ink, centreOf(bean));
+    });
+  }
+  window.addEventListener("flavourchange", (e) => show((e as CustomEvent<string>).detail));
+  show(currentFlavour());
+</script>

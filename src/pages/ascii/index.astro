@@ -31,15 +31,12 @@ const firstBanner = figlet(firstFont, firstWords);
   current="ascii"
   sheet="07"
   image="/og/ascii.png"
-  imageAlt="The sketchbook: a blueprint sheet with Pip pointing at the title."
+  imageAlt="The sketchbook: a printed card with Pip standing on a disc of cherry ink."
 >
   <Fragment set:html={iconSprite()} />
-  <section class="container ascii-top">
-    <p class="eyebrow">Sheet 07 · Sketchbook</p>
-    <h1>
-      Drawn in{" "}
-      <span class="circled">plain text.<svg viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M22 58 C 22 16, 268 6, 288 40 C 302 76, 128 98, 44 84 C 2 76, 4 40, 64 24" /></svg></span>
-    </h1>
+  <section class="container page-top ascii-top">
+    <p class="eyebrow">Page 07 · Sketchbook</p>
+    <h1>Drawn in <span class="bean-word">plain text.</span></h1>
     <p class="lede">
       A boot log, a chip, a robot and a Pip made of ones and zeros. Every picture here is made of letters, numbers,
       punctuation and spaces, so it copies, pastes and scales with the words around it.
@@ -58,7 +55,7 @@ const firstBanner = figlet(firstFont, firstWords);
 
   <section id="pip-art" class="container section" aria-labelledby="pip-title">
     <header class="section-head">
-      <p class="eyebrow">Sheet 07 · Pip, in the machine</p>
+      <p class="eyebrow">Page 07 · Pip, in the machine</p>
       <h2 id="pip-title"><span class="text-pop">// pip.exe</span></h2>
       <p class="sub">
         Pip, drawn one character per pixel from his own sprite, then put through the machine: he boots up behind a
@@ -75,7 +72,7 @@ const firstBanner = figlet(firstFont, firstWords);
 
   <section id="project-art" class="container section" aria-labelledby="projects-title">
     <header class="section-head">
-      <p class="eyebrow">Sheet 07 · Projects</p>
+      <p class="eyebrow">Page 07 · Projects</p>
       <h2 id="projects-title"><span class="text-pop">// projects.sys</span></h2>
       <p class="sub">
         A picture for each project. The boot log and the process table are drawn from the live project list, so they
@@ -89,7 +86,7 @@ const firstBanner = figlet(firstFont, firstWords);
 
   <section id="hardware" class="container section" aria-labelledby="hardware-title">
     <header class="section-head">
-      <p class="eyebrow">Sheet 07 · Hardware</p>
+      <p class="eyebrow">Page 07 · Hardware</p>
       <h2 id="hardware-title"><span class="text-pop">// hardware</span></h2>
       <p class="sub">Unit 01, and the chip it runs on. Watch the data pulses run along the pins.</p>
     </header>
@@ -100,7 +97,7 @@ const firstBanner = figlet(firstFont, firstWords);
 
   <section id="banner" class="container section" aria-labelledby="banner-title">
     <header class="section-head">
-      <p class="eyebrow">Sheet 07 · Banner maker</p>
+      <p class="eyebrow">Page 07 · Banner maker</p>
       <h2 id="banner-title"><span class="text-pop">// banner.sh</span></h2>
       <p class="sub">
         Type some words, pick a font and they come out as big letters. The words and the font stay in the address bar,
@@ -122,7 +119,7 @@ const firstBanner = figlet(firstFont, firstWords);
         </div>
       </div>
     </form>
-    <figure class="terminal glass ascii-figure" data-tint="yellow" data-size="lg">
+    <figure class="terminal ascii-figure" data-tint="yellow" data-size="lg">
       <div class="terminal__bar">
         <span class="terminal__dots" aria-hidden="true"><i></i><i></i><i></i></span>
         <span class="terminal__title" aria-hidden="true">banner.sh</span>

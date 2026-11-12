@@ -23,7 +23,7 @@ const meta = `${count} ${count === 1 ? "frame" : "frames"} · ${cols}×${rows}`;
 const label = `${piece.title}${count > 1 ? `, ${count} frames` : ""}`;
 ---
 
-<figure class="terminal glass ascii-figure ascii-sheet" data-tint={piece.tint} data-size={size} aria-labelledby={`art-${piece.id}`}>
+<figure class="terminal ascii-figure ascii-sheet" data-tint={piece.tint} data-size={size} aria-labelledby={`art-${piece.id}`}>
   <div class="terminal__bar">
     <span class="terminal__dots" aria-hidden="true"><i></i><i></i><i></i></span>
     <span class="terminal__title" aria-hidden="true">{piece.file}</span>

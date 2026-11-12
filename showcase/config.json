@@ -9,7 +9,7 @@
     "hamster-slots": {
       "status": "wip",
       "ascii": "slots",
-      "pop": "highlighter",
+      "pop": "lemon",
       "blurb": "A cute pixel-art idle slot machine, powered by a hamster on a wheel. Spin the reels, win (pretend) coins, buy upgrades and teach your hamster to run the wheel by itself. Then retire to the Big Cage, grow the Family Tree and eventually open a whole hamster casino.",
       "highlights": ["Eight slot machines, a jackpot wheel and a card gamble", "Every sprite and sound is made in code, no game engine"],
       "live": "https://nxt549.github.io/hamster-slots/",
@@ -36,7 +36,7 @@
     "pip": {
       "status": "done",
       "ascii": "pip-boot",
-      "pop": "blue-pencil",
+      "pop": "cherry",
       "scene": "desk",
       "note": "that's him\nup the top too!",
       "blurb": "A tiny pixel-art jellybean who lives on your desktop. Pip trots about on four stubby legs, climbs the edges of your screen, naps when you wander off and keeps a gentle eye on your breaks, your Pomodoros and whether you've had any water lately. He's a desktop pet, not a productivity nag. (That's him walking around up the top, too.)",
@@ -62,7 +62,7 @@
       ]
     },
     "stock-review": {
-      "pop": "stamp-green",
+      "pop": "lime",
       "ascii": "market",
       "highlights": ["A dark Live board that fills in ticker by ticker", "Missing numbers stay blank, never made up"],
       "image": "./img/stock-review.svg",

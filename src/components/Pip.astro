@@ -1,20 +1,24 @@
 ---
-// Pip, walking around a little stage. Click him to change his flavour; the hero's terminal can also
-// talk to him (`pip mint`, `pip say hi`) by dispatching a "pip" event on window, see src/scripts/shell.ts.
-// His flavour is remembered between visits, and the browser tab's icon changes to match.
+// Pip, walking along his runway. Click him to change his flavour, which reprints the whole site in that
+// ink (src/scripts/flavour.ts); the hero's terminal can also talk to him (`pip grape`, `pip say hi`) by
+// dispatching a "pip" event on window, see src/scripts/shell.ts. His flavour is remembered between
+// visits, and the browser tab's icon changes to match.
 import SPRITES from "./pip-sprites.js";
 
 interface Props {
   /** The handwritten note pointing at Pip. */
   hint?: string;
+  /** A small printed label at the top left of the runway. */
+  label?: string;
 }
 
-const { hint = "this is Pip! click him" } = Astro.props;
+const { hint = "this is Pip! click him", label } = Astro.props;
 const flavours = Object.keys(SPRITES.flavors);
 ---
 
-<div class="stage" aria-label="Pip, a pixel-art jellybean, walking around. Click him to change his flavour.">
-  <canvas id="pip" width="32" height="19" tabindex="0" role="button" aria-label="Pip. Click to change his flavour." data-flavours={flavours.join(" ")}></canvas>
+<div class="stage">
+  {label && <p class="eyebrow stage-label">{label}</p>}
+  <canvas id="pip" width="32" height="19" tabindex="0" role="button" aria-label="Pip, a pixel-art jellybean. Click to change his flavour, and the ink this site is printed in." data-flavours={flavours.join(" ")}></canvas>
   <div class="bubble" id="bubble">hi!</div>
   <div class="stage-hint hand" aria-hidden="true">{hint}<svg viewBox="0 0 46 30"><path d="M42 3 C 32 8, 22 20, 6 26 M6 26 l9 -1 M6 26 l4 -8" /></svg></div>
   <div class="ground"></div>
@@ -22,6 +26,7 @@ const flavours = Object.keys(SPRITES.flavors);
 
 <script>
   import SPRITES from "./pip-sprites.js";
+  import { STORE, centreOf, currentFlavour, setFlavour as printIn } from "../scripts/flavour";
 
   type Frame = keyof typeof SPRITES.frames;
   type Flavour = keyof typeof SPRITES.flavors;
@@ -38,7 +43,6 @@ const flavours = Object.keys(SPRITES.flavors);
 
   if (canvas && bubble && ctx && stage) {
     const W = 32, H = 19;
-    const STORE = "pip-flavour";
     const flavours = Object.keys(SPRITES.flavors) as Flavour[];
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
     const sayings = ["hi!", "boing", "had any water?", "yum, ", "wheee", "take a break!", "*squish*"];
@@ -78,12 +82,22 @@ const flavours = Object.keys(SPRITES.flavors);
       icon.href = c.toDataURL("image/png");
     };
 
-    const setFlavour = (i: number) => {
+    // Wear a flavour without telling anyone (the page already knows, or is about to).
+    const wear = (i: number) => {
       flavour = ((i % flavours.length) + flavours.length) % flavours.length;
       canvas.dataset.flavour = flavours[flavour];
-      try { localStorage.setItem(STORE, flavours[flavour]); } catch { /* private mode: just don't remember */ }
       updateIcon();
     };
+    // Change flavour, and reprint the site in it: the new ink floods out from Pip.
+    const setFlavour = (i: number) => {
+      wear(i);
+      printIn(flavours[flavour], centreOf(canvas));
+    };
+    // Someone picked an ink in the footer.
+    window.addEventListener("flavourchange", (e) => {
+      const i = flavours.indexOf((e as CustomEvent<string>).detail as Flavour);
+      if (i >= 0 && i !== flavour) { wear(i); if (reduced) draw("idle_0", false); }
+    });
 
     const say = (text: string) => {
       bubble.textContent = text;
@@ -148,10 +162,10 @@ const flavours = Object.keys(SPRITES.flavors);
       requestAnimationFrame(tick);
     };
 
-    let saved: string | null = null;
-    try { saved = localStorage.getItem(STORE); } catch { /* no storage, start on cherry */ }
-    if (saved && flavours.includes(saved as Flavour)) setFlavour(flavours.indexOf(saved as Flavour));
-    else canvas.dataset.flavour = flavours[flavour];
+    // The page head has already put the saved flavour on <html>; fall back to storage just in case.
+    let saved: string | null = currentFlavour();
+    try { saved = localStorage.getItem(STORE) ?? saved; } catch { /* no storage: whatever the page says */ }
+    wear(Math.max(0, flavours.indexOf(saved as Flavour)));
 
     if (reduced) {
       // Stand still; pokes and commands swap to a still pose instead of animating.
