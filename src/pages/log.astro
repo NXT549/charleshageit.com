@@ -41,11 +41,11 @@ const tally = [
 ].filter(([n]) => n) as [number, string, string][];
 ---
 
-<Page title={`Workshop log · ${SITE.name}`} description="Everything Charles has changed lately across his projects: commits, releases and new things, newest first." current="log" sheet="06" image="/og/log.png" imageAlt="Workshop log: a blueprint sheet with Pip pointing at the title.">
+<Page title={`Workshop log · ${SITE.name}`} description="Everything Charles has changed lately across his projects: commits, releases and new things, newest first." current="log" sheet="06" image="/og/log.png" imageAlt="Workshop log: a printed card with Pip standing on a disc of cherry ink.">
   <Fragment set:html={iconSprite()} />
-  <section class="container log-top">
-    <p class="eyebrow">Sheet 06 · Workshop log</p>
-    <h1>Workshop log</h1>
+  <section class="container page-top">
+    <p class="eyebrow">Page 06 · Workshop log</p>
+    <h1>Workshop <span class="bean-word">log</span></h1>
     <p class="lede">
       What I've been changing lately, across every project, newest first. It's pulled from GitHub every time the
       site rebuilds, so it writes itself.
@@ -58,7 +58,7 @@ const tally = [
     {
       groups.map((g) => (
         <section class="log-month" aria-label={g.label}>
-          <h2 class="hand log-month__title">{g.label}</h2>
+          <h2 class="log-month__title">{g.label}</h2>
           <ol class="log-list">
             {g.items.map((e) => (
               <li class:list={["log-entry", `log-entry--${e.kind}`]}>
@@ -100,34 +100,32 @@ const tally = [
 </Page>
 
 <style>
-  .log-top { display: grid; gap: var(--space-4); padding-top: var(--space-8); }
-  .log-tally { font: 500 var(--text-xs) / 1 var(--font-mono); letter-spacing: var(--tracking-mono); text-transform: uppercase; color: var(--accent-2); }
+  .log-tally { font: 500 var(--text-xs) / 1 var(--font-mono); letter-spacing: var(--tracking-mono); text-transform: uppercase; color: var(--ink-soft); }
 
-  .log { display: grid; gap: var(--space-7); padding-top: var(--space-7); max-width: 900px; }
-  .log-month { display: grid; gap: var(--space-4); }
-  .log-month__title { font-size: 2.1rem; --rot: -2deg; justify-self: start; }
+  .log { display: grid; gap: var(--space-8); padding-top: var(--space-8); }
+  .log-month { display: grid; gap: var(--space-5); max-width: 940px; }
+  .log-month__title { font: italic 800 var(--text-3xl) / 1 var(--font-display); letter-spacing: var(--tracking-tight); padding-bottom: var(--space-3); border-bottom: var(--rule); }
 
-  /* The timeline: a chalk line down the page, a mark per entry, the day written beside it. */
+  /* The timeline: an ink line down the page, a mark per entry, the day printed beside it. */
   .log-list { list-style: none; margin: 0; padding: 0; position: relative; display: grid; gap: var(--space-4); }
-  .log-list::before { content: ""; position: absolute; top: 6px; bottom: 6px; left: calc(64px + var(--space-3) + 7px); border-left: var(--outline); }
+  .log-list::before { content: ""; position: absolute; top: 6px; bottom: 6px; left: calc(64px + var(--space-3) + 7px); border-left: var(--rule-dotted); }
   .log-entry { display: grid; grid-template-columns: 64px 16px minmax(0, 1fr); gap: var(--space-3); align-items: start; }
-  .log-entry__day { padding-top: 4px; font: 500 var(--text-xs) / 1.2 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--text-faint); text-align: right; }
-  .log-entry__mark { position: relative; z-index: 1; width: 16px; height: 16px; margin-top: 3px; border: var(--outline); border-radius: 50%; background: var(--bg); }
-  .log-entry--release .log-entry__mark { border-radius: 2px; background: var(--accent-2); border-color: var(--accent-2); transform: rotate(45deg) scale(0.85); }
-  .log-entry--start .log-entry__mark { background: var(--success); border-color: var(--success); }
+  .log-entry__day { padding-top: 4px; font: 500 var(--text-xs) / 1.2 var(--font-mono); letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-faint); text-align: right; }
+  .log-entry__mark { position: relative; z-index: 1; width: 16px; height: 16px; margin-top: 3px; border: var(--rule); border-radius: 50%; background: var(--paper); }
+  /* a release is a jellybean of spot ink, a new project is solid ink */
+  .log-entry--release .log-entry__mark { width: 20px; height: 14px; margin: 4px 0 0 -2px; border-radius: 60% 40% 55% 45% / 55% 50% 50% 45%; rotate: -14deg; background: var(--spot); }
+  .log-entry--start .log-entry__mark { background: var(--ink); }
   .log-entry__body { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-2) var(--space-3); min-width: 0; }
-  .log-entry__repo { padding: 3px 7px; }
-  .log-entry__text { flex: 1 1 280px; min-width: 0; color: var(--text-muted); overflow-wrap: anywhere; }
-  .log-entry__text a { text-decoration: none; }
-  .log-entry__text a:hover { text-decoration: underline; }
+  .log-entry__repo { padding: 3px 9px; }
+  .log-entry__text { flex: 1 1 280px; min-width: 0; color: var(--ink-soft); overflow-wrap: anywhere; }
   .log-entry__text :global(.icon) { display: inline; vertical-align: -2px; margin-right: 4px; }
-  .log-entry__sha { margin-right: var(--space-2); }
-  .log-entry__sha code { color: var(--accent-2); border: 0; padding: 0; }
-  .log-entry__stamp { --rot: -4deg; font-size: 10px; padding: 4px 7px 3px; margin-right: var(--space-2); }
-  .log-entry__name { margin-left: var(--space-2); color: var(--text); }
-  .log-entry--release .log-entry__text, .log-entry--start .log-entry__text { color: var(--text); }
+  .log-entry__sha { margin-right: var(--space-2); text-decoration-thickness: 1.5px; }
+  .log-entry__sha code { background: none; padding: 0; }
+  .log-entry__stamp { --rot: -4deg; font-size: 10px; padding: 5px 8px 4px; margin-right: var(--space-2); }
+  .log-entry__name { margin-left: var(--space-2); color: var(--ink); }
+  .log-entry--release .log-entry__text, .log-entry--start .log-entry__text { color: var(--ink); }
 
-  .log-empty { color: var(--text-muted); }
+  .log-empty { color: var(--ink-soft); }
   .log-foot { display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--space-3); padding-left: calc(64px + 16px + 2 * var(--space-3)); }
   .log-foot .hand { font-size: 1.4rem; }
   @media (max-width: 520px) {

@@ -17,7 +17,7 @@ import {
 import pip from "../components/pip-sprites.js";
 import { getShowcase, type Repo } from "./showcase";
 
-/** A theme pen: cyan is the blue pencil, yellow the highlighter, green the stamp, chalk the plain linework. */
+/** One of the printing's inks: yellow is the spot ink, cyan its partner, green a fixed mint, chalk the paper colour. */
 export type Tint = "cyan" | "yellow" | "green" | "chalk";
 export type Group = "pip" | "projects" | "hardware";
 

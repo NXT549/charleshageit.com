@@ -11,12 +11,14 @@ and `/log/` are built from NXT549's public repos at build time; visitors never h
    profile location in page copy, meta/OG tags, structured data, the social card, `data/*.json`, docs or
    commit messages. Art and sample data count too (exchange names, ticker suffixes, real symbols), so the
    sketchbook's charts use made-up tickers. Grep `dist/` before pushing if unsure.
-2. **Blueprint look only**: navy grid paper, chalk lines, yellow highlighter, blue pencil, Caveat notes,
-   rubber stamps, Pip the mascot. Fun, with personality. No generic "AI" styling (dark glass, neon
-   gradients, glow orbs). Show screenshots before committing to a new visual direction.
+2. **Print-shop look only**: vanilla paper, licorice ink and one spot ink that is Pip's flavour (nine of
+   them, `data-flavour` on `<html>`), halftone dots, big Fraunces headlines, stickers, Caveat notes, Pip
+   the mascot. Fun, with personality. No generic "AI" styling (dark glass, neon gradients, glow orbs).
+   Show screenshots before committing to a new visual direction.
 3. **Use tokens.** Colours, fonts and spacing come from `src/styles/tokens.css`, shared pieces from
-   `theme.css`. No hard-coded values. Exception: `src/lib/og.ts` (satori can't read CSS variables) keeps
-   its own copy, so update it by hand when the theme changes.
+   `theme.css`. No hard-coded values. Exceptions: `src/lib/og.ts` (satori can't read CSS variables) and
+   the `theme-color` meta tag keep their own copies, so update them by hand when the theme changes.
+   Every ink must pass `showcase/test/theme.test.mjs` (4.5:1 in all nine flavours; Lighthouse only sees cherry).
 4. **Lighthouse**: performance >= 95, 100 for accessibility, best practices and SEO on every page
    (`lighthouserc.json`, blocking on PRs). Minimal JS, lazy images, no render-blocking requests.
 5. **Deploy setup stays put**: Pages source is "GitHub Actions", `main` holds source (never a built site),
@@ -39,12 +41,12 @@ GitHub data only shows up in CI.
 
 ## Map
 
-- `src/pages/`: `index`, `about`, `log`, `ascii/` (sketchbook, sheet 07), `404`, `projects/[name]`, `og/` (social cards).
+- `src/pages/`: `index`, `about`, `log`, `ascii/` (sketchbook, page 07), `404`, `projects/[name]`, `og/` (social cards).
 - `src/layouts/`: `Base.astro` (head, SEO, structured data), `Page.astro` (non-home pages).
-- `src/components/`: Hero, Projects, Sketchbook (Fig. 3), Workbench, FilterBar, About, StatusBadge, Pip, AsciiFigure, Header, Footer.
+- `src/components/`: Hero, Projects, Sketchbook (Fig. 3), Workbench, FilterBar, About, StatusBadge, Pip, PipIcon (the SVG Pip that follows the flavour), AsciiFigure, Header (dateline, masthead), Footer (colophon, ink picker).
 - `src/lib/`: `site.ts` (name, links), `showcase.ts` (build-time fetch), `readme.ts`, `og.ts`, `ascii.ts` (the sketchbook's pieces).
 - `src/ascii/`: sketchbook sources: `art/*.txt` (hand-drawn, frames split by `~~~`) and `fonts/*.flf` (FIGlet fonts).
-- `src/scripts/`: `fx.js` (stamps, scroll-in), `shell.ts` (hero terminal), `showcase.js` (filters), `ascii.ts` (frames, copy, banner maker). The scroll progress line, drifting grid, drawn rules and the "how it works" rail are pure CSS (`theme.css`, `projects/[name].astro`) and skip reduced motion.
+- `src/scripts/`: `flavour.ts` (the spot ink: set, save, ink flood), `fx.js` (stickers, scroll-in), `shell.ts` (hero terminal), `showcase.js` (relative dates, copy, demos), `ascii.ts` (frames, copy, banner maker). The scroll progress line, the ticker, the starburst and the "how it works" rail are pure CSS (`theme.css`, `page.css`, `projects/[name].astro`) and skip reduced motion.
 - `src/styles/`: `tokens.css`, `theme.css`, plus `page`, `prose`, `showcase`, `ascii` CSS.
 - `showcase/`: dependency-free `fetch.mjs`, `detect.mjs` (pure helpers), `render.mjs` (cards), `ascii.mjs`
   (sprites to characters, FIGlet), `cyber.mjs` (the sketchbook's generators and catalogue), `build.mjs`,
@@ -57,8 +59,8 @@ GitHub data only shows up in CI.
 - New public repos appear automatically; forks, archived repos and `hide` entries are skipped.
 - Per-card tweaks go in `repos.<name>` in `showcase/config.json`. Feature a repo via `featured` there or
   the `featured` GitHub topic. More in `docs/keeping-it-fresh.md`.
-- Sheet numbers on the drawings: home 01-04 (Fig. 3 is the sketchbook teaser), about 05, log 06, sketchbook 07,
-  projects P-01 onward.
+- Page numbers: home No. 01-04 (Fig. 3 is the sketchbook teaser), about 05, log 06, sketchbook 07,
+  projects are plates P-01 onward.
 - A repo's `ascii` config names a sketchbook piece (the ids are `PIECES` in `showcase/cyber.mjs`).
 
 ## Working style

@@ -34,17 +34,17 @@ with the current `showcase/config.json` applied.
   plus any repo with the `featured` topic on GitHub.
 - **Hide a repo** by adding it to `hide` in `showcase/config.json`.
 - **Customise a card** under `repos` in `showcase/config.json`: `blurb` (its first sentence becomes the bold
-  tagline), `highlights`, `status` (`done` stamps it "Shipped", `wip` "In progress"), `image` and `imageAlt`
+  tagline), `highlights`, `status` (`done` gives it a "Shipped" sticker, `wip` "In progress"), `image` and `imageAlt`
   (put screenshots in `public/img/`, around 1200×630), `live` (the "Play in your browser" link, otherwise the repo's
   website from GitHub), `embed: true` (adds a "Try it right here" button that plays the live site inside the
-  card), `pop` (the colour the card leaves behind on hover, a theme colour name like `highlighter` or
-  `blue-pencil`), `scene: "desk"` (Pip's spec drawing behind a pixel-art image), `note` (a handwritten note on
+  card), `pop` (the card's own ink, for its picture's backdrop, its number and its halftone shadow: a flavour name
+  like `lemon` or `cherry`), `scene: "desk"` (stands a pixel-art image on a ground line in front of a disc of ink), `note` (a handwritten note on
   the picture, `\n` for a new line), `platforms` (download buttons to always show, linking to the release page
   when there's no installer for one), `frameworks` (extra framework tags if they aren't detected),
   `does` (up to 8 `{title, text}` cards under "What it does" on the project's page) and `how` (up to 8
   `{title, text, note?}` steps under "How it works", with an optional handwritten `note`). Projects with
-  neither show an "On the drafting board" stamp instead.
-- **A picture from the sketchbook** on the project's sheet: `ascii` names a piece (`slots`, `market`, `pip-boot`, ...),
+  neither show a "Still at the printer" sticker instead.
+- **A picture from the sketchbook** on the project's page: `ascii` names a piece (`slots`, `market`, `pip-boot`, ...),
   shown under "In characters". The ids are the catalogue in `showcase/cyber.mjs`.
 - **Download buttons** come from the latest GitHub release: an `.exe`/`.msi` becomes Windows, a `.dmg`
   becomes Mac, an `.AppImage`/`.deb` becomes Linux.
@@ -65,7 +65,7 @@ Each card carries `data-language`, `data-frameworks`, `data-topics` and `data-ta
 
 The sketchbook (`/ascii/`) is pictures drawn in plain text, using only letters, numbers, punctuation and spaces,
 each in a little terminal window with its file name on the title bar. Fig. 3 on the home page shows a taste of
-it, and a project's sheet shows its own picture when `ascii` is set. There are nine pictures, listed in
+it, and a project's page shows its own picture when `ascii` is set. There are nine pictures, listed in
 `showcase/cyber.mjs` (`PIECES`: id, file name, title, group, tint, speed):
 
 - **Pip, in the machine** (`pip-boot`, `pip-binary`, `pip-glitch`): his frames from `src/components/pip-sprites.js`,
@@ -90,43 +90,69 @@ frames. To add a picture: add it to `PIECES`, give `src/lib/ascii.ts` its frames
   where the first frame shows. Every frame is a `<pre>` stacked in one grid cell, so the box never changes size. A
   picture wider than its box takes a tab stop so keyboard users can scroll it. Without the script the sketchbook is
   still all there, just still.
-- **Tints** use the theme's pens: `cyan` is the blue pencil, `yellow` the highlighter, `green` the stamp and `chalk`
-  the plain linework (`data-tint` in `src/styles/ascii.css`).
+- **Tints** use the printing's inks, on a block of solid ink: `yellow` is the spot ink, `cyan` its partner, `green` a
+  fixed mint and `chalk` the paper colour (`data-tint` in `src/styles/ascii.css`). The first two change with Pip's flavour.
 - The files: `src/pages/ascii/index.astro` (the page) and `ascii/fonts/[font].json.ts`, `src/components/AsciiFigure.astro`
   (one window and its copy button), `src/components/Sketchbook.astro` (Fig. 3), `src/lib/ascii.ts`,
   `src/scripts/ascii.ts`, `src/styles/ascii.css`, `showcase/ascii.mjs` and `showcase/cyber.mjs`.
 
 ## Theme
 
-The site is drawn like a blueprint for the workshop: navy grid paper, chalk-white linework, a yellow
-highlighter, cyan dimension lines, handwritten notes and rubber stamps. Headings and body text use Geist,
-labels and code use Geist Mono, and the handwritten notes use Caveat.
+The site is printed like a catalogue off a risograph: vanilla paper, licorice ink and one bright spot ink, with
+halftone dots for shadows and big soft headlines. **The spot ink is Pip's flavour.** Click Pip, type `pip grape` in
+the terminal or pick a bean in the footer and the whole site is reprinted in that ink, flooding out from where it was
+picked. The choice is remembered, and applied before the next page paints.
 
-- Colours, fonts, spacing and linework are CSS variables in `src/styles/tokens.css`. Use those instead of hard-coding values.
-- Reusable pieces live in `src/styles/theme.css`: `.panel` / `.glass` (drawing frame), `.glow` (lifts on hover and leaves an
-  offset outline; set `--pop` for its colour), `.sheet` and `.titleblock` (crop marks and the drawing's title block),
-  `.terminal`, `.btn--primary` / `--secondary` / `--ghost`, `.tag`, `.badge--live` / `--wip` / `--info` (rubber stamps),
-  `.hand` (handwritten note), `.circled` (hand-drawn loop around a word), `.text-pop` (highlighter), `.dim` (dimension line)
-  and `.eyebrow`. The comment at the top of the file lists them all.
-- Scroll motion: `src/scripts/fx.js` makes the stamps thunk down, and deals sheets (section headings, project cards,
-  about panels, log entries, the footer's Pip) onto the page as they scroll into view: they drop in at a slight angle,
-  the heading's highlighter swipes across and handwritten notes write themselves in. Add a selector to its `SHEETS`
-  list to give something else the same entrance. Anything on screen at load stays put. Pure CSS adds a highlighter
-  progress line under the header and a little drift on project screenshots (scroll timelines; skipped where
-  unsupported). All of it is off for people who prefer reduced motion.
+- **Tokens**: colours, fonts, spacing and linework are CSS variables in `src/styles/tokens.css`. Use those instead of
+  hard-coding values. `--paper`, `--ink` and their quieter shades are fixed; `--spot` (the loud colour), `--spot-ink`
+  (the same ink, dark enough for text on paper) and `--spot-2` (the partner ink, for overprints and halftones) change
+  with the flavour.
+- **The nine inks**: one per flavour in `src/components/pip-sprites.js` (cherry, lime, blueberry, lemon, grape,
+  licorice, bubblegum, pumpkin, candy cane), each a bright colour and an `-ink` shade, plus a
+  `:root[data-flavour="..."]` rule that picks its partner. A bright ink always reads under ink text and as text on an
+  ink block; `showcase/test/theme.test.mjs` checks that for all nine, since Lighthouse only ever sees cherry. To add a
+  flavour, add its two colours and its rule there.
+- **Flavour** (`src/scripts/flavour.ts`): sets `data-flavour` on `<html>`, saves it, fires `flavourchange` and runs the
+  ink flood (a view transition; skipped where unsupported and for reduced motion). `Pip.astro` and the footer's picker
+  both go through it. `PipIcon.astro` is the little SVG Pip in the masthead and footer, coloured by CSS variables
+  that `Base.astro` writes from the sprite palettes, so it changes flavour without a script.
+- **Type**: headlines are Fraunces (a cut made for this site: the 144pt optical size, soft and wonky, weights 600 to
+  900, with an 800 italic), body text is Geist, labels and code are Geist Mono and the handwritten notes are Caveat.
+  All self-hosted in `src/fonts/` under the SIL OFL. The Fraunces files were cut from the variable font with
+  fontTools' instancer (`opsz=144, SOFT=100, WONK=1`); `Fraunces-Display-900.woff` is the same cut for the social cards.
+- **Reusable pieces** live in `src/styles/theme.css`: `.panel` / `.glass` (a card), `.glow` (a card with a halftone
+  shadow that grows on hover; set `--pop` for its ink), `.ink-block` and `.terminal` (solid ink with light text),
+  `.btn--primary` / `--secondary` / `--ghost`, `.tag`, `.badge--live` / `--wip` / `--info` (stickers: shipped is solid,
+  in progress is outlined, so status never depends on colour), `.burst` (the starburst sticker), `.hand` (handwritten
+  note), `.text-pop` (a bar of spot ink behind a word), `.dots` (a halftone field) and `.eyebrow`. The comment at the
+  top of the file lists them all. `.bean-word` in `page.css` sits a headline's last words on a jellybean of spot ink.
+- **Motion**: `src/scripts/fx.js` slaps the stickers down and brings the pieces of a page (section headings, project
+  cards, about panels, log entries, the footer's Pip) in as they scroll into view: they rise into place, the spot bar
+  is printed across the heading and handwritten notes write themselves in. Add a selector to its `SHEETS` list to give
+  something else the same entrance. Anything on screen at load stays put. Pure CSS does the rest: the headline's spot
+  pass sliding into register, the ticker under the hero, the turning starburst, a progress line under the masthead
+  and a little drift on project screenshots (scroll timelines; skipped where unsupported). All of it is off for
+  people who prefer reduced motion.
+- **Outside the stylesheet**: `src/lib/og.ts` (the social cards) and the `theme-color` meta tag in `Base.astro` can't
+  read CSS variables, so they keep their own copies of the colours. The theme test fails if they drift.
 
 ## Pages
 
-- `/`: the home page: the hero, the featured projects, the workbench grid and a short about.
+- `/`: the home page: the hero (the headline, the terminal, Pip's runway and the ticker), the featured projects,
+  the sketchbook teaser, the workbench grid and a short about.
 - `/projects/<repo>/`: a spec sheet for every project on the workbench, made automatically from GitHub: what it is,
   how to get it, its languages, its latest releases and commits, and its whole README (links inside the repo go to GitHub).
 - `/about/`: the longer about, how a thing gets made here, and what's on the bench right now.
 - `/log/`: the workshop log, every recent commit, release and new project across the workbench, newest first.
 - `/ascii/`: the sketchbook, pictures drawn in plain text (see [The sketchbook](#the-sketchbook)).
-- `/404.html`: "This page went walkabout.", where GitHub Pages sends any address that doesn't exist.
+- `/404.html`: "This page is out of print.", where GitHub Pages sends any address that doesn't exist.
 
 The hero's terminal takes commands once its intro has typed out: `help` lists them (`ls`, `open pip`, `play
-hamster-slots`, `log`, `pip grape`, `pip say hi`, `ascii pip`, `banner hello`, `neofetch`, `hack`, ...). Pip remembers his flavour between visits, and the tab icon matches it.
+hamster-slots`, `log`, `pip grape`, `pip say hi`, `ascii pip`, `banner hello`, `neofetch`, `hack`, ...). Pip remembers his
+flavour between visits, the site is printed in it, and the tab icon matches it.
+
+Every page carries a number, like pages in a catalogue: the home page's sections are No. 01 to 04, about is page 05,
+the log 06 and the sketchbook 07, and each project is a plate (P-01 onward, featured projects first).
 
 ## Files
 
@@ -134,16 +160,18 @@ hamster-slots`, `log`, `pip grape`, `pip say hi`, `ascii pip`, `banner hello`, `
 - `src/pages/projects/[name].astro`, `about.astro`, `log.astro`, `404.astro`: the other pages, all on `src/layouts/Page.astro`.
 - `src/lib/readme.ts`: turns a README into HTML for its project page (`src/styles/prose.css` styles it).
 - `src/scripts/shell.ts`: the hero terminal's commands.
-- `src/components/Hero.astro`: the intro, with the GitHub status badge (`StatusBadge.astro`), jump-links to the
-  featured projects and Pip (`Pip.astro`).
+- `src/components/Hero.astro`: the intro, with the GitHub status pill (`StatusBadge.astro`), jump-links to the
+  featured projects, the terminal, Pip on his runway (`Pip.astro`) and the ticker.
+- `src/components/Header.astro` and `Footer.astro`: the dateline and masthead, and the colophon with the ink picker.
 - `src/components/FilterBar.astro`: the language / framework / topic filter for the workbench grid.
-- `src/layouts/Base.astro`: the `<head>`: title, description, social preview tags, structured data, styles and font preloads.
+- `src/layouts/Base.astro`: the `<head>`: title, description, social preview tags, structured data, styles, font
+  preloads and the one inline line that applies the saved flavour before the page paints.
 - `src/lib/site.ts`: the site's name, description and links, used everywhere above.
 - `src/lib/showcase.ts`: fetches the GitHub data once per build. Without GitHub it uses the cached
   `data/github-raw.json` with the current `showcase/config.json` applied, so card edits still show up.
 - `src/pages/og.png.ts` and `src/lib/og.ts`: draw the 1200×630 social preview card at build time.
 - `showcase/`: the GitHub fetch and card rendering (`config.json` to tweak, tests in `test/`). No dependencies.
 - `data/github.json`: the last saved copy of the repo data.
-- `src/styles/`, `src/scripts/`, `src/fonts/`: the theme, the showcase card styles, and the fonts (Geist, Geist Mono and Caveat; SIL OFL).
+- `src/styles/`, `src/scripts/`, `src/fonts/`: the theme, the showcase card styles, and the fonts (Fraunces, Geist, Geist Mono and Caveat; SIL OFL).
 - `src/components/pip-sprites.js`: Pip's sprites and flavours, copied from [NXT549/pip](https://github.com/NXT549/pip).
 - `public/`: files served as they are: `img/`, `robots.txt` and `CNAME` (the custom domain; don't delete it).

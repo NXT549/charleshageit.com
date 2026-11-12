@@ -336,8 +336,8 @@ export function pipGlitchFrames(rows, { frames = 6, seed = 9 } = {}) {
 
 /**
  * Every picture in the sketchbook: its id (what a project's `ascii` config names), the file name on its
- * terminal window, what it's called, where it sits on the page, how it's tinted (a theme pen: cyan is the
- * blue pencil, yellow the highlighter, green the stamp, chalk the plain linework) and how fast it plays.
+ * terminal window, what it's called, where it sits on the page, how it's tinted (one of the printing's inks:
+ * yellow is the spot ink, cyan its partner, green a fixed mint, chalk the paper colour) and how fast it plays.
  * src/lib/ascii.ts draws each one.
  */
 export const PIECES = [

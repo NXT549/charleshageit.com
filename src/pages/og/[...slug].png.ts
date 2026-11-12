@@ -5,7 +5,7 @@ import { splitBlurb } from "../../../showcase/render.mjs";
 import { SITE } from "../../lib/site";
 
 // A social preview card for every page but the home page (that one is /og.png), built at build time:
-// the same blueprint sheet, with each page's own title, stamp and note from Pip.
+// the same printed card, with each page's own title, sticker and note from Pip.
 const STAMPS: Record<string, string> = { done: "Shipped", wip: "In progress", live: "Live", archived: "Archived" };
 const seeIt = (path: string): [string, string] => ["See it at", `${SITE.domain}${path}`];
 
@@ -20,10 +20,10 @@ export async function getStaticPaths() {
       card: {
         title: "About Charles",
         subtitle: "How I vibe-code the little things in my workshop, and what's on the bench right now.",
-        eyebrow: "Sheet 05 · About",
+        eyebrow: "Page 05 · About",
         note: "say hi!",
         stamp: "Hello",
-        titleblock: [["Drawn by", "Charles"], ["Sheet", "05"], seeIt("/about/")],
+        titleblock: [["Made by", "Charles"], ["Page", "05"], seeIt("/about/")],
       },
     },
     {
@@ -31,10 +31,10 @@ export async function getStaticPaths() {
       card: {
         title: "Workshop log",
         subtitle: "Every commit, release and new project across the workbench, newest first.",
-        eyebrow: "Sheet 06 · Workshop log",
+        eyebrow: "Page 06 · Workshop log",
         note: "what's new?",
         stamp: "Updated often",
-        titleblock: [["Drawn by", "Charles"], ["Sheet", "06"], seeIt("/log/")],
+        titleblock: [["Made by", "Charles"], ["Page", "06"], seeIt("/log/")],
       },
     },
     {
@@ -42,10 +42,10 @@ export async function getStaticPaths() {
       card: {
         title: "The sketchbook",
         subtitle: "Pictures drawn in plain text: Pip booting up, a slot machine, a robot and a banner maker.",
-        eyebrow: "Sheet 07 · Sketchbook",
+        eyebrow: "Page 07 · Sketchbook",
         note: "boot sequence ok!",
         stamp: "System online",
-        titleblock: [["Drawn by", "Charles"], ["Sheet", "07"], seeIt("/ascii/")],
+        titleblock: [["Made by", "Charles"], ["Page", "07"], seeIt("/ascii/")],
       },
     },
     ...repos.map((repo, i) => {
@@ -56,10 +56,10 @@ export async function getStaticPaths() {
         card: {
           title: repo.title,
           subtitle: splitBlurb(r.blurb || repo.description || "")[0] || "One of the little things in my workshop.",
-          eyebrow: `Sheet ${sheet} · Spec sheet`,
+          eyebrow: `Plate ${sheet} · Spec sheet`,
           note: repo.name === "pip" ? "this is Pip!" : "Pip approves",
           stamp: STAMPS[r.status ?? ""] ?? "Spec sheet",
-          titleblock: [["Language", repo.language?.name ?? "Various"], ["Sheet", sheet], ["Source", `NXT549/${repo.name}`]],
+          titleblock: [["Language", repo.language?.name ?? "Various"], ["Plate", sheet], ["Source", `NXT549/${repo.name}`]],
         } satisfies OgCard,
       };
     }),

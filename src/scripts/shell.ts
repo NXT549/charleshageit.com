@@ -1,4 +1,4 @@
-// The hero's terminal ("Fig. 1") turns into a little shell once its intro has typed itself out.
+// The hero's terminal turns into a little shell once its intro has typed itself out.
 // Visitors can list and open projects, read about Charles and boss Pip around (`pip mint`, `pip say hi`).
 // Everything is built from the showcase data the page embeds in <script id="shell-data">, so new repos
 // show up here by themselves. Pip listens for "pip" events on window (src/components/Pip.astro).
@@ -29,7 +29,7 @@ const HELP: [string, string][] = [
   ["play <project>", "play it in your browser"],
   ["log", "what I've been changing lately"],
   ["cat about.md", "a bit about me (or: about)"],
-  ["pip [flavour]", "poke Pip, or pick his flavour"],
+  ["pip [flavour]", "poke Pip, or reprint the site in his flavour"],
   ["pip say <words>", "make Pip say something"],
   ["ascii", "the sketchbook, drawn in plain text"],
   ["banner <words>", "big letters from your words"],
@@ -238,7 +238,7 @@ export function mountShell(body: HTMLElement, data: ShellData) {
         const f = flavours.find((fl) => fl === s.replace(/[\s-]/g, "")) ?? flavours.find((fl) => fl.startsWith(s));
         if (f) {
           pip({ do: "flavour", value: f });
-          return print(`Pip is ${f} flavoured now. (he'll remember)`);
+          return print(`Pip is ${f} flavoured now, and so is the ink. (he'll remember)`);
         }
         return print([`Pip doesn't come in ${sub}. try `, strong("pip flavours")], "terminal__out shell__err");
       }
@@ -263,10 +263,11 @@ export function mountShell(body: HTMLElement, data: ShellData) {
         const info: (string | Node)[] = [
           strong(user),
           "-".repeat(user.length),
-          "OS: WorkshopOS 2026.10 (blueprint)",
+          "OS: WorkshopOS 2026.11 (riso edition)",
           "Host: one very tidy desk",
           `Projects: ${data.projects.length} (${data.facts.shipped} shipped)`,
           `Stack: ${data.facts.languages.join(", ") || "vibes"}`,
+          `Ink: licorice + ${document.documentElement.dataset.flavour || "cherry"}`,
           "Shell: vibe-sh",
           "Fuel: too many snacks",
         ];
@@ -315,7 +316,6 @@ export function mountShell(body: HTMLElement, data: ShellData) {
       case "hi":
       case "hello":
       case "hey":
-      case "g'day":
         pip({ do: "wave" });
         return print("hi! Pip says hi too.");
       case "coffee":
@@ -332,7 +332,7 @@ export function mountShell(body: HTMLElement, data: ShellData) {
       case "ping":
         return print("pong");
       case "uname":
-        return print("WorkshopOS 2026.10 (blueprint)");
+        return print("WorkshopOS 2026.11 (riso edition)");
       default: {
         const p = find(name);
         if (p) return print(["did you mean ", strong(`open ${p.name}`), "?"]);

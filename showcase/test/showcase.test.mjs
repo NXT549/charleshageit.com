@@ -195,7 +195,7 @@ test("repos carry filterable language, frameworks, topics and tags", async () =>
   const bot = data.repos.find((r) => r.name === "weather-bot");
   assert.deepEqual(bot.frameworks, ["flask"]);
   assert.equal(bot.homepage, null);
-  assert.equal(hs.pop, "highlighter");
+  assert.equal(hs.pop, "lemon");
   assert.equal(pip.scene, "desk");
   assert.equal(pip.note, "that's him\nup the top too!");
 
@@ -298,7 +298,9 @@ test("spotlight shows the README, release downloads, live link and demo", async 
   assert.equal((html.match(/<figure class="terminal spotlight__readme">/g) || []).length, 1);
   assert.ok(html.indexOf("spotlight__readme") > html.indexOf('id="project-pip"'));
   assert.match(html, /spotlight__shot--pixel/);
-  assert.match(html, /id="project-pip"[^>]* style="--pop: var\(--blue-pencil\)"/);
+  // each plate is printed in its own ink and numbered in spotlight order
+  assert.match(html, /id="project-pip"[^>]* style="--pop: var\(--cherry\)"/);
+  assert.match(html, /id="project-pip"[\s\S]*?<span class="spotlight__no" aria-hidden="true">02<\/span>/);
   assert.match(html, /spotlight__media spotlight__media--desk/);
   assert.match(html, /<span class="hand spotlight__note">that&#39;s him<br \/>up the top too!<\/span>/);
   // the blurb's first sentence becomes the tagline

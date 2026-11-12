@@ -1,149 +1,235 @@
 /* Page layout. Colours, type and components come from tokens.css and theme.css. */
 
-/* ---------- header ---------- */
+/* ---------- dateline & masthead ---------- */
+/* The strip above the masthead, like the top of a newspaper: the issue, and when it was last printed. */
+.dateline {
+  border-bottom: var(--rule-soft);
+  font: 500 var(--text-2xs) / 1 var(--font-mono); letter-spacing: var(--tracking-mono); text-transform: uppercase;
+  color: var(--ink-soft);
+}
+.dateline .container { display: flex; align-items: center; justify-content: space-between; gap: var(--space-4); height: 34px; }
+.dateline p { display: flex; align-items: center; gap: var(--space-2); white-space: nowrap; }
+.dateline b { font-weight: 600; color: var(--ink); }
+.dateline__ink { display: inline-block; width: 13px; height: 9px; border-radius: 60% 40% 55% 45% / 55% 50% 50% 45%; background: var(--spot); border: var(--rule); rotate: -14deg; }
+@media (max-width: 720px) { .dateline__extra { display: none !important; } }
+
 .site-header {
   position: sticky; top: 0; z-index: 50;
-  background: var(--bg);
-  border-bottom: var(--outline);
+  background: var(--grain) var(--paper);
+  border-bottom: var(--rule);
 }
-.site-header .container { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); height: 64px; }
+.site-header .container { display: flex; align-items: center; justify-content: space-between; gap: var(--space-3); height: var(--header-h); }
 .brand {
   display: flex; align-items: center; gap: 10px;
-  font: 700 var(--text-sm) / 1 var(--font-mono); letter-spacing: var(--tracking-mono); text-transform: uppercase;
-  color: var(--text); text-decoration: none;
+  font: 800 1.3rem / 1 var(--font-display); letter-spacing: var(--tracking-snug);
+  color: var(--ink); text-decoration: none; white-space: nowrap;
 }
-.brand:hover { color: var(--text); }
-.brand img { width: 30px; height: 30px; image-rendering: pixelated; transition: transform var(--dur) var(--ease-bounce); }
-.brand:hover img { transform: translateY(-3px) rotate(-8deg); }
-/* How far down the drawing you are: a highlighter line along the bottom of the header that
-   fills as you scroll. Pure CSS; browsers without scroll timelines just don't draw it.
-   The timeline goes through var() so the minifier can't fold it into the animation shorthand,
-   which browsers reject. */
+.brand:hover { background: none; }
+.brand .pip-icon { flex: none; transition: transform var(--dur) var(--ease-bounce); }
+.brand:hover .pip-icon { transform: translateY(-3px) rotate(-8deg); }
+/* How far down the page you are: a line of spot ink along the bottom of the masthead that fills as
+   you scroll. Pure CSS; browsers without scroll timelines just don't draw it. The timeline goes
+   through var() so the minifier can't fold it into the animation shorthand, which browsers reject. */
 @supports (animation-timeline: scroll()) {
   @media (prefers-reduced-motion: no-preference) {
     .site-header::after {
-      content: ""; position: absolute; left: 0; right: 0; bottom: calc(var(--stroke) * -1);
-      height: 3px; background: var(--accent);
+      content: ""; position: absolute; left: 0; right: 0; bottom: calc(var(--stroke) * -1 - 3px);
+      height: 4px; background: var(--spot);
       transform-origin: 0 50%; transform: scaleX(0);
       animation: scroll-progress linear both; animation-timeline: var(--timeline, scroll(root));
     }
   }
 }
 @keyframes scroll-progress { to { transform: scaleX(1); } }
-.nav { display: flex; align-items: center; gap: 4px; }
+.nav { display: flex; align-items: center; gap: 2px; }
 .nav ul { list-style: none; margin: 0; padding: 0; }
-.nav__links { display: flex; gap: 4px; }
+.nav__links { display: flex; gap: 2px; }
 .nav__links a, .nav__drawer a {
-  display: block;
-  font: 500 var(--text-xs) / 1 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase;
-  color: var(--text); text-decoration: none; padding: 10px 10px;
-  background: linear-gradient(var(--accent), var(--accent)) 10px calc(100% - 4px) / 0 2px no-repeat;
-  transition: background-size var(--dur) var(--ease-out);
+  display: block; padding: 9px 13px; border-radius: var(--radius-full);
+  font: 500 var(--text-sm) / 1 var(--font-sans);
+  color: var(--ink); text-decoration: none;
 }
-.nav__links a:hover, .nav__links a[aria-current="page"] { background-size: calc(100% - 20px) 2px; }
-.nav__links a[aria-current="page"] { color: var(--accent); }
+.nav__links a:hover, .nav__drawer a:hover { background: var(--ink); color: var(--paper); }
+.nav__links a[aria-current="page"], .nav__drawer a[aria-current="page"] { background: var(--spot); color: var(--ink); }
 .nav > .btn { margin-left: var(--space-2); }
 
-/* Phones: the links fold into a "Sheets" menu, drawn as the drawing index. */
+/* Phones: the links fold into a "Contents" menu. */
 .nav__menu { display: none; position: relative; }
 .nav__menu summary { list-style: none; }
 .nav__menu summary::-webkit-details-marker { display: none; }
 .nav__menu summary svg { width: 12px; height: 12px; fill: none; stroke: currentColor; stroke-width: 2; transition: transform var(--dur); }
 .nav__menu[open] summary svg { transform: rotate(180deg); }
 .nav__drawer {
-  position: absolute; right: 0; top: calc(100% + 12px); z-index: 60; min-width: 200px;
-  background: var(--bg); border: var(--outline); padding: var(--space-2) 0;
-  box-shadow: 6px 6px 0 calc(var(--stroke) * -1) var(--bg), 6px 6px 0 0 var(--accent);
+  position: absolute; right: 0; top: calc(100% + 12px); z-index: 60; min-width: 220px;
+  background: var(--paper-3); border: var(--rule); border-radius: var(--radius); padding: var(--space-2);
+  box-shadow: 0 18px 40px -18px rgb(36 26 46 / 0.45);
 }
-.nav__drawer a { display: flex; gap: var(--space-3); padding: 12px 16px; background: none; }
-.nav__drawer a:hover, .nav__drawer a[aria-current="page"] { color: var(--accent); }
-.nav__num { color: var(--accent-2); }
-@media (max-width: 760px) {
+.nav__drawer a { display: flex; align-items: baseline; gap: var(--space-3); padding: 12px 14px; font-size: var(--text-base); }
+.nav__num { font: 500 var(--text-2xs) / 1 var(--font-mono); color: var(--ink-faint); }
+.nav__drawer a:hover .nav__num { color: var(--on-ink-faint); }
+.nav__drawer a[aria-current="page"] .nav__num { color: var(--ink); }
+@media (max-width: 860px) {
   .nav__links { display: none; }
   .nav__menu { display: block; }
 }
 /* Small phones: the GitHub button keeps its icon and says its name to screen readers only. */
-@media (max-width: 440px) {
+@media (max-width: 480px) {
   .nav__gh { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .brand { font-size: 1.1rem; }
 }
 
 /* ---------- hero ---------- */
-.hero { display: grid; gap: var(--space-7); align-items: center; padding-block: var(--space-8) var(--space-4); }
-@media (min-width: 940px) { .hero { grid-template-columns: 1.05fr 1fr; padding-top: var(--space-9); } }
-.hero h1 { margin: var(--space-4) 0 var(--space-5); }
-.lede { font-size: var(--text-lg); color: var(--text-muted); max-width: 52ch; }
-.lede strong { color: var(--text); font-weight: 650; }
-.hero-tags { display: flex; flex-wrap: wrap; gap: var(--space-2); margin-top: var(--space-5); }
-.hero .terminal { min-width: 0; }
+/* The headline runs the width of the page; under it, the words on one side and the terminal on the other. */
+.hero-wrap { overflow-x: clip; }
+.hero { display: grid; gap: var(--space-6) var(--space-8); align-items: start; padding-block: var(--space-7) var(--space-6); }
+@media (min-width: 980px) {
+  .hero { grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr); padding-top: var(--space-8); }
+  .hero__head { grid-column: 1 / -1; }
+  .hero__copy { padding-top: var(--space-6); }
+}
+.hero > * { min-width: 0; }
+.hero h1 { margin: var(--space-5) 0 0; font-size: var(--text-4xl); }
+/* The headline is printed in two passes: ink, and a spot pass that slides into register as the page loads. */
+.hero h1, .page-top h1 { text-shadow: 0.035em 0.035em 0 var(--spot); animation: register 0.9s var(--ease-out) 0.1s backwards; }
+@keyframes register { from { text-shadow: 0.32em 0.14em 0 var(--spot); } }
+/* "for fun." sits on a jellybean of spot ink */
+.bean-word { position: relative; display: inline-block; margin-inline: 0.14em 0.1em; white-space: nowrap; font-style: italic; font-weight: 800; text-shadow: none; isolation: isolate; }
+.bean-word::before {
+  content: ""; position: absolute; z-index: -1; inset: 0.04em -0.16em -0.02em -0.16em;
+  background: var(--spot); border-radius: 58% 42% 52% 48% / 62% 54% 46% 38%; rotate: -2.5deg;
+  animation: bean-in 0.7s var(--ease-bounce) 0.25s backwards;
+}
+@keyframes bean-in { from { scale: 0; } }
+.lede { font-size: var(--text-lg); color: var(--ink-soft); max-width: 50ch; }
+.lede strong { color: var(--ink); font-weight: 650; }
+.hero-jump { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-2); margin-top: var(--space-6); }
+
+/* The terminal, with the printing's shapes behind it: a disc of spot ink, a halftone field of the
+   partner ink overprinting it, and a starburst sticker on the corner. */
+.hero-art { position: relative; isolation: isolate; padding: var(--space-5) 0 var(--space-5); }
+.hero-art::before {
+  content: ""; position: absolute; z-index: -2; right: -9%; top: -4%; width: 74%; aspect-ratio: 1; border-radius: 50%;
+  background: var(--spot);
+  animation: bean-in 0.9s var(--ease-out) 0.15s backwards;
+}
+.hero-art::after {
+  content: ""; position: absolute; z-index: -1; left: -9%; bottom: -5%; width: 58%; height: 60%; border-radius: var(--radius-lg);
+  background: radial-gradient(circle, var(--spot-2) 2.1px, transparent 2.4px) 0 0 / 9px 9px;
+  mix-blend-mode: multiply;
+}
+.hero-art .terminal { position: relative; rotate: -1.4deg; box-shadow: 0 30px 60px -30px rgb(36 26 46 / 0.55); }
+.hero-art .burst { position: absolute; z-index: 2; right: -14px; bottom: -22px; }
+@media (max-width: 560px) {
+  .hero-art .burst { width: 104px; right: -6px; bottom: -30px; }
+  .hero-art .terminal { rotate: -0.8deg; }
+}
 
 /* The hero terminal turns into a shell you can type in (src/scripts/shell.ts). It keeps a fixed
-   height, eight lines, and scrolls, so typing never shoves the rest of the hero around. */
-.shell { height: calc(8 * 1.75em + var(--space-4) + var(--space-5)); overflow-y: auto; scrollbar-width: thin; cursor: text; }
+   height, nine lines, and scrolls, so typing never shoves the rest of the hero around. */
+.shell { height: calc(9 * 1.75em + var(--space-4) + var(--space-5)); overflow-y: auto; scrollbar-width: thin; scrollbar-color: var(--on-ink-faint) transparent; cursor: text; }
 .shell a { cursor: pointer; }
-.shell [data-shell-prompt] { display: flex; align-items: baseline; }
+/* the prompt sits a little clear of the line above, which may be a row of links */
+.shell [data-shell-prompt] { display: flex; align-items: baseline; margin-top: var(--space-1); }
 .shell__form { flex: 1; min-width: 0; display: flex; position: relative; }
 .shell__input {
   flex: 1; min-width: 0; padding: 0; margin: 0; border: 0; outline: 0; background: transparent;
-  font: inherit; color: var(--text); caret-color: var(--accent); caret-shape: block;
+  font: inherit; color: var(--on-ink); caret-color: var(--spot); caret-shape: block;
 }
-.shell__input::placeholder { color: var(--text-faint); opacity: 1; }
+.shell__input::placeholder { color: var(--on-ink-faint); opacity: 1; }
 .shell__input:placeholder-shown:not(:focus) { text-indent: 1.4ch; }
 .shell__form .cursor { position: absolute; left: 0; top: 0.3em; pointer-events: none; }
 .shell__input:focus ~ .cursor, .shell__input:not(:placeholder-shown) ~ .cursor { display: none; }
-.shell__form:focus-within { box-shadow: 0 2px 0 -0.5px var(--accent); }
-.shell__em { font-weight: 600; color: var(--accent); }
-.shell__dim { color: var(--text-faint); }
-.shell__err { color: var(--danger); }
-.shell__err .shell__em { color: var(--text); }
-.shell__art { color: var(--accent-2); }  /* the little Pip that `neofetch` draws */
-.shell__ok { color: var(--success); }
+.shell__form:focus-within { box-shadow: 0 2px 0 -0.5px var(--spot); }
+.shell__em { font-weight: 600; color: var(--spot); }
+.shell__dim { color: var(--on-ink-faint); }
+.shell__err { color: var(--on-ink-alert); }
+.shell__err .shell__em { color: var(--on-ink); }
+.shell__art { color: var(--spot); }  /* the little Pip that `neofetch` draws */
+.shell__ok { color: var(--on-ink-ok); }
 /* Phones zoom into inputs smaller than 16px. */
 @media (pointer: coarse) { .shell__input { font-size: 16px; } }
 
-/* Pip, drawn as figure 1 at the bottom of the terminal */
-.stage { position: relative; height: 150px; margin: 0 var(--space-5) var(--space-4); border: var(--outline-dashed); }
-.stage .dim { position: absolute; left: 0; right: 0; top: -22px; }
-.stage .ground { position: absolute; left: 0; right: 0; bottom: 14px; border-top: var(--outline); }
+/* ---------- Pip's runway ----------
+   Pip walks the whole width of the page along a ruled ground line, with a strip of halftone under it. */
+.stage { position: relative; height: 128px; }
+.stage .ground { position: absolute; left: 0; right: 0; bottom: 18px; border-top: var(--rule); }
 .stage .ground::after {
-  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 10px;
-  background: repeating-linear-gradient(-45deg, var(--border) 0 1px, transparent 1px 7px);
+  content: ""; position: absolute; left: 0; right: 0; top: 0; height: 18px; color: var(--spot);
+  background: radial-gradient(circle, currentColor 1.4px, transparent 1.7px) 0 0 / var(--dot) var(--dot);
+  -webkit-mask: linear-gradient(#000, transparent); mask: linear-gradient(#000, transparent);
 }
 #pip {
-  position: absolute; bottom: 14px; left: 0; width: 128px; height: 76px;
-  image-rendering: pixelated; cursor: pointer; touch-action: manipulation;
+  position: absolute; bottom: 18px; left: 0; width: 128px; height: 76px;
+  image-rendering: pixelated; cursor: pointer; touch-action: manipulation; border-radius: 0;
 }
+#pip:focus-visible { outline-offset: 6px; }
 .bubble {
-  position: absolute; bottom: 92px; transform: translateX(-50%) rotate(-3deg);
-  font: 600 1.45rem / 1 var(--font-hand); color: var(--accent); white-space: nowrap;
+  position: absolute; bottom: 100px; transform: translateX(-50%) rotate(-3deg);
+  padding: 2px 12px 4px; border: var(--rule); border-radius: var(--radius-full); background: var(--paper-3);
+  font: 600 1.4rem / 1.1 var(--font-hand); color: var(--ink); white-space: nowrap;
   opacity: 0; transition: opacity var(--dur); pointer-events: none; z-index: 2;
 }
 .bubble.show { opacity: 1; }
-.stage-hint { position: absolute; right: 14px; top: 10px; --rot: 4deg; text-align: right; transition: opacity var(--dur); }
+.stage-label { position: absolute; left: 0; top: 0; }
+.stage-hint { position: absolute; right: 4px; top: 6px; --rot: 3deg; text-align: right; color: var(--ink); transition: opacity var(--dur); }
 .stage-hint svg { width: 46px; height: 30px; margin: 2px 0 0 auto; }
 .stage-hint path { fill: none; stroke: currentColor; stroke-width: 2.5; stroke-linecap: round; stroke-linejoin: round; }
 .stage.poked .stage-hint { opacity: 0; }
-@media (max-width: 560px) { .stage-hint { display: none; } }
+@media (max-width: 620px) { .stage-hint { display: none; } }
+.runway { padding-top: var(--space-2); }
+
+/* ---------- the ticker ----------
+   A band of ink running the width of the page, set at a slight angle. The words are in the page once
+   for screen readers and once more (hidden) so the loop has no seam. Still for reduced motion. */
+.ticker {
+  width: 104%; margin: var(--space-6) -2% 0; rotate: -1.1deg;
+  background: var(--ink); color: var(--on-ink); overflow: hidden;
+}
+.ticker__track { display: flex; width: max-content; animation: ticker 46s linear infinite; }
+.ticker ul { list-style: none; margin: 0; padding: 15px 0; display: flex; align-items: center; flex: none; }
+.ticker li { display: flex; align-items: center; font: italic 800 clamp(1.4rem, 1rem + 1.7vw, 2.2rem) / 1 var(--font-display); letter-spacing: var(--tracking-snug); white-space: nowrap; }
+.ticker li::after {
+  content: ""; width: 0.62em; height: 0.42em; margin-inline: 0.75em; border-radius: 60% 40% 55% 45% / 55% 50% 50% 45%;
+  background: var(--spot); rotate: -18deg;
+}
+.ticker li:nth-child(even)::after { background: var(--spot-2); rotate: 14deg; }
+@keyframes ticker { to { translate: -50% 0; } }
+@media (prefers-reduced-motion: reduce) { .ticker__track { animation: none; } }
 
 /* ---------- sections ---------- */
-.section { padding-top: var(--space-9); }
+.section { padding-top: var(--space-10); }
+@media (max-width: 640px) { .section { padding-top: var(--space-9); } }
 
-/* ---------- about ---------- */
-.about { max-width: 760px; }
-.about .terminal__body { display: grid; gap: var(--space-4); font: 400 var(--text-base) / var(--leading-normal) var(--font-sans); color: var(--text-muted); }
-.about strong { color: var(--text); font-weight: 650; }
-.about .hand { justify-self: end; --rot: -4deg; }
+/* The top of every page but the front one: label, big headline, lede. */
+.page-top { display: grid; gap: var(--space-4); justify-items: start; padding-top: var(--space-8); }
+.page-top h1 { margin-top: var(--space-3); max-width: 14ch; }
+@media (max-width: 640px) { .page-top { padding-top: var(--space-7); } }
+
+/* ---------- about (front page) ---------- */
+.letter { display: grid; gap: var(--space-7); align-items: start; }
+@media (min-width: 900px) { .letter { grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); } }
+.letter__quote { font: italic 800 clamp(1.8rem, 1.2rem + 2.4vw, 3rem) / 1.08 var(--font-display); letter-spacing: var(--tracking-snug); text-wrap: balance; }
+.letter__quote .text-pop { font-style: italic; }
+.letter__body { display: grid; gap: var(--space-4); color: var(--ink-soft); font-size: var(--text-lg); max-width: 58ch; }
+.letter__body strong { color: var(--ink); font-weight: 650; }
+.letter__body--cap > p:first-child::first-letter {
+  float: left; margin: 0.06em 0.1em 0 0; font: 900 3.6em / 0.8 var(--font-display); color: var(--ink);
+  text-shadow: 0.05em 0.05em 0 var(--spot);
+}
+.letter__body .hand { justify-self: end; --rot: -4deg; font-size: 2rem; }
 
 /* ---------- footer ---------- */
-/* Pip stands on the footer's top line, waiting to take you back up. */
+/* Pip stands on the footer's top edge, waiting to take you back up. */
 .footer-pip {
   display: flex; align-items: flex-end; justify-content: center; gap: var(--space-3);
-  width: fit-content; height: 72px; margin: -72px auto 0; padding-inline: var(--space-2);
-  text-decoration: none; text-transform: none; letter-spacing: normal;
+  width: fit-content; height: 72px; margin: 0 auto; padding-inline: var(--space-2);
+  text-decoration: none; color: var(--ink);
 }
-.footer-pip img { width: 48px; height: 48px; image-rendering: pixelated; transition: transform var(--dur) var(--ease-bounce); }
-.footer-pip .hand { --rot: -4deg; font-size: 1.5rem; }
-.footer-pip:hover img, .footer-pip:focus-visible img { transform: translateY(-8px) rotate(-8deg); }
-.footer-pip.is-in img { animation: pip-hop 0.9s var(--ease-out) calc(var(--in-delay, 0s) + 0.2s) backwards; }
+.footer-pip:hover { background: none; }
+.footer-pip .pip-icon { flex: none; transition: transform var(--dur) var(--ease-bounce); }
+.footer-pip .hand { --rot: -4deg; font-size: 1.5rem; margin-bottom: 6px; }
+.footer-pip:hover .pip-icon, .footer-pip:focus-visible .pip-icon { transform: translateY(-8px) rotate(-8deg); }
+.footer-pip.is-in .pip-icon { animation: pip-hop 0.9s var(--ease-out) calc(var(--in-delay, 0s) + 0.2s) backwards; }
 @keyframes pip-hop {
   0% { transform: translateY(24px) scale(1, 0.6); opacity: 0; }
   35% { transform: translateY(-18px) scale(0.9, 1.1); opacity: 1; }
@@ -151,10 +237,42 @@
   80% { transform: translateY(-5px) scale(1); }
 }
 
-.site-footer {
-  margin-top: var(--space-9); border-top: var(--outline);
-  font: 500 11px / 1.6 var(--font-mono); letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-faint);
+/* The colophon: a block of ink at the foot of the page. */
+.site-footer { margin-top: var(--space-9); }
+.footer-ink { border-radius: 0; overflow: clip; }
+.colophon { display: grid; gap: var(--space-6) var(--space-7); padding-block: var(--space-7) var(--space-6); }
+@media (min-width: 860px) { .colophon { grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr) auto; } }
+.colophon h2 { margin-bottom: var(--space-3); font: 500 var(--text-2xs) / 1 var(--font-mono); letter-spacing: var(--tracking-mono); text-transform: uppercase; color: var(--on-ink-faint); }
+.colophon p { color: var(--on-ink-soft); max-width: 44ch; }
+.colophon p b { font-weight: 600; color: var(--on-ink); }
+.colophon ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); }
+.colophon__print b { color: var(--spot); }
+/* The colour bar a printer leaves in the margin: ink, both spots, and where they overlap. */
+.colour-bar { display: flex; margin-top: var(--space-4); }
+.colour-bar i { width: 30px; height: 30px; border-radius: 50%; background: var(--c); margin-right: -9px; mix-blend-mode: screen; }
+
+/* Pick an ink: nine jellybeans. The one in use wears a ring. */
+.inks { display: flex; flex-wrap: wrap; gap: 10px; max-width: 250px; }
+.inks[hidden] { display: none; }
+.inks__bean {
+  width: 42px; height: 30px; padding: 0; border: 0; cursor: pointer;
+  background: var(--bean); border-radius: 60% 40% 55% 45% / 55% 50% 50% 45%; rotate: -12deg;
+  transition: rotate var(--dur) var(--ease-bounce), scale var(--dur) var(--ease-bounce);
 }
-.site-footer .titleblock { border-top: 0; grid-auto-flow: row; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); }
-.site-footer .titleblock > * { padding-block: var(--space-4); }
-@media (max-width: 640px) { .site-footer .titleblock > * { border-left: 0; } }
+.inks__bean:nth-child(even) { rotate: 9deg; }
+.inks__bean:hover { scale: 1.15; rotate: 0deg; }
+.inks__bean[aria-pressed="true"] { outline: 2.5px solid var(--on-ink); outline-offset: 3px; }
+/* the candy cane is striped, as it should be */
+.inks__bean[data-ink="candycane"] { background: repeating-linear-gradient(45deg, var(--paper-3) 0 5px, var(--cherry) 5px 10px); }
+
+/* The name of the place, as big as the page, cropped by its bottom edge. */
+.wordmark {
+  display: block; margin: var(--space-5) 0 -0.17em; padding-inline: var(--gutter);
+  font: 900 clamp(2.4rem, 10.6vw, 13.5rem) / 0.8 var(--font-display); letter-spacing: -0.045em; white-space: nowrap; text-align: center;
+  color: var(--spot); user-select: none;
+}
+.footer-base {
+  display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-2) var(--space-5);
+  padding-block: var(--space-4); border-top: var(--on-ink-rule);
+  font: 500 var(--text-2xs) / 1.5 var(--font-mono); letter-spacing: var(--tracking-mono); text-transform: uppercase; color: var(--on-ink-faint);
+}

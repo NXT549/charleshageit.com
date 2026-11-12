@@ -16,7 +16,7 @@ const date = pushed?.toLocaleDateString("en-GB", { day: "numeric", month: "short
 
 {
   pushed && (
-    <a class:list={["badge hero-status", fresh ? "badge--live" : "badge--info"]} href={user.url}>
+    <a class:list={["hero-status", fresh && "hero-status--live"]} href={user.url}>
       <span class="hero-status__label">{fresh ? "building" : "last seen"} on GitHub</span>
       <span class="hero-status__sep" aria-hidden="true">·</span>
       <span class="hero-status__detail">
@@ -28,8 +28,18 @@ const date = pushed?.toLocaleDateString("en-GB", { day: "numeric", month: "short
 }
 
 <style>
-  .hero-status { --rot: -2deg; text-decoration: none; margin-bottom: var(--space-5); flex-wrap: wrap; row-gap: 2px; }
-  .hero-status b { font-weight: inherit; text-decoration: underline; text-underline-offset: 2px; }
+  .hero-status {
+    display: inline-flex; flex-wrap: wrap; align-items: center; gap: 2px 8px;
+    margin-bottom: var(--space-5); padding: 7px 14px 7px 12px;
+    font: 500 var(--text-xs) / 1.3 var(--font-mono); letter-spacing: 0.02em;
+    color: var(--ink); background: var(--paper-3); border: var(--rule); border-radius: var(--radius-full);
+    text-decoration: none;
+  }
+  .hero-status:hover { background: var(--ink); color: var(--paper); }
+  .hero-status::before { content: ""; width: 9px; height: 9px; border-radius: 50%; background: var(--ink-faint); }
+  .hero-status--live::before { background: var(--spot); box-shadow: 0 0 0 1.5px var(--ink); animation: live 2.4s ease-in-out infinite; }
+  @keyframes live { 50% { scale: 0.6; } }
+  .hero-status b { font-weight: 700; }
   @media (max-width: 480px) {
     .hero-status__label, .hero-status__sep { display: none; }
   }

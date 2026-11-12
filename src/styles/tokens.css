@@ -1,12 +1,40 @@
 /* ==========================================================================
    Design tokens for charleshageit.com
-   The workshop's blueprint: navy grid paper, chalk-white linework, a yellow
-   highlighter, cyan dimension lines, handwritten notes and rubber stamps.
+   The workshop's catalogue, printed on a risograph: vanilla paper, licorice
+   ink and one bright spot ink. The spot ink is Pip's flavour, set as
+   data-flavour on <html> (src/scripts/flavour.ts), so the whole site is
+   reprinted when he changes.
    Every other stylesheet (and every inline <style>) should read from these
-   instead of hard-coding.
+   instead of hard-coding. showcase/test/theme.test.mjs checks the contrast of
+   every ink, so keep colours here as six-digit hex.
    ========================================================================== */
 
 /* ---------- Fonts (self-hosted, Latin subset) ---------- */
+/* Fraunces, cut for headlines: the 144pt optical size, soft and wonky. */
+@font-face {
+  font-family: "Fraunces";
+  src: url("../fonts/Fraunces-Display.woff2") format("woff2");
+  font-weight: 600 900;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Fraunces";
+  src: url("../fonts/Fraunces-DisplayItalic.woff2") format("woff2");
+  font-weight: 600 900;
+  font-style: italic;
+  font-display: swap;
+}
+/* Stands in while Fraunces loads, sized to match so the headline doesn't jump. */
+@font-face {
+  font-family: "Fraunces Fallback";
+  src: local("Georgia Bold"), local("Georgia-Bold"), local("Georgia");
+  font-weight: 600 900;
+  size-adjust: 104%;
+  ascent-override: 94%;
+  descent-override: 24%;
+  line-gap-override: 0%;
+}
 @font-face {
   font-family: "Geist";
   src: url("../fonts/Geist-Variable.woff2") format("woff2");
@@ -30,63 +58,68 @@
 }
 
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 
-  /* ---------- Pens ---------- */
-  --chalk: #e6f0ff;        /* linework and text */
-  --highlighter: #ffd23f;  /* the one loud colour: CTAs, circles, notes */
-  --blue-pencil: #5fd4ff;  /* dimension lines, labels, paths */
-  --stamp-red: #ff7a5c;    /* "in progress" stamps */
-  --stamp-green: #34d399;  /* "shipped" stamps */
-  --navy: #0b2240;
+  /* ---------- Paper and ink ---------- */
+  --paper: #f7f0e1;        /* vanilla stock: the page */
+  --paper-2: #efe5cf;      /* a shade deeper: wells, picture frames */
+  --paper-3: #fffaf0;      /* a lighter sheet: cards, inserts */
+  --ink: #241a2e;          /* licorice: text, rules, ink blocks (14.7:1 on --paper) */
+  --ink-soft: #54485e;     /* quieter text (7.5:1 on --paper) */
+  --ink-faint: #6b5f74;    /* captions and metadata (5.3:1 on --paper, 4.8:1 on --paper-2) */
 
-  /* ---------- Semantic colours ---------- */
-  --bg: var(--navy);
-  --grid: rgb(170 205 255 / 0.13);
-  --grid-major: rgb(170 205 255 / 0.26);
-  --surface: #102b4e;               /* paper inside a drawing frame */
-  --surface-2: #163663;
-  --surface-3: #1c4174;
-  --line: var(--chalk);             /* frame and outline colour */
-  --border: rgb(230 240 255 / 0.22);
-  --border-strong: rgb(230 240 255 / 0.5);
+  /* Text on an ink block (terminals, the ticker, the footer) */
+  --on-ink: #f7f0e1;
+  --on-ink-soft: #c9bfd0;  /* 9.4:1 on --ink */
+  --on-ink-faint: #a79cb0; /* 6.4:1 on --ink */
+  --on-ink-ok: #7fdcae;
+  --on-ink-alert: #ff9580;
 
-  --text: var(--chalk);             /* 13.9:1 on --bg */
-  --text-muted: #a9c2e6;            /* 8.8:1 on --bg */
-  --text-faint: #8eabd3;            /* 6.8:1 on --bg, 6:1 on --surface */
+  /* ---------- The inks ----------
+     One pair per flavour in src/components/pip-sprites.js. The bright one is safe under ink text
+     (4.5:1 or better, so it also reads as text on an ink block); the "-ink" one is dark enough to
+     be text on paper. Per-project colours ("pop" in showcase/config.json) use the bright names. */
+  --cherry: #f15060;      --cherry-ink: #b3243f;
+  --lime: #68c445;        --lime-ink: #2f6d1f;
+  --blueberry: #5b8def;   --blueberry-ink: #2b52b0;
+  --lemon: #f7cf3a;       --lemon-ink: #7f5d00;
+  --grape: #a970e4;       --grape-ink: #6f35aa;
+  --licorice: #8f8a9e;    --licorice-ink: #55516a;
+  --bubblegum: #f06ec0;   --bubblegum-ink: #b0297f;
+  --pumpkin: #f08a24;     --pumpkin-ink: #a44d08;
+  --candycane: #57cfa0;   --candycane-ink: #0f7556;   /* peppermint */
 
-  --accent: var(--highlighter);     /* primary: main buttons, circles, notes */
-  --accent-2: var(--blue-pencil);   /* secondary: labels, paths, dimensions */
-  --accent-fg: var(--navy);         /* text on a filled accent (9:1 or better) */
-  --accent-soft: rgb(255 210 63 / 0.14);
-  --accent-2-soft: rgb(95 212 255 / 0.12);
-  --highlighter-ink: rgb(255 210 63 / 0.38);  /* the see-through swipe behind .text-pop */
-  --warn: var(--stamp-red);
-  --danger: var(--stamp-red);
-  --success: var(--stamp-green);
+  /* ---------- The press: which inks this printing uses ---------- */
+  --spot: var(--cherry);          /* the loud colour: shapes, highlights, buttons */
+  --spot-ink: var(--cherry-ink);  /* the same ink, dark enough for text on paper */
+  --spot-2: var(--blueberry);     /* the partner ink, for overprints and halftones */
+  --spot-wash: color-mix(in srgb, var(--spot) 20%, var(--paper));
 
   /* ---------- Type ---------- */
+  --font-display: "Fraunces", "Fraunces Fallback", Georgia, "Times New Roman", serif;
   --font-sans: "Geist", "Inter", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
   --font-mono: "Geist Mono", "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --font-hand: "Caveat", "Segoe Print", "Bradley Hand", cursive;
-  --font-display: var(--font-sans);
 
+  --text-2xs: 0.6875rem;  /* 11px: labels */
   --text-xs: 0.75rem;     /* 12px: tags, metadata */
   --text-sm: 0.875rem;    /* 14px: captions, terminal */
   --text-base: 1rem;      /* 16px: body */
   --text-lg: 1.125rem;    /* 18px: lede */
-  --text-xl: 1.25rem;
+  --text-xl: 1.375rem;
   --text-2xl: 1.75rem;
-  --text-3xl: clamp(2rem, 1.5rem + 2vw, 2.875rem);      /* h2 */
-  --text-4xl: clamp(2.75rem, 1.5rem + 5vw, 5rem);       /* h1 */
+  --text-3xl: clamp(2.5rem, 1.5rem + 4.2vw, 4.5rem);    /* h2 */
+  --text-4xl: clamp(3.1rem, 0.5rem + 10.4vw, 9.75rem);  /* the front-page headline */
+  --text-page: clamp(3rem, 1.4rem + 6.6vw, 6.25rem);    /* h1 on the other pages */
   --text-hand: 1.6rem;                                  /* handwritten notes */
 
-  --leading-tight: 1.02;
-  --leading-snug: 1.15;
+  --leading-tight: 0.92;
+  --leading-art: 1.02;          /* plain-text pictures: rows that touch */
+  --leading-snug: 1.1;
   --leading-normal: 1.65;
-  --tracking-tight: -0.04em;
-  --tracking-snug: -0.025em;
-  --tracking-mono: 0.12em;      /* uppercase technical labels */
+  --tracking-tight: -0.035em;
+  --tracking-snug: -0.02em;
+  --tracking-mono: 0.1em;       /* uppercase labels */
 
   /* ---------- Space, radius, layout ---------- */
   --space-1: 4px;
@@ -98,63 +131,27 @@
   --space-7: 48px;
   --space-8: 64px;
   --space-9: 96px;
+  --space-10: 136px;
 
-  --radius-sm: 2px;       /* drawings have square corners */
-  --radius: 2px;
-  --radius-lg: 3px;
-  --radius-full: 999px;
+  --radius-sm: 8px;
+  --radius: 14px;
+  --radius-lg: 20px;
+  --radius-full: 999px;   /* buttons and tags are jellybeans */
 
-  --container: 1120px;
-  --gutter: 16px;
+  --container: 1200px;
+  --gutter: 18px;
+  --header-h: 62px;
 
-  /* ---------- Linework & offsets ---------- */
+  /* ---------- Linework and texture ---------- */
   --stroke: 1.5px;
-  --outline: var(--stroke) solid var(--line);
-  --outline-dashed: var(--stroke) dashed var(--border-strong);
-  --shadow-sm: none;
-  --shadow: none;
-  --shadow-lg: none;
-
-  /* ---------- Old names from earlier versions, mapped onto the blueprint ---------- */
-  --flavour: var(--highlighter);
-  --flavour-text: var(--highlighter);
-  --gradient-accent: linear-gradient(var(--accent), var(--accent));
-  --gradient-text: linear-gradient(var(--accent), var(--accent));
-  --glass-bg: rgb(11 34 64 / 0.85);
-  --glass-bg-strong: var(--surface);
-  --glass-border: var(--line);
-  --glass-blur: 0px;
-  --glass-highlight: 0 0 0 transparent;
-  --glow-accent: 5px 5px 0 calc(var(--stroke) * -1) var(--bg), 5px 5px 0 0 var(--accent);
-  --glow-accent-2: 5px 5px 0 calc(var(--stroke) * -1) var(--bg), 5px 5px 0 0 var(--accent-2);
-  --glow-text: 0 0 0 transparent;
-  --emerald: var(--stamp-green);
-  --emerald-300: var(--stamp-green);
-  --emerald-400: var(--stamp-green);
-  --emerald-500: var(--stamp-green);
-  --emerald-600: var(--stamp-green);
-  --cyan: var(--blue-pencil);
-  --cyan-300: var(--blue-pencil);
-  --cyan-400: var(--blue-pencil);
-  --cyan-500: var(--blue-pencil);
-  --cyan-600: var(--blue-pencil);
-  --lemon: var(--highlighter);
-  --amber-400: var(--highlighter);
-  --cherry: var(--stamp-red);
-  --cherry-light: var(--stamp-red);
-  --rose-400: var(--stamp-red);
-  --lime: var(--stamp-green);
-  --blueberry: var(--blue-pencil);
-  --grape: var(--surface-3);
-  --bubblegum: var(--stamp-red);
-  --pumpkin: var(--highlighter);
-  --zinc-950: var(--bg);
-  --zinc-900: var(--surface);
-  --zinc-800: var(--surface-2);
-  --zinc-700: var(--border-strong);
-  --zinc-600: var(--border-strong);
-  --zinc-400: var(--text-muted);
-  --zinc-100: var(--text);
+  --rule: var(--stroke) solid var(--ink);
+  --rule-soft: var(--stroke) solid rgb(36 26 46 / 0.16);
+  --rule-dotted: var(--stroke) dotted rgb(36 26 46 / 0.45);
+  --on-ink-rule: var(--stroke) solid rgb(247 240 225 / 0.2);
+  --dot: 6px;             /* the halftone screen's pitch */
+  --lift: 7px;            /* how far a halftone shadow sits from its card */
+  /* A little tooth in the paper: static noise, drawn once and tiled. */
+  --grain: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='220' height='220'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2' seed='7'/%3E%3CfeColorMatrix values='0 0 0 0 .14 0 0 0 0 .1 0 0 0 0 .18 0 0 0 -.9 .52'/%3E%3C/filter%3E%3Crect width='220' height='220' filter='url(%23n)' opacity='.22'/%3E%3C/svg%3E");
 
   /* ---------- Motion ---------- */
   --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
@@ -163,6 +160,17 @@
   --dur-fast: 120ms;
   --dur: 220ms;
   --dur-slow: 420ms;
-  --dur-sheet: 650ms;   /* a sheet sliding onto the page as it scrolls in */
-  --stagger: 90ms;      /* gap between sheets dealt out together */
+  --dur-sheet: 700ms;   /* something arriving as it scrolls in */
+  --stagger: 80ms;      /* gap between things that arrive together */
 }
+
+/* ---------- One printing per flavour ---------- */
+:root[data-flavour="cherry"] { --spot: var(--cherry); --spot-ink: var(--cherry-ink); --spot-2: var(--blueberry); }
+:root[data-flavour="lime"] { --spot: var(--lime); --spot-ink: var(--lime-ink); --spot-2: var(--bubblegum); }
+:root[data-flavour="blueberry"] { --spot: var(--blueberry); --spot-ink: var(--blueberry-ink); --spot-2: var(--lemon); }
+:root[data-flavour="lemon"] { --spot: var(--lemon); --spot-ink: var(--lemon-ink); --spot-2: var(--bubblegum); }
+:root[data-flavour="grape"] { --spot: var(--grape); --spot-ink: var(--grape-ink); --spot-2: var(--lemon); }
+:root[data-flavour="licorice"] { --spot: var(--licorice); --spot-ink: var(--licorice-ink); --spot-2: var(--lemon); }
+:root[data-flavour="bubblegum"] { --spot: var(--bubblegum); --spot-ink: var(--bubblegum-ink); --spot-2: var(--blueberry); }
+:root[data-flavour="pumpkin"] { --spot: var(--pumpkin); --spot-ink: var(--pumpkin-ink); --spot-2: var(--grape); }
+:root[data-flavour="candycane"] { --spot: var(--candycane); --spot-ink: var(--candycane-ink); --spot-2: var(--cherry); }

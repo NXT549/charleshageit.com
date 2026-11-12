@@ -1,6 +1,7 @@
 ---
-// A spec sheet for every project on the page: what it is, how to get it, what it's made of, what changed
-// lately, and its whole README. Built from the same GitHub data as the cards, so new repos get one too.
+// A spec sheet for every project on the page, laid out as an entry in the catalogue: what it is, how to
+// get it, what it's made of, what changed lately, and its whole README. Built from the same GitHub data
+// as the cards, so new repos get one too.
 import Page from "../../layouts/Page.astro";
 import Pip from "../../components/Pip.astro";
 import AsciiFigure from "../../components/AsciiFigure.astro";
@@ -27,7 +28,7 @@ import "../../styles/prose.css";
 
 export async function getStaticPaths() {
   const data = await getShowcase();
-  // Featured projects first, in their spotlight order, then the rest by last push: the sheet numbers.
+  // Featured projects first, in their spotlight order, then the rest by last push: the plate numbers.
   const order = [...data.featured, ...data.repos.filter((r) => !r.featured).map((r) => r.name)];
   const repos = order.map((n) => data.repos.find((r) => r.name === n)!);
   return repos.map((repo, i) => ({
@@ -110,7 +111,7 @@ const description = tagline || `${r.title}, one of the little things in Charles'
   current="projects"
   sheet={sheet}
   image={`/og/projects/${r.name}.png`}
-  imageAlt={`${r.title}: a blueprint spec sheet with Pip pointing at the title.`}
+  imageAlt={`${r.title}: a printed card with Pip standing on a disc of cherry ink.`}
 >
   <Fragment set:html={iconSprite()} />
 
@@ -120,7 +121,7 @@ const description = tagline || `${r.title}, one of the little things in Charles'
         <a href="/#workbench">~/projects</a><span aria-hidden="true">/</span><span aria-current="page">{r.name}</span>
       </nav>
       <Fragment set:html={statusBadge(r, "proj-status")} />
-      <p class="eyebrow">Sheet {sheet} · Project</p>
+      <p class="eyebrow">Plate {sheet} · Project</p>
       <h1>{r.title}</h1>
       {tagline && <p class="lede proj-tagline" set:html={richText(tagline)} />}
       {blurb && <p class="proj-blurb" set:html={richText(blurb)} />}
@@ -134,10 +135,9 @@ const description = tagline || `${r.title}, one of the little things in Charles'
       <div class="repo-actions" set:html={actions} />
     </div>
 
-    <figure class="proj-fig glass sheet">
-      {livePip ? <Pip hint="that's him! click him" /> : (
+    <figure class="proj-fig glow" style={r.pop ? `--pop: var(--${r.pop})` : undefined}>
+      {livePip ? <div class="proj-pip"><Pip hint="that's him! click him" /></div> : (
       <div class:list={["spotlight__media proj-media", r.scene && `spotlight__media--${r.scene}`]}>
-        {r.scene === "desk" && <span class="dim spotlight__dim" aria-hidden="true">168 px</span>}
         {
           img ? (
             <img
@@ -150,7 +150,7 @@ const description = tagline || `${r.title}, one of the little things in Charles'
               fetchpriority="high"
             />
           ) : (
-            <div class="spotlight__placeholder" aria-hidden="true"><span class="prompt">~/</span>{r.name}<span class="cursor" /></div>
+            <div class="spotlight__placeholder" aria-hidden="true"><span class="proj-placeholder__path">~/</span>{r.name}<span class="cursor" /></div>
           )
         }
         {r.note && <span class="hand spotlight__note" set:html={esc(r.note).replace(/\n/g, "<br />")} />}
@@ -164,10 +164,10 @@ const description = tagline || `${r.title}, one of the little things in Charles'
         }
       </div>
       )}
-      <figcaption class="titleblock">
-        <div><small>Drawing</small>{r.title}</div>
-        <div><small>Repo</small><a href={repoUrl ?? undefined}>{r.fullName}</a></div>
-        <div><small>Sheet</small>{sheet}</div>
+      <figcaption class="proj-caption">
+        <span>Plate {sheet}</span>
+        <span>{r.title}</span>
+        <a href={repoUrl ?? undefined}>{r.fullName}</a>
       </figcaption>
     </figure>
   </section>
@@ -176,7 +176,7 @@ const description = tagline || `${r.title}, one of the little things in Charles'
     art && (
       <section class="container proj-ascii" aria-labelledby="ascii-title">
         <header class="section-head">
-          <p class="eyebrow">Sheet {sheet} · In plain text</p>
+          <p class="eyebrow">Plate {sheet} · In plain text</p>
           <h2 id="ascii-title">In <span class="text-pop">characters</span></h2>
           <p class="sub">The same picture, drawn with nothing but letters and punctuation.</p>
         </header>
@@ -189,12 +189,12 @@ const description = tagline || `${r.title}, one of the little things in Charles'
     r.does.length > 0 && (
       <section class="container proj-does" aria-labelledby="does-title">
         <header class="section-head">
-          <p class="eyebrow">Sheet {sheet} · Preview</p>
+          <p class="eyebrow">Plate {sheet} · Preview</p>
           <h2 id="does-title">What it <span class="text-pop">does</span></h2>
         </header>
         <ul class="does-grid">
           {r.does.map((d, i) => (
-            <li class="panel does-card" style={`--n: "${i + 1}"`}>
+            <li class="panel does-card" style={`--n: "${String(i + 1).padStart(2, "0")}"`}>
               <h3>{d.title}</h3>
               <p set:html={richText(d.text)} />
             </li>
@@ -208,7 +208,7 @@ const description = tagline || `${r.title}, one of the little things in Charles'
     r.how.length > 0 && (
       <section class="container proj-how" aria-labelledby="how-title">
         <header class="section-head">
-          <p class="eyebrow">Sheet {sheet} · Working drawing</p>
+          <p class="eyebrow">Plate {sheet} · Inner workings</p>
           <h2 id="how-title">How it <span class="text-pop">works</span></h2>
         </header>
         <ol class="how">
@@ -231,8 +231,8 @@ const description = tagline || `${r.title}, one of the little things in Charles'
     r.does.length === 0 && r.how.length === 0 && (
       <section class="container proj-draft" aria-label="Still being drawn">
         <div class="panel proj-draft__box">
-          <span class="badge badge--wip" style="--rot: -3deg">On the drafting board</span>
-          <p>The "what it does" and "how it works" drawings for {r.title} aren't finished yet. The whole README is below in the meantime.</p>
+          <span class="badge badge--wip" style="--rot: -3deg">Still at the printer</span>
+          <p>The "what it does" and "how it works" pages for {r.title} aren't printed yet. The whole README is below in the meantime.</p>
         </div>
       </section>
     )
@@ -254,11 +254,11 @@ const description = tagline || `${r.title}, one of the little things in Charles'
           <div class="panel proj-panel">
             <h2 class="proj-panel__title">Materials</h2>
             <div class="proj-bar" aria-hidden="true">
-              {materials.map((l) => <span style={`--w: ${l.share}%; --c: ${l.color ?? "var(--text-faint)"}`} />)}
+              {materials.map((l) => <span style={`--w: ${l.share}%; --c: ${l.color ?? "var(--ink-faint)"}`} />)}
             </div>
             <ul class="proj-materials">
               {materials.map((l) => (
-                <li><i style={`--c: ${l.color ?? "var(--text-faint)"}`} />{l.name}<span>{l.share}%</span></li>
+                <li><i style={`--c: ${l.color ?? "var(--ink-faint)"}`} />{l.name}<span>{l.share}%</span></li>
               ))}
             </ul>
           </div>
@@ -301,12 +301,12 @@ const description = tagline || `${r.title}, one of the little things in Charles'
       }
     </aside>
 
-    <article class="terminal glass sheet proj-readme" aria-labelledby="readme-title">
-      <div class="terminal__bar">
-        <span class="terminal__dots" aria-hidden="true"><i></i><i></i><i></i></span>
-        <h2 class="terminal__title" id="readme-title">{r.name}/README.md</h2>
+    <article class="panel proj-readme" aria-labelledby="readme-title">
+      <div class="proj-readme__bar">
+        <h2 id="readme-title">{r.name}/README.md</h2>
+        {repoUrl && <a href={repoUrl}>on GitHub</a>}
       </div>
-      <div class="terminal__body readme">
+      <div class="proj-readme__body readme">
         {readme ? <Fragment set:html={readme} /> : <p>No README yet. {repoUrl && <a href={repoUrl}>See the code on GitHub</a>}</p>}
       </div>
     </article>
@@ -319,96 +319,108 @@ const description = tagline || `${r.title}, one of the little things in Charles'
 </Page>
 
 <style>
-  .proj-top { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-7); align-items: start; padding-top: var(--space-8); }
-  @media (min-width: 940px) { .proj-top { grid-template-columns: 1fr 1.05fr; align-items: center; } }
+  .proj-top { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-7) var(--space-8); align-items: start; padding-top: var(--space-7); }
+  @media (min-width: 940px) { .proj-top { grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); align-items: center; padding-top: var(--space-8); } }
   .proj-intro { display: grid; gap: var(--space-4); justify-items: start; min-width: 0; }
-  .proj-intro h1 { font-size: clamp(2.5rem, 1.5rem + 4vw, 4.25rem); }
-  .proj-crumbs { display: flex; gap: var(--space-2); font: 500 var(--text-xs) / 1 var(--font-mono); letter-spacing: 0.08em; color: var(--text-faint); }
-  .proj-crumbs a { color: var(--accent-2); text-decoration: none; }
-  .proj-crumbs a:hover { text-decoration: underline; }
-  .proj-crumbs [aria-current] { color: var(--text); }
-  :global(.proj-status) { --rot: -4deg; font-size: var(--text-sm); }
-  .proj-tagline { color: var(--text); font-weight: 600; }
-  .proj-blurb { color: var(--text-muted); max-width: 60ch; }
+  .proj-intro h1 { font-size: var(--text-page); text-shadow: 0.035em 0.035em 0 var(--spot); overflow-wrap: anywhere; }
+  .proj-crumbs { display: flex; gap: var(--space-2); font: 500 var(--text-xs) / 1 var(--font-mono); letter-spacing: 0.04em; color: var(--ink-faint); }
+  .proj-crumbs [aria-current] { color: var(--ink); }
+  :global(.proj-status) { --rot: -4deg; }
+  .proj-tagline { color: var(--ink); font-weight: 600; }
+  .proj-blurb { color: var(--ink-soft); max-width: 60ch; }
   .proj-highlights { margin: 0; }
-  .proj-intro :global(.repo-actions) { margin-top: var(--space-2); }
+  .proj-intro :global(.repo-actions) { margin-top: var(--space-3); }
 
   .proj-top > *, .proj-body > * { min-width: 0; }
-  .proj-fig { margin: 0; min-width: 0; background: var(--surface); }
-  .proj-media { aspect-ratio: 1200 / 630; min-height: 0; border: 0; }
-  @media (min-width: 940px) { .proj-media { min-height: 300px; } }
-  .proj-media.spotlight__media--desk { aspect-ratio: auto; min-height: 340px; }
+  .proj-fig { --lift: 12px; --dot: 7px; margin: 0; min-width: 0; }
+  .proj-fig:hover, .proj-fig:focus-within { translate: none; }
+  .proj-fig:hover::after, .proj-fig:focus-within::after { translate: var(--lift) var(--lift); }
+  .proj-media { --r: calc(var(--radius-lg) - var(--stroke)); width: 100%; aspect-ratio: 1200 / 630; min-height: 0; border: 0; border-radius: var(--r) var(--r) 0 0; }
+  .proj-media.spotlight__media--desk { aspect-ratio: auto; min-height: 360px; }
   .proj-media.is-playing { aspect-ratio: auto; min-height: min(70vh, 560px); }
-  .proj-fig .titleblock { border-top: var(--outline); }
-  .proj-fig :global(.stage) { height: 260px; margin: var(--space-7) var(--space-5) var(--space-5); }
-  .proj-fig .titleblock a { color: inherit; }
+  .proj-placeholder__path { color: var(--ink-faint); }
+  /* Pip's own page: the real Pip, walking about on a disc of his ink */
+  .proj-pip { position: relative; overflow: hidden; padding: var(--space-8) var(--space-5) var(--space-4); border-radius: calc(var(--radius-lg) - var(--stroke)) calc(var(--radius-lg) - var(--stroke)) 0 0; isolation: isolate; }
+  .proj-pip::before { content: ""; position: absolute; z-index: -1; left: 50%; top: 52%; width: min(70%, 330px); aspect-ratio: 1; translate: -50% -50%; border-radius: 50%; background: var(--spot-2); }
+  .proj-pip :global(.stage) { height: 230px; }
+  .proj-caption {
+    display: flex; flex-wrap: wrap; justify-content: space-between; gap: var(--space-1) var(--space-4);
+    padding: var(--space-3) var(--space-4); border-top: var(--rule);
+    font: 500 var(--text-2xs) / 1.4 var(--font-mono); letter-spacing: var(--tracking-mono); text-transform: uppercase; color: var(--ink-soft);
+  }
+  .proj-caption a { text-decoration-thickness: 1.5px; }
 
-  .proj-body { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-6); align-items: start; padding-top: var(--space-8); }
+  .proj-body { display: grid; grid-template-columns: minmax(0, 1fr); gap: var(--space-6); align-items: start; padding-top: var(--space-9); }
   @media (min-width: 940px) {
-    .proj-body { grid-template-columns: minmax(0, 1fr) 320px; }
-    .proj-aside { order: 2; position: sticky; top: 88px; max-height: calc(100vh - 104px); overflow-y: auto; scrollbar-width: thin; }
+    .proj-body { grid-template-columns: minmax(0, 1fr) 330px; }
+    .proj-aside { order: 2; position: sticky; top: calc(var(--header-h) + 20px); max-height: calc(100vh - var(--header-h) - 40px); overflow-y: auto; scrollbar-width: thin; }
   }
   .proj-aside { display: grid; gap: var(--space-4); min-width: 0; }
-  .proj-panel { display: grid; gap: var(--space-3); padding: var(--space-4); min-width: 0; }
-  .proj-panel__title { font: 600 11px / 1 var(--font-mono); letter-spacing: var(--tracking-mono); text-transform: uppercase; color: var(--accent-2); }
-  .proj-spec { display: grid; grid-template-columns: 1fr 1fr; margin: 0; border: var(--outline); }
-  .proj-spec div { padding: 7px 10px; border-bottom: 1px solid var(--border); min-width: 0; }
-  .proj-spec div:nth-child(odd) { border-right: 1px solid var(--border); }
+  .proj-panel { display: grid; gap: var(--space-3); padding: var(--space-4) var(--space-4) var(--space-5); min-width: 0; border-radius: var(--radius); }
+  .proj-panel__title { font: 500 var(--text-2xs) / 1 var(--font-mono); letter-spacing: var(--tracking-mono); text-transform: uppercase; color: var(--ink-soft); }
+  .proj-spec { display: grid; grid-template-columns: 1fr 1fr; gap: 0 var(--space-4); margin: 0; }
+  .proj-spec div { padding: 8px 0; border-bottom: var(--rule-soft); min-width: 0; }
   .proj-spec div:nth-last-child(-n + 2) { border-bottom: 0; }
-  .proj-spec dt { font: 500 9px / 1.3 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--text-faint); }
-  .proj-spec dd { margin: 2px 0 0; font: 500 var(--text-xs) / 1.3 var(--font-mono); overflow-wrap: anywhere; }
+  .proj-spec dt { font: 500 10px / 1.3 var(--font-mono); letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-faint); }
+  .proj-spec dd { margin: 2px 0 0; font: 600 var(--text-sm) / 1.3 var(--font-sans); overflow-wrap: anywhere; }
 
-  .proj-bar { display: flex; height: 10px; border: var(--outline); }
+  .proj-bar { display: flex; height: 14px; border: var(--rule); border-radius: var(--radius-full); overflow: hidden; }
   .proj-bar span { width: var(--w); background: var(--c); }
-  .proj-bar span + span { border-left: 1.5px solid var(--bg); }
-  .proj-materials { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font: 450 var(--text-xs) / 1.4 var(--font-mono); color: var(--text-muted); }
+  .proj-bar span + span { border-left: var(--rule); }
+  .proj-materials { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; font: 500 var(--text-xs) / 1.4 var(--font-mono); color: var(--ink-soft); }
   .proj-materials li { display: flex; align-items: center; gap: var(--space-2); }
-  .proj-materials i { width: 10px; height: 10px; border-radius: 2px; background: var(--c); box-shadow: 0 0 0 1.5px var(--line); }
-  .proj-materials span { margin-left: auto; color: var(--text-faint); }
+  .proj-materials i { width: 13px; height: 9px; border-radius: 60% 40% 55% 45% / 55% 50% 50% 45%; rotate: -14deg; background: var(--c); box-shadow: 0 0 0 1.5px var(--ink); }
+  .proj-materials span { margin-left: auto; color: var(--ink-faint); }
 
-  .proj-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); font: 400 var(--text-xs) / 1.45 var(--font-mono); color: var(--text-faint); }
+  .proj-list { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-2); font: 400 var(--text-xs) / 1.45 var(--font-mono); color: var(--ink-faint); }
   .proj-list li { display: grid; grid-template-columns: auto 1fr; gap: 2px var(--space-2); }
-  .proj-list a { color: var(--accent-2); text-decoration: none; }
-  .proj-list a:hover { text-decoration: underline; }
-  .proj-list code { color: inherit; border: 0; padding: 0; font-size: 1em; }
-  .proj-list__msg { color: var(--text-muted); overflow-wrap: anywhere; }
+  .proj-list a { text-decoration-thickness: 1.5px; color: var(--ink); }
+  .proj-list code { color: inherit; background: none; padding: 0; font-size: 1em; }
+  .proj-list__msg { color: var(--ink-soft); overflow-wrap: anywhere; }
   .proj-list :global(time) { grid-column: 2; }
-  .proj-more { font: 500 var(--text-xs) / 1 var(--font-mono); text-decoration: none; }
+  .proj-more { font: 500 var(--text-xs) / 1.4 var(--font-mono); justify-self: start; }
 
-  .proj-readme { min-width: 0; }
-  .proj-readme .terminal__title { margin-right: 42px; }
-
-
-  .proj-does, .proj-how, .proj-draft { padding-top: var(--space-8); }
-  .proj-draft__box { display: grid; gap: var(--space-3); justify-items: start; padding: var(--space-5); color: var(--text-muted); max-width: 60ch; }
-  .does-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); }
-  .does-card { position: relative; display: grid; gap: var(--space-2); align-content: start; padding: var(--space-5) var(--space-4) var(--space-4); }
-  .does-card::before {
-    content: var(--n); position: absolute; top: -14px; left: var(--space-4);
-    display: grid; place-items: center; width: 28px; height: 28px;
-    font: 700 var(--text-xs) / 1 var(--font-mono); color: var(--accent-fg); background: var(--accent);
-    border: var(--outline); border-radius: 50%; rotate: -6deg;
+  /* The README: a lighter sheet tucked into the catalogue, with its file name along the top. */
+  .proj-readme { min-width: 0; overflow: hidden; }
+  .proj-readme__bar {
+    display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: var(--space-2) var(--space-4);
+    padding: var(--space-3) var(--space-5); border-bottom: var(--rule); background: var(--paper-2);
+    font: 500 var(--text-xs) / 1.4 var(--font-mono);
   }
-  .does-card h3, .how__card h3 { font-size: var(--text-lg); }
-  .does-card p, .how__card p { margin: 0; color: var(--text-muted); }
+  .proj-readme__bar h2 { font: inherit; letter-spacing: 0.02em; }
+  .proj-readme__body { padding: var(--space-5); }
+  @media (min-width: 640px) { .proj-readme__body { padding: var(--space-6) var(--space-7) var(--space-7); } }
 
-  .how { --rail: 36px; list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-5); position: relative; max-width: 780px; }
+  .proj-ascii, .proj-does, .proj-how, .proj-draft { padding-top: var(--space-9); }
+  .proj-draft__box { display: grid; gap: var(--space-3); justify-items: start; padding: var(--space-5); color: var(--ink-soft); max-width: 60ch; }
+  .does-grid { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-4); grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); }
+  .does-card { display: grid; gap: var(--space-2); align-content: start; padding: var(--space-5); }
+  /* each card's number, in spot ink keyed in black */
+  .does-card::before {
+    content: var(--n); margin-bottom: var(--space-2);
+    font: italic 800 2.75rem / 0.9 var(--font-display); letter-spacing: var(--tracking-tight);
+    color: var(--spot); -webkit-text-stroke: 3px var(--ink); paint-order: stroke fill;
+  }
+  .does-card h3, .how__card h3 { font: 700 var(--text-xl) / 1.2 var(--font-sans); letter-spacing: -0.015em; }
+  .does-card p, .how__card p { margin: 0; color: var(--ink-soft); }
+
+  .how { --rail: 44px; list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-5); position: relative; max-width: 820px; }
   .how::before {
-    content: ""; position: absolute; left: calc(var(--rail) / 2 - 1px); top: 18px; bottom: 18px; width: 2px;
-    background: repeating-linear-gradient(var(--line) 0 8px, transparent 8px 14px);
+    content: ""; position: absolute; left: calc(var(--rail) / 2 - 1.5px); top: 22px; bottom: 22px; width: 0;
+    border-left: 3px dotted var(--ink);
     transform-origin: 50% 0;
   }
   .how__step { position: relative; display: grid; grid-template-columns: var(--rail) minmax(0, 1fr); gap: var(--space-4); align-items: start; }
   .how__dot {
     position: relative; z-index: 1; display: grid; place-items: center; width: var(--rail); height: var(--rail);
-    font: 700 var(--text-sm) / 1 var(--font-mono); color: var(--text); background: var(--bg);
-    border: 2.5px solid var(--accent); border-radius: 50%;
+    font: 800 var(--text-lg) / 1 var(--font-display); color: var(--ink); background: var(--spot);
+    border: var(--rule); border-radius: 50%;
   }
-  .how__card { display: grid; gap: var(--space-2); padding: var(--space-4); }
-  .how__note { color: var(--accent); rotate: -2deg; justify-self: end; }
+  .how__card { display: grid; gap: var(--space-2); padding: var(--space-5); }
+  .how__note { rotate: -2deg; justify-self: end; }
   @media (prefers-reduced-motion: no-preference) {
     @supports (animation-timeline: view()) {
-      /* The dashed rail is drawn down the page as you scroll through the steps. */
+      /* The dotted rail is drawn down the page as you scroll through the steps. */
       .how::before { animation: rail-draw linear both; animation-timeline: var(--view, view()); animation-range: entry 15% cover 60%; }
       .how__step.is-in .how__dot { animation: dot-pop 0.5s var(--ease-bounce) calc(var(--in-delay, 0s) + 0.15s) backwards; }
     }
@@ -416,5 +428,5 @@ const description = tagline || `${r.title}, one of the little things in Charles'
   @keyframes rail-draw { from { transform: scaleY(0); } }
   @keyframes dot-pop { from { scale: 0; } }
 
-  .proj-pager { display: flex; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; padding-top: var(--space-7); }
+  .proj-pager { display: flex; justify-content: space-between; gap: var(--space-3); flex-wrap: wrap; padding-top: var(--space-8); }
 </style>

@@ -1,0 +1,33 @@
+---
+// Pip as an inline SVG, drawn from his own sprite with one path per colour. The colours are CSS variables
+// (--pip-B, --pip-D, ...) that src/layouts/Base.astro sets for each flavour, so the little Pips in the
+// masthead and the footer change flavour with the rest of the site, with no script.
+import SPRITES from "./pip-sprites.js";
+
+interface Props {
+  /** Width in pixels; the height follows the sprite's 32×19 shape. */
+  size?: number;
+}
+
+const { size = 36 } = Astro.props;
+const W = 32;
+const frame: string = SPRITES.frames.idle_0;
+const H = frame.length / W;
+const cherry: Record<string, string> = { ...SPRITES.base, ...SPRITES.flavors.cherry };
+
+// Each run of same-coloured pixels in a row becomes one rectangle in that colour's path.
+const paths: Record<string, string> = {};
+for (let y = 0; y < H; y++) {
+  for (let x = 0; x < W; ) {
+    const key = frame[y * W + x];
+    let run = 1;
+    while (x + run < W && frame[y * W + x + run] === key) run++;
+    if (key !== ".") paths[key] = `${paths[key] ?? ""}M${x} ${y}h${run}v1h-${run}z`;
+    x += run;
+  }
+}
+---
+
+<svg class="pip-icon" viewBox={`0 0 ${W} ${H}`} width={size} height={Math.round((size * H) / W)} aria-hidden="true" shape-rendering="crispEdges">
+  {Object.entries(paths).map(([key, d]) => <path d={d} style={`fill:var(--pip-${key},${cherry[key]})`} />)}
+</svg>

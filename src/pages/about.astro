@@ -33,13 +33,10 @@ const steps = [
 ];
 ---
 
-<Page title={`About · ${SITE.name}`} description="Who Charles is, how he vibe-codes the little things in his workshop, and what's on the bench right now." current="about" sheet="05" image="/og/about.png" imageAlt="About Charles: a blueprint sheet with Pip pointing at the title.">
-  <section class="container about-top">
-    <p class="eyebrow">Sheet 05 · About</p>
-    <h1>
-      Hi, I'm{" "}
-      <span class="circled">Charles.<svg viewBox="0 0 300 100" preserveAspectRatio="none" aria-hidden="true"><path pathLength="1" d="M22 58 C 22 16, 268 6, 288 40 C 302 76, 128 98, 44 84 C 2 76, 4 40, 64 24" /></svg></span>
-    </h1>
+<Page title={`About · ${SITE.name}`} description="Who Charles is, how he vibe-codes the little things in his workshop, and what's on the bench right now." current="about" sheet="05" image="/og/about.png" imageAlt="About Charles: a printed card with Pip standing on a disc of cherry ink.">
+  <section class="container page-top">
+    <p class="eyebrow">Page 05 · About</p>
+    <h1>Hi, I'm <span class="bean-word">Charles.</span></h1>
     <p class="lede">
       I make little things for fun: games, a desktop pet, and whatever
       I can describe well enough to build next.
@@ -47,33 +44,27 @@ const steps = [
   </section>
 
   <section class="container about-grid">
-    <div class="terminal glass sheet">
-      <div class="terminal__bar">
-        <span class="terminal__dots" aria-hidden="true"><i></i><i></i><i></i></span>
-        <span class="terminal__title">about.md</span>
-      </div>
-      <div class="terminal__body readme">
-        <p>
-          This site used to be home to <strong>Charles IT</strong>, my local tech-help business. Now it's my
-          workshop: the place I put the things I build for fun.
-        </p>
-        <p>
-          I build most of these by <strong>vibe coding</strong>: I describe what I want, an AI helps write the code,
-          and we go back and forth until it feels right. It's how a hamster ended up with a family tree.
-        </p>
-        <p>
-          Some of them are finished, some are very much not. Everything is on <a href={SITE.githubUrl}>GitHub</a>,
-          so you can see how each one was made, one commit at a time.
-        </p>
-        <p>
-          I draw in plain text too. Pip is <a href="/ascii/">drawn one character at a time</a>, and the sketchbook has
-          a slot machine, a robot and a banner maker.
-        </p>
-        <span class="hand">— Charles</span>
-      </div>
+    <div class="letter__body letter__body--cap readme">
+      <p>
+        This site used to be home to <strong>Charles IT</strong>, my local tech-help business. Now it's my
+        workshop: the place I put the things I build for fun.
+      </p>
+      <p>
+        I build most of these by <strong>vibe coding</strong>: I describe what I want, an AI helps write the code,
+        and we go back and forth until it feels right. It's how a hamster ended up with a family tree.
+      </p>
+      <p>
+        Some of them are finished, some are very much not. Everything is on <a href={SITE.githubUrl}>GitHub</a>,
+        so you can see how each one was made, one commit at a time.
+      </p>
+      <p>
+        I draw in plain text too. Pip is <a href="/ascii/">drawn one character at a time</a>, and the sketchbook has
+        a slot machine, a robot and a banner maker.
+      </p>
+      <span class="hand">— Charles</span>
     </div>
 
-    <div class="panel about-now">
+    <div class="panel glow about-now">
       <h2 class="about-label">On the bench right now</h2>
       {
         latest && (
@@ -89,7 +80,7 @@ const steps = [
         )
       }
       {latest?.pushedAt && <p class="about-now__when">last touched <Fragment set:html={time(latest.pushedAt)} /></p>}
-      <dl class="titleblock about-numbers">
+      <dl class="about-numbers">
         {numbers.map(([k, v]) => <div><dt>{k}</dt><dd>{v}</dd></div>)}
       </dl>
       <a class="btn btn--ghost btn--sm" href="/log/">Read the workshop log</a>
@@ -106,7 +97,7 @@ const steps = [
       {
         steps.map((s, i) => (
           <li class:list={["flow__step", i === steps.length - 1 && "flow__step--ship"]}>
-            <span class="flow__n">{s.n}</span>
+            <span class="flow__n" aria-hidden="true">{s.n}</span>
             <span class="flow__title">{s.title}</span>
             {s.note && <span class="hand flow__note">{s.note}</span>}
             {i === steps.length - 1 && <span class="badge badge--live flow__stamp">Shipped</span>}
@@ -119,7 +110,7 @@ const steps = [
 
   <section class="container section about-tools" aria-labelledby="tools">
     <header class="section-head">
-      <p class="eyebrow">Materials list</p>
+      <p class="eyebrow">Ingredients</p>
       <h2 id="tools"><span class="text-pop">What it's all made of</span></h2>
       <p class="sub">The languages and frameworks across everything on the workbench, counted from GitHub.</p>
     </header>
@@ -133,11 +124,11 @@ const steps = [
   </section>
 
   <section class="container section about-hi" aria-labelledby="hi">
-    <div class="panel sheet about-hi__card">
-      <h2 id="hi">Say hi</h2>
+    <div class="ink-block about-hi__card">
+      <h2 id="hi">Say <em>hi.</em></h2>
       <p>Got an idea, found a bug, or just want to say hi? Find me on GitHub, or open an issue on any of the projects.</p>
       <div class="about-hi__actions">
-        <a class="btn btn--primary" href={SITE.githubUrl}>Find me on GitHub</a>
+        <a class="btn btn--secondary" href={SITE.githubUrl}>Find me on GitHub</a>
         <a class="btn btn--ghost" href="/#projects">See the projects</a>
       </div>
     </div>
@@ -145,56 +136,54 @@ const steps = [
 </Page>
 
 <style>
-  .about-top { display: grid; gap: var(--space-4); padding-top: var(--space-8); }
-  .about-top h1 { margin-top: var(--space-2); }
+  .about-grid { display: grid; gap: var(--space-7); align-items: start; padding-top: var(--space-8); }
+  @media (min-width: 940px) { .about-grid { grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr); } }
 
-  .about-grid { display: grid; gap: var(--space-6); align-items: start; padding-top: var(--space-7); }
-  @media (min-width: 940px) { .about-grid { grid-template-columns: 1.4fr 1fr; } }
-  .about-grid .hand { justify-self: end; --rot: -4deg; }
-
-  .about-label { font: 600 11px / 1 var(--font-mono); letter-spacing: var(--tracking-mono); text-transform: uppercase; color: var(--accent-2); }
+  .about-label { font: 500 var(--text-2xs) / 1 var(--font-mono); letter-spacing: var(--tracking-mono); text-transform: uppercase; color: var(--ink-soft); }
   .about-now { display: grid; gap: var(--space-3); padding: var(--space-5); justify-items: start; }
   .about-now__what { font: 650 var(--text-lg) / 1.4 var(--font-sans); }
-  .about-now__what a { color: var(--accent); }
-  .about-now__msg { font-weight: 400; color: var(--text-muted); }
-  .about-now__when { font: 450 var(--text-xs) / 1 var(--font-mono); color: var(--text-faint); }
-  .about-numbers { width: 100%; margin: var(--space-2) 0; border: var(--outline); grid-auto-flow: column; }
-  .about-numbers dd { margin: 0; font-size: var(--text-lg); color: var(--text); }
-  .about-numbers dt { display: block; font-size: 9px; color: var(--text-faint); margin-bottom: 2px; }
+  .about-now__msg { font-weight: 400; color: var(--ink-soft); }
+  .about-now__when { font: 450 var(--text-xs) / 1 var(--font-mono); color: var(--ink-faint); }
+  /* the numbers, set big like prices in a catalogue */
+  .about-numbers { width: 100%; margin: var(--space-2) 0; display: grid; grid-template-columns: repeat(2, 1fr); gap: var(--space-4) var(--space-3); padding-block: var(--space-4); border-block: var(--rule-soft); }
+  .about-numbers div { display: flex; flex-direction: column-reverse; gap: 2px; }
+  .about-numbers dd { margin: 0; font: 900 2.75rem / 0.9 var(--font-display); letter-spacing: var(--tracking-tight); text-shadow: 0.05em 0.05em 0 var(--spot); }
+  .about-numbers dt { font: 500 var(--text-2xs) / 1.3 var(--font-mono); letter-spacing: var(--tracking-mono); text-transform: uppercase; color: var(--ink-faint); }
 
-  /* Fig. 2: the loop, drawn as a flow chart. Across on wide screens, down on phones. */
-  .flow { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-6); }
-  @media (min-width: 900px) { .flow { grid-template-columns: repeat(5, 1fr); gap: var(--space-5); } }
+  /* Fig. 2: the loop, as numbered cards joined by a dotted line. Across on wide screens, down on phones. */
+  .flow { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--space-5); }
+  @media (min-width: 900px) { .flow { grid-template-columns: repeat(5, minmax(0, 1fr)); gap: var(--space-4); } }
   .flow__step {
-    position: relative; display: grid; gap: var(--space-2); align-content: start;
-    padding: var(--space-4); min-height: 120px;
-    border: var(--outline); background: var(--glass-bg);
+    position: relative; display: grid; gap: var(--space-2); align-content: start; justify-items: start;
+    padding: var(--space-4) var(--space-4) var(--space-5); min-height: 150px;
+    border: var(--rule); border-radius: var(--radius-lg); background: var(--paper-3);
   }
-  /* the arrow to the next step */
+  /* the dotted line on to the next step */
   .flow__step:not(:last-child)::after {
-    content: ""; position: absolute; left: 50%; bottom: -26px; width: 2px; height: 20px; background: var(--accent-2);
-    clip-path: none;
-  }
-  .flow__step:not(:last-child)::before {
-    content: ""; position: absolute; left: calc(50% - 5px); bottom: -28px; width: 0; height: 0;
-    border: 6px solid transparent; border-top: 8px solid var(--accent-2); border-bottom: 0; z-index: 1;
+    content: ""; position: absolute; left: 50%; bottom: calc(var(--space-5) * -1 - var(--stroke)); height: var(--space-5);
+    border-left: 3px dotted var(--ink);
   }
   @media (min-width: 900px) {
-    .flow__step:not(:last-child)::after { left: auto; right: -22px; bottom: auto; top: 50%; width: 18px; height: 2px; }
-    .flow__step:not(:last-child)::before { left: auto; right: -24px; bottom: auto; top: calc(50% - 5px); border: 6px solid transparent; border-left: 8px solid var(--accent-2); border-right: 0; }
+    .flow__step:not(:last-child)::after { left: auto; right: calc(var(--space-4) * -1 - var(--stroke)); bottom: auto; top: 44px; width: var(--space-4); height: 0; border-left: 0; border-top: 3px dotted var(--ink); }
   }
-  .flow__n { font: 500 11px / 1 var(--font-mono); letter-spacing: var(--tracking-mono); color: var(--accent-2); }
+  .flow__n { font: italic 800 2.5rem / 0.9 var(--font-display); letter-spacing: var(--tracking-tight); color: var(--spot); -webkit-text-stroke: 3px var(--ink); paint-order: stroke fill; }
   .flow__title { font: 700 var(--text-lg) / 1.25 var(--font-sans); }
   .flow__note { font-size: 1.3rem; --rot: -2deg; }
-  .flow__step--ship { border-color: var(--success); }
-  .flow__stamp { justify-self: start; margin-top: var(--space-2); --rot: -7deg; }
+  .flow__step--ship { background: var(--spot); }
+  .flow__step--ship .flow__n { color: var(--ink); -webkit-text-stroke: 0; }
+  .flow__stamp { margin-top: var(--space-2); --rot: -7deg; }
   .flow__loop { margin-top: var(--space-5); --rot: -1deg; }
   @media (min-width: 900px) { .flow__loop { margin-left: 22%; } }
 
   .about-chips { display: flex; flex-wrap: wrap; gap: var(--space-2); }
-  .dim-count { color: var(--text-faint); margin-left: 2px; }
+  .about-chips :global(.tag) { padding: 8px 14px; font-size: var(--text-xs); }
+  .dim-count { opacity: 0.7; margin-left: 2px; }
 
-  .about-hi__card { display: grid; gap: var(--space-4); padding: var(--space-6); max-width: 760px; justify-items: start; }
-  .about-hi__card p { color: var(--text-muted); max-width: 56ch; }
+  .about-hi__card { display: grid; gap: var(--space-4); padding: clamp(var(--space-6), 6vw, var(--space-8)); justify-items: start; position: relative; overflow: hidden; isolation: isolate; }
+  /* a disc of spot ink sliding off the corner */
+  .about-hi__card::after { content: ""; position: absolute; z-index: -1; right: -70px; bottom: -100px; width: 190px; aspect-ratio: 1; border-radius: 50%; background: var(--spot); }
+  @media (min-width: 760px) { .about-hi__card::after { right: -90px; bottom: -150px; width: 360px; } }
+  .about-hi__card h2 { font-size: var(--text-3xl); }
+  .about-hi__card p { color: var(--on-ink-soft); font-size: var(--text-lg); max-width: 46ch; }
   .about-hi__actions { display: flex; flex-wrap: wrap; gap: var(--space-2); }
 </style>

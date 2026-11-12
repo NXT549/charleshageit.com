@@ -1,6 +1,6 @@
 // Turns showcase data into HTML strings. Pure functions, so any build step can use them.
-// Styling comes from css/tokens.css + css/theme.css (glass, glow, terminal, btn, tag, badge)
-// and the layout rules in css/showcase.css.
+// Styling comes from src/styles/tokens.css + theme.css (glass, glow, terminal, btn, tag, badge)
+// and the layout rules in src/styles/showcase.css.
 
 export function esc(value) {
   return String(value ?? "")
@@ -82,7 +82,7 @@ export function projectPath(repo) {
   return `/projects/${encodeURIComponent(repo.name)}/`;
 }
 
-// Rubber stamps: keep the words short, the theme sets them in uppercase.
+// Stickers: keep the words short, the theme sets them in uppercase.
 const STATUS = {
   done: ["badge--live", "Shipped"],
   wip: ["badge--wip", "In progress"],
@@ -90,7 +90,7 @@ const STATUS = {
   archived: ["badge--info", "Archived"],
 };
 
-/** A card's hover colour, from a theme colour name in the config ("blue-pencil" -> var(--blue-pencil)). */
+/** A card's own ink, from a flavour name in the config ("lemon" -> var(--lemon)): its picture's backdrop and its halftone shadow. */
 export function popStyle(repo) {
   return repo.pop ? ` style="--pop: var(--${esc(repo.pop)})"` : "";
 }
@@ -225,8 +225,8 @@ function spotlightCard(repo, index) {
     : "";
 
   const [tagline, blurb] = splitBlurb(repo.blurb || repo.description);
-  // Pip's spec drawing: a dimension line over the sprite (css/showcase.css draws it 168px wide).
-  const sceneBits = repo.scene === "desk" ? `<span class="dim spotlight__dim" aria-hidden="true">168 px</span>` : "";
+  // The plate number, printed big in the corner: 01, 02, 03 in spotlight order.
+  const plate = `<span class="spotlight__no" aria-hidden="true">${String(index + 1).padStart(2, "0")}</span>`;
   const note = repo.note ? `<span class="hand spotlight__note">${esc(repo.note).replace(/\n/g, "<br />")}</span>` : "";
 
   const highlights = repo.highlights.length
@@ -236,11 +236,12 @@ function spotlightCard(repo, index) {
   return `
     <article class="spotlight glass glow${index % 2 ? " spotlight--flip" : ""}" id="project-${esc(repo.name)}" ${dataAttrs(repo)}${popStyle(repo)}>
       <div class="spotlight__media${repo.scene ? ` spotlight__media--${esc(repo.scene)}` : ""}">
-        ${sceneBits}${media}
+        ${media}
         ${note}
         ${demo}
       </div>
       <div class="spotlight__body">
+        ${plate}
         ${statusBadge(repo, "spotlight__status")}
         <p class="spotlight__path"><span class="prompt__path">~/${esc(repo.fullName.split("/")[0])}/</span><span>${esc(repo.name)}</span></p>
         <h3 class="spotlight__title"><a href="${esc(projectPath(repo))}">${esc(repo.title)}</a></h3>
